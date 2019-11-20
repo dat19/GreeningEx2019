@@ -11,7 +11,7 @@
 /[Mm]emoryCaptures/
 
 /[Aa]ssets/TextMesh Pro/
-/[Aa]ssets/PrivateResources/
+/**/PrivateResources/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
