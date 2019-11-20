@@ -17,3 +17,9 @@
 1. *Window*メニューから、*TextMeshPro* > *Import TMP Essential Resources*を選択
 
 以上で、プロジェクトが実行可能になる。
+
+# 命名規約
+- フォルダー名とスクリプトファイル名はパスカルケース
+- それ以外のリソースやレイヤー名は小文字のスネークケース
+  - 参考は[こちら](https://docs.google.com/document/d/10DWSrp2QcdawOtBvM67lr8Sjv1disyUshkcp0mc_B5U/)
+- ソースコードは、マイクロソフトの規約を元にしたUnityのプロジェクトで利用されているエディター設定(.editorconfig)をプロジェクトに加えてある。**エラー一覧**の**メッセージ**に警告が表示されるので、問題がなくなるように気を配ること
