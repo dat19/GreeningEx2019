@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class FrameCounter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnGUI()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GUI.Label(new Rect(20, 20, 100, 30), Time.frameCount.ToString());
     }
 }
