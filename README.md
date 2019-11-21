@@ -47,6 +47,8 @@ Inputの設定をゲームに合わせて行ったら、Input.GetButton()に変�
 ## デバッグについて
 Player SettingsのOther SettingsのScripting Define Symbolsで`DEBUG`を定義している。これを削除すると、`#if DEBUG`～`#endif`間のデバッグコードをまとめて無効にできる。ビルドする時に消す。
 
+## Warning
+- `Your multi-scene setup may be improved by tending to ...`という警告は、マルチシーンでライティングをオートにしていると表示される警告。ライトが決まったあとにベイクすれば治るので、それまでは気にしなくてよい
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/
