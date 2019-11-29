@@ -182,3 +182,33 @@ public enum ActionType {
   - 苗を運ぶなど
 - プレイヤーの行動は変わらないが、アニメの切り替えが発生する要素は、適切な型で設定
   - 上昇中と落下中を切り替えるためのY速度なら、Float型
+
+## アニメの状態(IntegerのStateで制御したいもの)
+```cs
+public enum AnimType {
+  Start,
+  Walk, 
+  Jump,
+  Water,
+  Obore,
+  Pickup,
+  Tsuta,
+  Watage,
+  Clear,
+}
+
+```
+
+- Bool型のNaeパラメーターで表す
+  - 苗を持つアニメに切り替わるようにする
+- Float型の速度VelXを渡して、立っているのと歩きを切り替える
+  - アニメ再生速度は、スクリプトで指定
+- Float型の速度VelYを渡して、上昇中と、下降中のパターンを切り替える
+  - ジャンプと落下はJumpに統合
+- Putdownは、Pickupの逆再生になる
+  - プログラム側で、AnimatorのSpeedを-1にして逆再生にする
+- Tsutaのアニメの速度は、プログラムで調整する
+- キノコジャンプと玉乗りジャンプと、花ジャンプは、同じJumpで行う
+
+
+
