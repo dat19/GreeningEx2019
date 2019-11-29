@@ -150,7 +150,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedMapChip: 0
-  mapChipPrefabs: []
+  mapChipPrefabs:
+  - {fileID: 6820182565492851374, guid: c8c9cbbc0b643444599a509907617046, type: 3}
+  - {fileID: 4269892110473912333, guid: 1321f6e6e22e2e145a3f94405d2bdfff, type: 3}
+  - {fileID: 2513788105799943616, guid: 1f65ba11b8c4e6d4b9c7b918ef6407e4, type: 3}
+  - {fileID: 3767001414668562940, guid: 9cc9818def03a9e4f927a272d583985f, type: 3}
+  - {fileID: 3771247379393185249, guid: e005fc063a840c24f91b341695895613, type: 3}
 --- !u!4 &1191927563
 Transform:
   m_ObjectHideFlags: 0
