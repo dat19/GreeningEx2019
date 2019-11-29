@@ -162,7 +162,15 @@ public enum ActionType {
     Start,
     Move,
     Water,
-    // :
+    Obore,
+    Pickup,
+    NaeMove,
+    Putdown,
+    Tsuta,
+    Watage,
+    Kinoko,
+    Tamanori,
+    Clear
 }
 ```
 
