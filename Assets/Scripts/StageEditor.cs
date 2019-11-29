@@ -29,15 +29,16 @@ public class StageEditor : MonoBehaviour
     void Update()
     {
         Camera myCam = Camera.main;
-        Vector3 mpos = myCam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mpos = myCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
         Vector3 cpos = myCam.transform.position;
 
         mpos.x = Mathf.Round(mpos.x);
         mpos.y = Mathf.Round(mpos.y);
-        mpos.z = 0;
+
         if (Input.GetMouseButtonDown(0))
         {
-            PrefabUtility.InstantiatePrefab(mapChipPrefabs[(int)selectedMapChip]);
+            GameObject clone = PrefabUtility.InstantiatePrefab(mapChipPrefabs[(int)selectedMapChip]) as GameObject;
+            clone.transform.position = mpos;
         }
 
         //カメラ移動
