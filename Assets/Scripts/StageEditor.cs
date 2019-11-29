@@ -12,6 +12,7 @@ public class StageEditor : MonoBehaviour
 
     public enum MapType
     {
+        None=-1,
         GroundUp,
         GroundDown,
         WaterUp,
@@ -19,13 +20,16 @@ public class StageEditor : MonoBehaviour
         FlowerLeaf,
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /// <summary>
+    /// ヒットチェック時の上限数
+    /// </summary>
+    const int HitMax = 4;
 
-    // Update is called once per frame
+    /// <summary>
+    /// マウスの場所にあったものとの衝突データ
+    /// </summary>
+    RaycastHit[] hits = new RaycastHit[HitMax];
+
     void Update()
     {
         Camera myCam = Camera.main;
@@ -35,10 +39,24 @@ public class StageEditor : MonoBehaviour
         mpos.x = Mathf.Round(mpos.x);
         mpos.y = Mathf.Round(mpos.y);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            GameObject clone = PrefabUtility.InstantiatePrefab(mapChipPrefabs[(int)selectedMapChip]) as GameObject;
-            clone.transform.position = mpos;
+            // マウスでクリックした場所のマップ座標mpos
+            int hitCount = Physics.RaycastNonAlloc(mpos + Vector3.back, Vector3.forward, hits);
+            if (hitCount > 0)
+            {
+                for (int i=0; i<hitCount;i++)
+                {
+                    DestroyImmediate(hits[i].collider.gameObject);
+                }
+            }
+
+            if (selectedMapChip != MapType.None)
+            {
+                GameObject clone = PrefabUtility.InstantiatePrefab(mapChipPrefabs[(int)selectedMapChip]) as GameObject;
+                clone.transform.position = mpos;
+                clone.transform.SetParent(transform);
+            }
         }
 
         //カメラ移動
