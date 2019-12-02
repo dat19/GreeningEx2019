@@ -17,7 +17,18 @@ public class StageEditor : MonoBehaviour
         GroundDown,
         WaterUp,
         WaterDown,
+        //
         FlowerLeaf,
+        IvyLittle,
+        DandelionLittle,
+        MushroomLittle,
+        RockBefore,
+        //
+        Flower,
+        Ivy,
+        Dandelion,
+        Mushroom,
+        RockAfter,
     }
 
     /// <summary>
