@@ -62,12 +62,14 @@ public class StageEditor : MonoBehaviour
                 }
             }
 
+#if UNITY_EDITOR
             if (selectedMapChip != MapType.None)
             {
                 GameObject clone = PrefabUtility.InstantiatePrefab(mapChipPrefabs[(int)selectedMapChip]) as GameObject;
                 clone.transform.position = mpos;
                 clone.transform.SetParent(transform);
             }
+#endif
         }
 
         //カメラ移動
