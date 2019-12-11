@@ -79,8 +79,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  gravityAdd: 9.81
-  rotateY: 45
+  gravityAdd: 20
+  rotateY: 40
 --- !u!1001 &8589126343943112770
 PrefabInstance:
   m_ObjectHideFlags: 0
