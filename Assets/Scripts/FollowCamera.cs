@@ -9,19 +9,24 @@ public class FollowCamera : MonoBehaviour
     [Tooltip("プレイヤーの画面右端"), SerializeField]
     float viewPointMax = 0.6f;
 
-    Camera myCamera;
-    Transform playerTransform;
+    Transform playerTransform = null;
     Vector3 camToPlayer;
 
     private void Awake()
     {
-        myCamera = GetComponent<Camera>();
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject go = GameObject.FindGameObjectWithTag("Player");
+        if (go == null)
+        {
+            return;
+        }
+        playerTransform = go.transform;
         camToPlayer = playerTransform.position - transform.position;
     }
 
     private void LateUpdate()
     {
+        if (!playerTransform) return;
+
         Vector3 next = playerTransform.position - camToPlayer;
         transform.position = next;
     }
