@@ -616,7 +616,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.0833334
-    functionName: OnAnimeEnd
+    functionName: Proc
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
