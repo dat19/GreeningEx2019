@@ -1103,7 +1103,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1778308410}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &1841159178
+--- !u!54 &1841159183
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
