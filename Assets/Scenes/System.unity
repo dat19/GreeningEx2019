@@ -181,6 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1f5d418ab7e87249a693f60d0062e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toStageSelect: 0
 --- !u!82 &190469380
 AudioSource:
   m_ObjectHideFlags: 0
