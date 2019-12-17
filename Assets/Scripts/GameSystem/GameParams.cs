@@ -30,7 +30,7 @@ namespace GreeningEx2019
         /// </summary>
         public static int SelectedStage { get; private set; }
 
-        public static bool IsInputActionAndWaterDown {
+        public static bool IsActionAndWaterButtonDown {
             get {
                 return Input.GetButtonDown("Action") || Input.GetButtonDown("Water");
             }

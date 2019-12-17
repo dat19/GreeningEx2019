@@ -18,7 +18,7 @@ namespace GreeningEx2019
         {
             if (Fade.IsFading) return;
 
-            if (GameParams.IsInputActionAndWaterDown)
+            if (GameParams.IsActionAndWaterButtonDown)
             {
                 SoundController.Play(SoundController.SeType.Click);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);

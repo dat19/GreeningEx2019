@@ -106,7 +106,7 @@ namespace GreeningEx2019
             }
             lastCursor = cursor;
 
-            if (GameParams.IsInputActionAndWaterDown)
+            if (GameParams.IsActionAndWaterButtonDown)
             {
                 Debug.Log("Stage Start");
             }
