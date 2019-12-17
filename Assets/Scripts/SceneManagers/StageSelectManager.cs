@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GreeningEx2019
 {
@@ -10,6 +11,17 @@ namespace GreeningEx2019
         Transform[] islands = null;
         [Tooltip("ステージの星を表示する高さ"), SerializeField]
         float stageStarHeight = 4.5f;
+
+        /// <summary>
+        /// 操作が可能になったら、trueを返します。
+        /// </summary>
+        public static bool CanMove
+        {
+            get
+            {
+                return state == StateType.PlayerControl;
+            }
+        }
 
         /// <summary>
         /// ステージ選択シーンに来る時の状況を表す。
@@ -34,7 +46,10 @@ namespace GreeningEx2019
         /// <summary>
         /// 現在の状態
         /// </summary>
-        StateType state = StateType.OpeningMovie;
+        static StateType state = StateType.OpeningMovie;
+
+        // リピートを防ぐための前のカーソル
+        static float lastCursor = 0;
 
         private new void Awake()
         {
@@ -55,15 +70,46 @@ namespace GreeningEx2019
             base.Awake();
         }
 
-#if DEBUG
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            switch (state)
             {
-                SoundController.Play(SoundController.SeType.Click);
-                SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
+                case StateType.PlayerControl:
+                    UpdatePlayerControl();
+                    break;
+
+                default:
+                    // デバッグコード。未実装の状態は、すぐに操作に移行
+                    if (Fade.IsFading) return;
+                    state = StateType.PlayerControl;
+                    break;
             }
         }
-#endif
+
+        public override void OnFadeOutDone()
+        {
+            base.OnFadeOutDone();
+            SceneManager.SetActiveScene(gameObject.scene);
+        }
+
+
+        void UpdatePlayerControl()
+        {
+            float cursor = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Vertical");
+            if ((cursor < -0.5f) && (lastCursor > -0.5f))
+            {
+                GameParams.PrevSelectStage();
+            }
+            else if ((cursor > 0.5f) && (lastCursor < 0.5f))
+            {
+                GameParams.NextSelectStage();
+            }
+            lastCursor = cursor;
+
+            if (GameParams.IsInputActionAndWaterDown)
+            {
+                Debug.Log("Stage Start");
+            }
+        }
     }
 }

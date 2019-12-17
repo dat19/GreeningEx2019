@@ -14,15 +14,15 @@ namespace GreeningEx2019
             SceneManager.SetActiveScene(gameObject.scene);            
         }
 
-#if DEBUG
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Fade.IsFading) return;
+
+            if (GameParams.IsInputActionAndWaterDown)
             {
                 SoundController.Play(SoundController.SeType.Click);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
             }
         }
-#endif
     }
 }

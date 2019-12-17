@@ -12,6 +12,13 @@ namespace GreeningEx2019
     {
         [Tooltip("ステージ選択シーンへ移行する際のモード")]
         public StageSelectManager.ToStageSelectType toStageSelect = StageSelectManager.ToStageSelectType.NewGame;
+        [Tooltip("クリア済みのステージ数。0なら全くクリアしていない。1ならStage1をクリア済み。")]
+        public int clearedStageCount = 10;
+
+        /// <summary>
+        /// クリア済みステージ数
+        /// </summary>
+        public static int ClearedStageCount { get { return Instance.clearedStageCount; } }
 
         /// <summary>
         /// 全ステージ数
@@ -19,20 +26,25 @@ namespace GreeningEx2019
         public const int StageCount = 10;
 
         /// <summary>
-        /// クリア済みのステージ数。0なら全くクリアしていない。1ならStage1をクリア済み。
-        /// </summary>
-        public static int ClearedStageCount { get; private set; }
-
-        /// <summary>
         /// ステージ選択で選ばれたステージ。0=Stage1
         /// </summary>
         public static int SelectedStage { get; private set; }
+
+        public static bool IsInputActionAndWaterDown {
+            get {
+                return Input.GetButtonDown("Action") || Input.GetButtonDown("Water");
+            }
+        }
 
         private void Awake()
         {
             // TODO: PlayerPrefsから、ClearedStageCountを読み出す
 
-            SelectedStage = ClearedStageCount;
+            SelectedStage = Mathf.Min(clearedStageCount, StageCount-1);
+            if (SelectedStage == StageCount - 1)
+            {
+                SelectedStage = 0;
+            }
         }
 
         /// <summary>
@@ -49,7 +61,8 @@ namespace GreeningEx2019
         /// </summary>
         public static void PrevSelectStage()
         {
-            SelectedStage = (SelectedStage == 0) ? ClearedStageCount : SelectedStage;
+            SelectedStage = (SelectedStage == 0) ? ClearedStageCount : SelectedStage-1;
+            SelectedStage = Mathf.Min(SelectedStage, StageCount - 1);
         }
 
         /// <summary>
@@ -60,7 +73,7 @@ namespace GreeningEx2019
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
             if (SelectedStage == ClearedStageCount-1)
             {
-                ClearedStageCount++;
+                Instance.clearedStageCount++;
 
                 // TODO: PlayerPrefsで、ClearedStageCountを保存
             }

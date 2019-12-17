@@ -177,6 +177,8 @@ namespace GreeningEx2019
         /// <returns></returns>
         IEnumerator SceneChange()
         {
+            isBooting = false;
+
             // シーンを非アクティブで読み込み開始
             loadingSceneOperations[loadingSceneOperationCount] = SceneManager.LoadSceneAsync(NextScene.ToString(), LoadSceneMode.Additive);
             loadingSceneOperations[loadingSceneOperationCount].allowSceneActivation = false;
@@ -240,7 +242,6 @@ namespace GreeningEx2019
             unloadSceneCount = 0;
 
             IsChanging = false;
-            isBooting = false;
             enabled = false;
         }
 
