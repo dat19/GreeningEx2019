@@ -10,6 +10,17 @@ namespace GreeningEx2019
         [Tooltip("ゲーム用プレイヤープレハブ"), SerializeField]
         GameObject stellaPrefab = null;
 
+        /// <summary>
+        /// 操作可能な状態かどうかを返します。
+        /// </summary>
+        public static bool CanMove
+        {
+            get
+            {
+                return !Fade.IsFading;
+            }
+        }
+
         public override void OnFadeOutDone()
         {
             SoundController.PlayBGM(SoundController.BgmType.Title, true);
