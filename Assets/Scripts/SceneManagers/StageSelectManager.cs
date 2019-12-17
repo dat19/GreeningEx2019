@@ -108,7 +108,7 @@ namespace GreeningEx2019
 
             if (GameParams.IsActionAndWaterButtonDown)
             {
-                Debug.Log("Stage Start");
+                SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
         }
     }

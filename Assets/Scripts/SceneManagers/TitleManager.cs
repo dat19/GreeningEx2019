@@ -7,11 +7,10 @@ namespace GreeningEx2019
 {
     public class TitleManager : SceneManagerBase
     {
-
         public override void OnFadeOutDone()
         {
             SoundController.PlayBGM(SoundController.BgmType.Title, true);
-            SceneManager.SetActiveScene(gameObject.scene);            
+            SceneManager.SetActiveScene(gameObject.scene);
         }
 
         private void Update()
