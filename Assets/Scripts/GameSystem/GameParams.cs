@@ -10,10 +10,8 @@ namespace GreeningEx2019
     /// </summary>
     public class GameParams : Singleton<GameParams>
     {
-        public static GameParams Instance;
-
-        [Tooltip("ステージ選択シーンへ移行する際のモード"), SerializeField]
-        StageSelectManager.ToStageSelectType toStageSelect = StageSelectManager.ToStageSelectType.NewGame;
+        [Tooltip("ステージ選択シーンへ移行する際のモード")]
+        public StageSelectManager.ToStageSelectType toStageSelect = StageSelectManager.ToStageSelectType.NewGame;
 
         /// <summary>
         /// 全ステージ数
@@ -32,8 +30,6 @@ namespace GreeningEx2019
 
         private void Awake()
         {
-            Instance = this;
-
             // TODO: PlayerPrefsから、ClearedStageCountを読み出す
 
             SelectedStage = ClearedStageCount;
