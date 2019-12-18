@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NaeMask
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: joint1
+    m_Weight: 0
+  - m_Path: joint1/joint2
+    m_Weight: 0
+  - m_Path: joint1/joint2/joint3
+    m_Weight: 0
+  - m_Path: joint1/joint2/joint3/Hand_L
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/Hand_L/Hand2_L
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/Hand_L/Hand2_L/Hand3_L
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/Hand_R
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/Hand_R/Hand2_R
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/Hand_R/Hand2_R/Hand3_R
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/joint4
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/joint4/joint5
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/joint4/stella_model:pCube1
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/joint4/stella_model:pCube2
+    m_Weight: 1
+  - m_Path: joint1/joint2/joint3/joint4/stella_model:pSphere1
+    m_Weight: 1
+  - m_Path: joint1/Leg_L
+    m_Weight: 0
+  - m_Path: joint1/Leg_L/Leg2_L
+    m_Weight: 1
+  - m_Path: joint1/Leg_L/Leg2_L/Leg3_L
+    m_Weight: 1
+  - m_Path: joint1/Leg_L/Leg2_L/Leg3_L/Leg4_L
+    m_Weight: 1
+  - m_Path: joint1/Leg_R
+    m_Weight: 0
+  - m_Path: joint1/Leg_R/Leg2_R
+    m_Weight: 1
+  - m_Path: joint1/Leg_R/Leg2_R/Leg3_R
+    m_Weight: 1
+  - m_Path: joint1/Leg_R/Leg2_R/Leg3_R/Leg4_R
+    m_Weight: 1
+  - m_Path: nurbsCircle10
+    m_Weight: 0
+  - m_Path: nurbsCircle10/nurbsCircle1
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle1/ikHandle4
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle2
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle2/ikHandle3
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle3
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle3/ikHandle1
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle4
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle4/ikHandle2
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle5
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle6
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle7
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle8
+    m_Weight: 1
+  - m_Path: nurbsCircle10/nurbsCircle11
+    m_Weight: 1
+  - m_Path: nurbsCircle10/transform2
+    m_Weight: 1
+  - m_Path: stella_model:pCylinder1
+    m_Weight: 0
+  - m_Path: stella_model:pCylinder2
+    m_Weight: 0
+  - m_Path: stella_model:pCylinder7
+    m_Weight: 0
+  - m_Path: stella_model:pCylinder8
+    m_Weight: 1
+  - m_Path: stella_model:pCylinder9
+    m_Weight: 1
+  - m_Path: stella_model:pCylinder10
+    m_Weight: 1
+  - m_Path: stella_model:pCylinder11
+    m_Weight: 1
