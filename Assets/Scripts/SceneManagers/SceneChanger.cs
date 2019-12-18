@@ -308,7 +308,7 @@ namespace GreeningEx2019
         /// </summary>
         public static void SetSubCamera()
         {
-            if (Instance.subCamera == null) return;
+            if (Instance == null || Instance.subCamera == null) return;
 
             activeCamera = Instance.subCamera;
             Instance.subCamera.enabled = true;
