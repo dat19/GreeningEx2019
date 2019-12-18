@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace GreeningEx2019
 {
@@ -32,6 +31,24 @@ namespace GreeningEx2019
         [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
         float miniJumpMargin = 0.25f;
 
+        [Header("デバッグ")]
+        [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
+        bool isDebugMovable = false;
+
+        /// <summary>
+        /// ステラの行動定義
+        /// </summary>
+        public enum ActionType
+        {
+            None = -1,
+            Start,  // 0開始時の演出
+            Walk,   // 1立ち、歩き
+            Air,    // 2落下、着地
+            Jump,   // 3ジャンプまでのアニメ
+            Water,  // 4水まき
+            Nae,    // 5苗運び
+        }
+
         /// <summary>
         /// アニメのStateに設定する値
         /// </summary>
@@ -50,19 +67,6 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// ステラの行動定義
-        /// </summary>
-        public enum ActionType
-        {
-            Start,  // 開始時の演出
-            Walk,   // 立ち、歩き
-            Air,    // 落下、着地
-            Jump,   // ジャンプまでのアニメ
-            Water,  // 水まき
-            Nae,    // 苗運び
-        }
-
-        /// <summary>
         /// 列挙する接触したオブジェクトの上限数
         /// </summary>
         const int CollisionMax = 8;
@@ -73,11 +77,16 @@ namespace GreeningEx2019
 
         public static CharacterController chrController { get; private set; }
         public static Vector3 myVelocity = Vector3.zero;
+        static Vector3 forwardVector = Vector3.right;
         static Animator anim;
-        static ActionType nowAction;
+        static ActionType nowAction = ActionType.None;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static LayerMask mapCollisionLayerMask;
         static Vector3 checkCenter;
+        static UnityAction animEventAction = null;
+        static Vector3 targetJumpGround = Vector3.zero;
+        static int defaultLayer = 0;
+        static int jumpLayer = 0;
 
         void Awake()
         {
@@ -88,11 +97,20 @@ namespace GreeningEx2019
             nowAction = ActionType.Walk;
             mapCollisionLayerMask = LayerMask.GetMask("MapCollision");
             boxColliderHalfExtents.y = chrController.height * 0.5f;
+            defaultLayer = LayerMask.NameToLayer("Player");
+            jumpLayer = LayerMask.NameToLayer("Jump");
         }
 
         void FixedUpdate()
         {
-            if (!StageManager.CanMove) return;
+#if UNITY_EDITOR
+            if (!isDebugMovable)
+            {
+#endif
+                if (!StageManager.CanMove) return;
+#if UNITY_EDITOR
+            }
+#endif
 
             stellaActionScriptableObjects[(int)nowAction]?.UpdateAction(Time.fixedDeltaTime);
         }
@@ -132,10 +150,12 @@ namespace GreeningEx2019
             if (h < -0.5f)
             {
                 e.y = rotateY;
+                forwardVector.x = -1;
             }
             else if (h > 0.5f)
             {
                 e.y = -rotateY;
+                forwardVector.x = 1;
             }
             transform.eulerAngles = e;
         }
@@ -152,6 +172,10 @@ namespace GreeningEx2019
             }
 
             myVelocity.y += -gravityAdd * Time.fixedDeltaTime;
+            if (myVelocity.y < 0)
+            {
+                gameObject.layer = defaultLayer;
+            }
         }
 
         /// <summary>
@@ -163,12 +187,11 @@ namespace GreeningEx2019
             if ((chrController.collisionFlags & CollisionFlags.Sides) == 0) return;
 
             // ぶつかった相手を調べる
-            Vector3 dir = (transform.eulerAngles.y < 0 || transform.eulerAngles.y > 180) ? Vector3.right : Vector3.left;
             checkCenter = transform.position
                 + chrController.center
-                + dir * (chrController.radius + boxColliderHalfExtents.x);
+                + forwardVector * (chrController.radius + boxColliderHalfExtents.x);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, dir, raycastHits, Quaternion.identity, boxColliderHalfExtents.x, mapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, boxColliderHalfExtents.x, mapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
@@ -180,35 +203,38 @@ namespace GreeningEx2019
             }
             if (h <= miniJumpHeight)
             {
-                JumpToGround((transform.position + dir) + Vector3.up * miniJumpHeight);
+                targetJumpGround = (transform.position + forwardVector) + Vector3.up * miniJumpHeight;
+                ChangeAction(ActionType.Jump);
             }
         }
 
         /// <summary>
-        /// ジャンプで着地したい地面の座標
+        /// targetJumpGroundへのジャンプを開始します。
         /// </summary>
-        static Vector3 targetJumpGround = Vector3.zero;
-
-        /// <summary>
-        /// 目的の床の座標を指定して、そこに向けてジャンプ
-        /// </summary>
-        /// <param name="target">目的の足場</param>
-        public void JumpToGround(Vector3 target)
+        public void StartTargetJump()
         {
-            targetJumpGround = target;
-            ChangeAction(ActionType.Jump);
-            SetAnimState(AnimType.Jump);
-        }
+            gameObject.layer = jumpLayer;
 
-        /// <summary>
-        /// targetJumpGroundから、ジャンプの初速を設定します。
-        /// 移動速度は、moveSpeedを一先ず利用します。
-        /// </summary>
-        public void SetFirstVelocityY()
-        {
-            chrController.detectCollisions = false;     // 当たり判定を一時無効化
-            float targetY = targetJumpGround.y + miniJumpMargin;
+            // 目的の高さと、目的高さからの段差分を求める
+            float top = targetJumpGround.y + miniJumpMargin;
 
+            // Y方向の初速を決める
+            // h = (g*t*t)/2;
+            // 2h/g  = t*t
+            float t = Mathf.Sqrt(2f * top / gravityAdd);
+            myVelocity.y = gravityAdd * t;
+
+            // X方向の速度を決める
+            float total = top + miniJumpMargin;
+            t = Mathf.Sqrt(2f * total / gravityAdd);
+            myVelocity.x = targetJumpGround.x - transform.position.x;
+            myVelocity.x = myVelocity.x / t;
+
+            Debug.Log($"  vel = {myVelocity}");
+
+            ChangeAction(ActionType.Air);
+
+            Move();
         }
 
         /// <summary>
@@ -226,10 +252,37 @@ namespace GreeningEx2019
         /// <param name="type">StellaMove.ActionTypeで次の動作を指定します。</param>
         public void ChangeAction(ActionType type)
         {
-            int idx = (int)type;
-            stellaActionScriptableObjects[idx].End();
+            EndAction();
             nowAction = type;
-            stellaActionScriptableObjects[idx].Init();
+            stellaActionScriptableObjects[(int)type].Init();
+        }
+
+        /// <summary>
+        /// 現在の行動の終了処理を呼び出します。
+        /// </summary>
+        public void EndAction()
+        {
+            if (nowAction != ActionType.None)
+            {
+                stellaActionScriptableObjects[(int)nowAction].End();
+            }
+        }
+
+        /// <summary>
+        /// アニメーションから呼び出された時に実行したい処理を登録します。
+        /// </summary>
+        /// <param name="act">アニメが完了した時に呼び出すアクション</param>
+        public static void RegisterAnimEvent(UnityAction act)
+        {
+            animEventAction = act;
+        }
+
+        /// <summary>
+        /// アニメーションから呼び出すメソッド。
+        /// </summary>
+        public void OnAnimEvent()
+        {
+            animEventAction?.Invoke();
         }
     }
 }
