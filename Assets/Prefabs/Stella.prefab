@@ -60,7 +60,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2.3
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.01
@@ -88,8 +88,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1eb9375e3d83363408e2a9e3796ee1a1, type: 2}
   - {fileID: 0}
   walkDownY: 0.1
-  miniJumpHeight: 1
+  miniJumpCheckX: 0.5
+  miniJumpHeight: 1.2
   miniJumpMargin: 0.25
+  isDebugMovable: 1
 --- !u!114 &1459080414
 MonoBehaviour:
   m_ObjectHideFlags: 0

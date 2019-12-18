@@ -7,7 +7,12 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Walk", fileName = "StellaActionWalk")]
     public class StellaWalk : StellaActionScriptableObject
     {
-        public override void UpdateAction(float tick)
+        public override void Init()
+        {
+            StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
+        }
+
+        public override void UpdateAction()
         {
             StellaMove.instance.Walk();
             StellaMove.instance.Gravity();

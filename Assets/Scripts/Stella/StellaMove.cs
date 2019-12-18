@@ -26,8 +26,10 @@ namespace GreeningEx2019
         StellaActionScriptableObject[] stellaActionScriptableObjects = null;
         [Tooltip("歩く際のデフォルトの落下距離"), SerializeField]
         float walkDownY = 0.1f;
+        [Tooltip("ミニジャンプチェックをする距離"), SerializeField]
+        float miniJumpCheckX = 0.5f;
         [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
-        float miniJumpHeight = 1f;
+        float miniJumpHeight = 1.2f;
         [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
         float miniJumpMargin = 0.25f;
 
@@ -58,12 +60,11 @@ namespace GreeningEx2019
             Walk,       // 1立ち、歩き
             Jump,       // 2ジャンプ開始
             Air,        // 3空中
-            OnGround,   // 4着地
-            Water,      // 5水まき
-            Obore,      // 6溺れ
-            Ivy,        // 7ツタ
-            Dandelion,  // 8綿毛に捕まる
-            Clear,      // 9クリア
+            Water,      // 4水まき
+            Obore,      // 5溺れ
+            Ivy,        // 6ツタ
+            Dandelion,  // 7綿毛に捕まる
+            Clear,      // 8クリア
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace GreeningEx2019
             anim.SetInteger("State", (int)AnimType.Walk);
             nowAction = ActionType.Walk;
             mapCollisionLayerMask = LayerMask.GetMask("MapCollision");
-            boxColliderHalfExtents.y = chrController.height * 0.5f;
+            boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
         }
@@ -111,8 +112,8 @@ namespace GreeningEx2019
 #if UNITY_EDITOR
             }
 #endif
-
-            stellaActionScriptableObjects[(int)nowAction]?.UpdateAction(Time.fixedDeltaTime);
+            
+            stellaActionScriptableObjects[(int)nowAction]?.UpdateAction();
         }
 
         /// <summary>
@@ -125,11 +126,16 @@ namespace GreeningEx2019
             anim.SetFloat("VelY", myVelocity.y);
 
             Vector3 move = myVelocity * Time.fixedDeltaTime;
-            if (chrController.isGrounded)
-            {
-                move.y -= walkDownY;
-            }
             chrController.Move(move);
+
+            if (!chrController.isGrounded && (nowAction == ActionType.Walk))
+            {
+                // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
+                move.Set(0, -chrController.stepOffset - move.y, 0);
+                chrController.Move(move);
+            }
+
+            anim.SetBool("IsGrounded", chrController.isGrounded);
         }
 
         /// <summary>
@@ -179,31 +185,38 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 移動先の高さが1かどうかを確認して、必要ならミニジャンプします。
+        /// 移動先の高さをチェックして、必要ならミニジャンプします。
         /// </summary>
         public void CheckMiniJump()
         {
-            // 横にぶつかっていなければチェック不要
-            if ((chrController.collisionFlags & CollisionFlags.Sides) == 0) return;
-
-            // ぶつかった相手を調べる
+            // 移動先に段差がないかを確認
+            float startOffset = chrController.radius + boxColliderHalfExtents.x;
             checkCenter = transform.position
                 + chrController.center
-                + forwardVector * (chrController.radius + boxColliderHalfExtents.x);
+                + forwardVector * startOffset;
+            float dist = (miniJumpCheckX - startOffset);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, boxColliderHalfExtents.x, mapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, dist, mapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
-            float h = raycastHits[0].collider.bounds.max.y - footh;
+            int hitIndex = 0;
+            float h = raycastHits[hitIndex].collider.bounds.max.y - footh;
 
             for (int i = 1; i < hitCount; i++)
             {
-                h = Mathf.Max(h, raycastHits[i].collider.bounds.max.y - footh);
+                float temph = raycastHits[i].collider.bounds.max.y - footh;
+                if (temph > h)
+                {
+                    h = temph;
+                    hitIndex = i;
+                }
             }
+
             if (h <= miniJumpHeight)
             {
-                targetJumpGround = (transform.position + forwardVector) + Vector3.up * miniJumpHeight;
+                targetJumpGround = raycastHits[hitIndex].transform.position;
+                targetJumpGround.y = chrController.bounds.min.y + h;
                 ChangeAction(ActionType.Jump);
             }
         }
@@ -216,21 +229,18 @@ namespace GreeningEx2019
             gameObject.layer = jumpLayer;
 
             // 目的の高さと、目的高さからの段差分を求める
-            float top = targetJumpGround.y + miniJumpMargin;
+            float top = targetJumpGround.y + miniJumpMargin - chrController.bounds.min.y;
 
             // Y方向の初速を決める
             // h = (g*t*t)/2;
             // 2h/g  = t*t
             float t = Mathf.Sqrt(2f * top / gravityAdd);
-            myVelocity.y = gravityAdd * t;
+            myVelocity.y = gravityAdd * (t - Time.fixedDeltaTime);
 
             // X方向の速度を決める
             float total = top + miniJumpMargin;
             t = Mathf.Sqrt(2f * total / gravityAdd);
-            myVelocity.x = targetJumpGround.x - transform.position.x;
-            myVelocity.x = myVelocity.x / t;
-
-            Debug.Log($"  vel = {myVelocity}");
+            myVelocity.x = (targetJumpGround.x - transform.position.x) / (t + Time.fixedDeltaTime);
 
             ChangeAction(ActionType.Air);
 

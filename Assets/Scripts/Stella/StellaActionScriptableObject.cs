@@ -11,10 +11,9 @@ namespace GreeningEx2019
         public virtual void Init() { }
 
         /// <summary>
-        /// 更新処理です。前の処理からの経過秒数を引数に渡します。
+        /// 更新処理です。
         /// </summary>
-        /// <param name="tick">経過秒数。Time.deltaTimeか、Time.fixedDeltaTimeの値</param>
-        public virtual void UpdateAction(float tick) { }
+        public virtual void UpdateAction() { }
 
         /// <summary>
         /// 終了時に必要な処理があったら、overrideして実装します。
