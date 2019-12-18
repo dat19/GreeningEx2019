@@ -15,9 +15,10 @@ namespace GreeningEx2019
         public override void Init()
         {
             isLanding = false;
+            StellaMove.instance.SetAnimState(StellaMove.AnimType.Air);
         }
 
-        public override void UpdateAction(float tick)
+        public override void UpdateAction()
         {
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
@@ -26,7 +27,6 @@ namespace GreeningEx2019
             {
                 StellaMove.myVelocity.x = 0;
                 StellaMove.RegisterAnimEvent(Grounded);
-                StellaMove.instance.SetAnimState(StellaMove.AnimType.OnGround);
                 isLanding = true;
             }
         }
