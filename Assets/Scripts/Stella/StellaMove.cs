@@ -27,6 +27,8 @@ namespace GreeningEx2019
         StellaActionScriptableObject[] stellaActionScriptableObjects = null;
         [Tooltip("歩く際のデフォルトの落下距離"), SerializeField]
         float walkDownY = 0.1f;
+        [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
+        float miniJumpHeight = 1f;
 
         /// <summary>
         /// アニメのStateに設定する値
@@ -52,10 +54,22 @@ namespace GreeningEx2019
             Nae,    // 苗運び
         }
 
+        /// <summary>
+        /// 列挙する接触したオブジェクトの上限数
+        /// </summary>
+        const int CollisionMax = 8;
+        /// <summary>
+        /// 移動先を判定する厚さの半分
+        /// </summary>
+        Vector3 boxColliderHalfExtents = new Vector3(0.05f, 0, 1);
+
         public static CharacterController chrController { get; private set; }
         public static Vector3 myVelocity = Vector3.zero;
         static Animator anim;
         static ActionType nowAction;
+        static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
+        static LayerMask mapCollisionLayerMask;
+        static Vector3 checkCenter;
 
         void Awake()
         {
@@ -64,6 +78,8 @@ namespace GreeningEx2019
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
             nowAction = ActionType.Walk;
+            mapCollisionLayerMask = LayerMask.GetMask("MapCollision");
+            boxColliderHalfExtents.y = chrController.height * 0.5f;
         }
 
         void FixedUpdate()
@@ -128,6 +144,40 @@ namespace GreeningEx2019
             }
 
             myVelocity.y += -gravityAdd * Time.fixedDeltaTime;
+        }
+
+        /// <summary>
+        /// 移動先の高さが1かどうかを確認して、必要ならミニジャンプします。
+        /// </summary>
+        public void CheckMiniJump()
+        {
+            // 横にぶつかっていなければチェック不要
+            if ((chrController.collisionFlags & CollisionFlags.Sides) == 0) return;
+
+            // ぶつかった相手を調べる
+            Vector3 dir = (transform.eulerAngles.y < 0  || transform.eulerAngles.y > 180 ) ? Vector3.right : Vector3.left;
+            checkCenter = transform.position
+                + chrController.center
+                + dir * (chrController.radius + boxColliderHalfExtents.x);
+
+            Debug.Log($"  checkCenter={checkCenter} half={boxColliderHalfExtents} dir={dir} euler={transform.eulerAngles.y}");
+                
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, dir, raycastHits, Quaternion.identity, boxColliderHalfExtents.x, mapCollisionLayerMask);
+            if (hitCount == 0) return;
+
+            float footh = chrController.bounds.min.y;
+            float h = raycastHits[0].collider.bounds.max.y - footh;
+            Debug.Log($"  firstheight={h}");
+            for (int i=1; i<hitCount;i++)
+            {
+                Debug.Log($"  {i} : {raycastHits[i].collider.bounds.max.y}");
+                h = Mathf.Max(h, raycastHits[i].collider.bounds.max.y - footh);
+            }
+
+            if (h <= miniJumpHeight)
+            {
+                Debug.Log("ミニジャンプ！");
+            }
         }
 
         /// <summary>
