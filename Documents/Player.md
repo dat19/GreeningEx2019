@@ -187,28 +187,35 @@ public enum ActionType {
 ```cs
 public enum AnimType {
   Start,
-  Walk, 
+  Walk,
   Jump,
+  Air,
+  OnGround,
   Water,
   Obore,
-  Pickup,
-  Tsuta,
-  Watage,
+  Ivy,
+  Dandelion,
   Clear,
 }
 
 ```
 
-- Bool型のNaeパラメーターで表す
-  - 苗を持つアニメに切り替わるようにする
-- Float型の速度VelXを渡して、立っているのと歩きを切り替える
-  - アニメ再生速度は、スクリプトで指定
-- Float型の速度VelYを渡して、上昇中と、下降中のパターンを切り替える
+## パラメーター
+- Integer State
+  - AnimTypeに対応させたシーケンシャルアニメ状態
+- Bool Nae
+  - 苗を持った状態をNaeレイヤーで再生する。falseにするとすぐに解除
+- Float VelX
+  - X速度の絶対値を渡して、立っているのと歩きを切り替える
+  - アニメ再生速度にかける
+- Float VelY
+  - Y速度を渡して、上昇中と下降中のパターンを切り替える
   - ジャンプと落下はJumpに統合
-- Putdownは、Pickupの逆再生になる
-  - プログラム側で、AnimatorのSpeedを-1にして逆再生にする
-- Tsutaのアニメの速度は、プログラムで調整する
-- キノコジャンプと玉乗りジャンプと、花ジャンプは、同じJumpで行う
-
-
-
+- Trigger LiftUp
+  - 苗を持ち上げるアニメ。再生が終わったら、立ちに戻る
+- Trigger LiftDown
+  - 苗を置くアニメ。再生が終わったら、立ちに戻る
+- Tsutaのアニメの速度は、VelYに連動させる
+- キノコジャンプと玉乗りジャンプと花ジャンプは、全てJumpから開始
+- Jumpモーションが完了して初速を設定したら、Airに移行する
+- その場で落下する場合は、Airから再生

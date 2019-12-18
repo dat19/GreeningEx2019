@@ -37,11 +37,16 @@ namespace GreeningEx2019
         /// </summary>
         public enum AnimType
         {
-            Start,
-            Walk,
+            Start,      // 0ゲーム開始演出
+            Walk,       // 1立ち、歩き
             Jump,       // 2ジャンプ開始
             Air,        // 3空中
             OnGround,   // 4着地
+            Water,      // 5水まき
+            Obore,      // 6溺れ
+            Ivy,        // 7ツタ
+            Dandelion,  // 8綿毛に捕まる
+            Clear,      // 9クリア
         }
 
         /// <summary>
