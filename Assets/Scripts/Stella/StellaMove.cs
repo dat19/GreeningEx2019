@@ -29,6 +29,8 @@ namespace GreeningEx2019
         float walkDownY = 0.1f;
         [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
         float miniJumpHeight = 1f;
+        [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
+        float miniJumpMargin = 0.25f;
 
         /// <summary>
         /// アニメのStateに設定する値
@@ -49,7 +51,8 @@ namespace GreeningEx2019
         {
             Start,  // 開始時の演出
             Walk,   // 立ち、歩き
-            Air,    // 空中。ジャンプ、落下
+            Air,    // 落下、着地
+            Jump,   // ジャンプまでのアニメ
             Water,  // 水まき
             Nae,    // 苗運び
         }
@@ -155,29 +158,52 @@ namespace GreeningEx2019
             if ((chrController.collisionFlags & CollisionFlags.Sides) == 0) return;
 
             // ぶつかった相手を調べる
-            Vector3 dir = (transform.eulerAngles.y < 0  || transform.eulerAngles.y > 180 ) ? Vector3.right : Vector3.left;
+            Vector3 dir = (transform.eulerAngles.y < 0 || transform.eulerAngles.y > 180) ? Vector3.right : Vector3.left;
             checkCenter = transform.position
                 + chrController.center
                 + dir * (chrController.radius + boxColliderHalfExtents.x);
 
-            Debug.Log($"  checkCenter={checkCenter} half={boxColliderHalfExtents} dir={dir} euler={transform.eulerAngles.y}");
-                
             int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, dir, raycastHits, Quaternion.identity, boxColliderHalfExtents.x, mapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
             float h = raycastHits[0].collider.bounds.max.y - footh;
-            Debug.Log($"  firstheight={h}");
-            for (int i=1; i<hitCount;i++)
+
+            for (int i = 1; i < hitCount; i++)
             {
-                Debug.Log($"  {i} : {raycastHits[i].collider.bounds.max.y}");
                 h = Mathf.Max(h, raycastHits[i].collider.bounds.max.y - footh);
             }
-
             if (h <= miniJumpHeight)
             {
-                Debug.Log("ミニジャンプ！");
+                JumpToGround((transform.position + dir) + Vector3.up * miniJumpHeight);
             }
+        }
+
+        /// <summary>
+        /// ジャンプで着地したい地面の座標
+        /// </summary>
+        static Vector3 targetJumpGround = Vector3.zero;
+
+        /// <summary>
+        /// 目的の床の座標を指定して、そこに向けてジャンプ
+        /// </summary>
+        /// <param name="target">目的の足場</param>
+        public void JumpToGround(Vector3 target)
+        {
+            targetJumpGround = target;
+            ChangeAction(ActionType.Jump);
+            SetAnimState(AnimType.Jump);
+        }
+
+        /// <summary>
+        /// targetJumpGroundから、ジャンプの初速を設定します。
+        /// 移動速度は、moveSpeedを一先ず利用します。
+        /// </summary>
+        public void SetFirstVelocityY()
+        {
+            chrController.detectCollisions = false;     // 当たり判定を一時無効化
+            float targetY = targetJumpGround.y + miniJumpMargin;
+
         }
 
         /// <summary>
