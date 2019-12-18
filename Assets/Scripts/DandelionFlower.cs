@@ -24,7 +24,7 @@ public class DandelionFlower : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water") || state == 0)
+        if (other.CompareTag("Water") && state == 0)
         {
             animator.SetTrigger("bloom");
             state = 1;
