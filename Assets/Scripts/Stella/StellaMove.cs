@@ -35,7 +35,9 @@ namespace GreeningEx2019
         {
             Start,
             Walk,
-            Jump,
+            Jump,       // 2ジャンプ開始
+            Air,        // 3空中
+            OnGround,   // 4着地
         }
 
         /// <summary>
