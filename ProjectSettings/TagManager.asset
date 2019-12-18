@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Water
   - Nae
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -18,9 +19,9 @@ TagManager:
   - Player
   - Nae
   - Goal
-  - 
-  - 
-  - 
+  - MapCollision
+  - MapTrigger
+  - Jump
   - 
   - 
   - 

@@ -19,6 +19,10 @@ namespace GreeningEx2019
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                 StellaMove.myVelocity.x = 0f;
             }
+            else
+            {
+                StellaMove.instance.CheckMiniJump();
+            }
         }
     }
 }

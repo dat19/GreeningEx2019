@@ -7,16 +7,34 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Air", fileName = "StellaActionAir")]
     public class StellaAir : StellaActionScriptableObject
     {
+        /// <summary>
+        /// 着地中
+        /// </summary>
+        bool isLanding = false;
+
+        public override void Init()
+        {
+            isLanding = false;
+        }
+
         public override void UpdateAction(float tick)
         {
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
-            if (StellaMove.chrController.isGrounded)
+            if (!isLanding && StellaMove.chrController.isGrounded)
             {
-                StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
-                StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+                StellaMove.myVelocity.x = 0;
+                StellaMove.RegisterAnimEvent(Grounded);
+                StellaMove.instance.SetAnimState(StellaMove.AnimType.OnGround);
+                isLanding = true;
             }
+        }
+
+        void Grounded()
+        {
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+            isLanding = false;
         }
     }
 }
