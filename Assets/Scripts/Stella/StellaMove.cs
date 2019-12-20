@@ -43,12 +43,19 @@ namespace GreeningEx2019
         public enum ActionType
         {
             None = -1,
-            Start,  // 0開始時の演出
-            Walk,   // 1立ち、歩き
-            Air,    // 2落下、着地
-            Jump,   // 3ジャンプまでのアニメ
-            Water,  // 4水まき
-            Nae,    // 5苗運び
+            Start,    // 0開始時の演出
+            Walk,     // 1立ち、歩き
+            Air,      // 2落下、着地
+            Jump,     // 3ジャンプまでのアニメ
+            Water,    // 4水まき
+            Pickup,   // 5苗を持ち上げる
+            NaeMove,  // 6苗運び
+            Putdown,  // 7苗を置く
+            Ivy,      // 8ツタにつかまる
+            Watage,   // 9綿毛につかまる
+            Tamanori, // 10岩にのる
+            Obore,    // 11溺れ
+            Clear     // 12ステージクリア
         }
 
         /// <summary>
@@ -71,6 +78,22 @@ namespace GreeningEx2019
         /// 列挙する接触したオブジェクトの上限数
         /// </summary>
         const int CollisionMax = 8;
+
+        /// <summary>
+        /// 前方を表すベクトル
+        /// </summary>
+        public static Vector3 ForwardVector { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static float GravityAdd { get { return instance.gravityAdd; } }
+
+        /// <summary>
+        /// 地面のレイヤーマスク
+        /// </summary>
+        public static LayerMask MapCollisionLayerMask { get; private set; }
+
         /// <summary>
         /// 移動先を判定する厚さの半分
         /// </summary>
@@ -78,11 +101,10 @@ namespace GreeningEx2019
 
         public static CharacterController chrController { get; private set; }
         public static Vector3 myVelocity = Vector3.zero;
-        static Vector3 forwardVector = Vector3.right;
+
         static Animator anim;
         static ActionType nowAction = ActionType.None;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
-        static LayerMask mapCollisionLayerMask;
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
         static Vector3 targetJumpGround = Vector3.zero;
@@ -96,10 +118,11 @@ namespace GreeningEx2019
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
             nowAction = ActionType.Walk;
-            mapCollisionLayerMask = LayerMask.GetMask("MapCollision");
+            MapCollisionLayerMask = LayerMask.GetMask("MapCollision");
             boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
+            ForwardVector = Vector3.right;
         }
 
         void FixedUpdate()
@@ -156,12 +179,12 @@ namespace GreeningEx2019
             if (h < -0.5f)
             {
                 e.y = rotateY;
-                forwardVector.x = -1;
+                ForwardVector = Vector3.left;
             }
             else if (h > 0.5f)
             {
                 e.y = -rotateY;
-                forwardVector.x = 1;
+                ForwardVector = Vector3.right;
             }
             transform.eulerAngles = e;
         }
@@ -193,10 +216,10 @@ namespace GreeningEx2019
             float startOffset = chrController.radius + boxColliderHalfExtents.x;
             checkCenter = transform.position
                 + chrController.center
-                + forwardVector * startOffset;
+                + ForwardVector * startOffset;
             float dist = (miniJumpCheckX - startOffset);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, dist, mapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, ForwardVector, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
