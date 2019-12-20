@@ -158,19 +158,20 @@ enum型で、上記の動作状態を決める。
 
 ```cs
 public enum ActionType {
-    None = -1,
-    Start,
-    Move,
-    Water,
-    Obore,
-    Pickup,
-    NaeMove,
-    Putdown,
-    Tsuta,
-    Watage,
-    Kinoko,
-    Tamanori,
-    Clear
+  None = -1,
+  Start,    // 0開始時の演出
+  Walk,     // 1立ち、歩き
+  Air,      // 2落下、着地
+  Jump,     // 3ジャンプまでのアニメ
+  Water,    // 4水まき
+  Pickup,   // 5苗を持ち上げる
+  NaeMove,  // 6苗運び
+  Putdown,  // 7苗を置く
+  Ivy,      // 8ツタにつかまる
+  Watage,   // 9綿毛につかまる
+  Tamanori, // 10岩にのる
+  Obore,    // 11溺れ
+  Clear     // 12ステージクリア
 }
 ```
 

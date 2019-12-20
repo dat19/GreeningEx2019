@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace GreeningEx2019
 {
+    /// <summary>
+    /// ステラの空中制御。
+    /// targetPositionのx座標に達するまでは、現在の移動を続けます。
+    /// </summary>
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Air", fileName = "StellaActionAir")]
     public class StellaAir : StellaActionScriptableObject
     {
