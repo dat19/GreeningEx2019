@@ -17,7 +17,17 @@ namespace GreeningEx2019
 
         public override void UpdateAction()
         {
-            StellaMove.instance.Walk();
+            // 水まきチェック
+            if (Input.GetButton("Water"))
+            {
+                StellaMove.instance.ChangeAction(StellaMove.ActionType.Water);
+
+            }
+            else
+            {
+                StellaMove.instance.Walk();
+            }
+
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
