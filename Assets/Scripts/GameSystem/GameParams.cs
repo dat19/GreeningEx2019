@@ -26,6 +26,11 @@ namespace GreeningEx2019
         public const int StageCount = 10;
 
         /// <summary>
+        /// クリア済みステージ数の保存用キー
+        /// </summary>
+        const string ClearedStageCountKey = "ClearedStageCount";
+
+        /// <summary>
         /// ステージ選択で選ばれたステージ。0=Stage1
         /// </summary>
         public static int SelectedStage { get; private set; }
@@ -38,12 +43,56 @@ namespace GreeningEx2019
 
         private void Awake()
         {
-            // TODO: PlayerPrefsから、ClearedStageCountを読み出す
+            LoadClearedStageCount();
 
             SelectedStage = Mathf.Min(clearedStageCount, StageCount-1);
             if (SelectedStage == StageCount - 1)
             {
                 SelectedStage = 0;
+            }
+        }
+
+        /// <summary>
+        /// 新規にゲームを開始するための初期化
+        /// </summary>
+        public static void SetNewGame()
+        {
+            Instance.clearedStageCount = 0;
+            SaveClearedStageCount();
+
+            SelectedStage = 0;
+        }
+
+        /// <summary>
+        /// 現在のクリアステージカウントを保存する。
+        /// </summary>
+        public static void SaveClearedStageCount()
+        {
+            PlayerPrefs.SetInt(ClearedStageCountKey, Instance.clearedStageCount);
+        }
+
+        /// <summary>
+        /// 保存してあるクリアステージカウントを読み出す。
+        /// </summary>
+        public static void LoadClearedStageCount()
+        {
+            Instance.clearedStageCount = PlayerPrefs.GetInt(ClearedStageCountKey, Instance.clearedStageCount);
+        }
+
+        /// <summary>
+        /// コンティニューのための初期化
+        /// </summary>
+        public static void SetContinue()
+        {
+            if (ClearedStageCount >= StageCount)
+            {
+                // クリア済みの時は最初のステージ
+                SelectedStage = 0;
+            }
+            else
+            {
+                // プレイ中の時は最後のステージ
+                SelectedStage = ClearedStageCount;
             }
         }
 
