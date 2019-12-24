@@ -32,6 +32,12 @@ namespace GreeningEx2019
         float miniJumpHeight = 1.2f;
         [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
         float miniJumpMargin = 0.25f;
+        [Tooltip("じょうろピボットオブジェクト"), SerializeField]
+        Transform zyouroPivot = null;
+        [Tooltip("じょうろの水のエミッターの位置"), SerializeField]
+        Transform zyouroEmitterPosition = null;
+        [Tooltip("じょうろの水のエミッター"), SerializeField]
+        Transform zyouroEmitter = null;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
@@ -101,6 +107,9 @@ namespace GreeningEx2019
 
         public static CharacterController chrController { get; private set; }
         public static Vector3 myVelocity = Vector3.zero;
+        public static Transform ZyouroPivot { get { return instance.zyouroPivot; } }
+        public static Transform ZyouroEmitterPosition { get { return instance.zyouroEmitterPosition; } }
+        public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
 
         static Animator anim;
         static ActionType nowAction = ActionType.None;
@@ -110,6 +119,7 @@ namespace GreeningEx2019
         static Vector3 targetJumpGround = Vector3.zero;
         static int defaultLayer = 0;
         static int jumpLayer = 0;
+        static ParticleSystem splashParticle = null;
 
         void Awake()
         {
@@ -123,6 +133,7 @@ namespace GreeningEx2019
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
             ForwardVector = Vector3.right;
+            splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
         }
 
         void FixedUpdate()
@@ -321,6 +332,16 @@ namespace GreeningEx2019
         void Restart()
         {
             SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
+        }
+
+        /// <summary>
+        /// 現在の場所で水しぶきを上げる
+        /// </summary>
+        public void Splash()
+        {
+            splashParticle.transform.position = new Vector3(chrController.bounds.center.x, chrController.bounds.min.y);
+            splashParticle.transform.forward = Vector3.up;
+            splashParticle.Play();
         }
 
         private void OnTriggerEnter(Collider other)

@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toStageSelect: 0
-  clearedStageCount: 10
+  clearedStageCount: 1
 --- !u!82 &190469380
 AudioSource:
   m_ObjectHideFlags: 0

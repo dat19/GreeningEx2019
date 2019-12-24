@@ -7,8 +7,13 @@ public class Water : MonoBehaviour
     [Tooltip("生存秒数"), SerializeField]
     float lifeTime = 3f;
 
-    void Start()
+    public void Start()
     {
-        Destroy(gameObject, lifeTime);        
+        Invoke("Disable", lifeTime);
+    }
+
+    private void Disable()
+    {
+        gameObject.SetActive(false);
     }
 }

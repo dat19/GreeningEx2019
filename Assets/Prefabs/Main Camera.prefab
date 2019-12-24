@@ -241,9 +241,9 @@ GameObject:
   m_Component:
   - component: {fileID: 745748506634067980}
   - component: {fileID: 5679665490338013148}
+  - component: {fileID: 745748506634067983}
   - component: {fileID: 745748506634067981}
   - component: {fileID: 745748506634067978}
-  - component: {fileID: 745748506634067983}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -281,6 +281,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1951fb7b77977b14194e8d01ce756524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &745748506634067983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745748506634067979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffe64293dcca47449ae863aa45338f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewPointMin: 0.2
+  viewPointMax: 0.6
 --- !u!20 &745748506634067981
 Camera:
   m_ObjectHideFlags: 0
@@ -384,20 +398,6 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!114 &745748506634067983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 745748506634067979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ffe64293dcca47449ae863aa45338f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewPointMin: 0.2
-  viewPointMax: 0.6
 --- !u!1 &745748507033364738
 GameObject:
   m_ObjectHideFlags: 0
