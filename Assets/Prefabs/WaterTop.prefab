@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2513788105799943622}
   - component: {fileID: 2513788105799943617}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: WaterTop
-  m_TagString: Untagged
+  m_TagString: DeadZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
