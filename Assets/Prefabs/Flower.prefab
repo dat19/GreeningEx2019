@@ -53,7 +53,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7137157468005444666}
-  - component: {fileID: 7137157468005444668}
   - component: {fileID: 7137157468005444667}
   m_Layer: 0
   m_Name: Flower
@@ -77,27 +76,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7137157468005444668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7137157468005444665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19ca9587414d99c41a7c51ebd5accb2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flowerBridgePrefab: {fileID: 0}
-  flowerScriptableObject: {fileID: 11400000, guid: 61c25f4577997624c90db736e9bbc645,
-    type: 2}
-  radius: 2
-  flowerCount: 10
-  startOffset: {x: -0.25, y: -0.4, z: 0}
-  blockLength: 2
-  kazariOffset: {x: 0, y: 0, z: 0.4}
-  direction: 1
 --- !u!95 &7137157468005444667
 Animator:
   serializedVersion: 3

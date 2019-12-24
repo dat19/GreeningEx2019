@@ -20,10 +20,8 @@ namespace GreeningEx2019
         float blockLength = 2f;
         [Tooltip("飾り花のオフセット。Xは算出するので、YとZのみ利用。手前用のデータを設定"), SerializeField]
         Vector3 kazariOffset = new Vector3(0, -0.1f, -0.4f);
-
-        [Header("デバッグ")]
-        [Tooltip("花の橋の方向。動作確認が完了したら、メソッドの引数にする"), SerializeField]
-        float direction = 1;
+        [Tooltip("開花し終えるまでの秒数"), SerializeField]
+        float openSeconds = 1f;
 
         /// <summary>
         /// 花の橋のオブジェクト数
@@ -36,16 +34,41 @@ namespace GreeningEx2019
 
             int fcount = flowerCount + (flowerCount - 1) * 2;
 
+            // 花をつけるアニメ用のもともと設定されている花
+            GameObject go = transform.Find("Flower").gameObject;
+            flowerList.Add(go);
+            flowerScriptableObject.Flower(go.transform.GetChild(0).transform);
+
             while (flowerList.Count < fcount)
             {
-                GameObject go = Instantiate(flowerBridgePrefab, transform);
-                go.GetComponent<Animator>().SetTrigger("Flower");
+                go = Instantiate(flowerBridgePrefab, transform);
                 flowerList.Add(go);
                 // 花を設定
                 flowerScriptableObject.Flower(go.transform.GetChild(0).transform);
             }
+        }
 
-            PutFlower(direction);
+        /// <summary>
+        /// 開花アニメを開始
+        /// </summary>
+        public void OpenFlower()
+        {
+            StartCoroutine(flower());
+        }
+
+        IEnumerator flower()
+        {
+            int count = flowerCount + (flowerCount - 1) * 2;
+            float startTime = Time.time;
+            for (int i = 1; i < count; i++)
+            {
+                flowerList[i].GetComponent<Animator>().SetTrigger("Grow");
+                float nextTime = ((float)i / (float)count) * openSeconds;
+                while ((Time.time-startTime) < nextTime)
+                {
+                    yield return null;
+                }
+            }
         }
 
         /// <summary>

@@ -24,9 +24,9 @@ public class Grow : MonoBehaviour
     /// </summary>
     public StateType state = StateType.Nae;
 
-    Animator anim;
+    protected Animator anim;
 
-    private void Awake()
+    protected void Awake()
     {
         state = StateType.Nae;
         anim = GetComponent<Animator>();
@@ -36,7 +36,7 @@ public class Grow : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if ((state == StateType.Nae) && other.CompareTag("Water"))
         {
@@ -49,7 +49,7 @@ public class Grow : MonoBehaviour
     /// アニメーションの最後のフレームのイベントから
     /// 呼び出します。
     /// </summary>
-    public void GrowDone()
+    public virtual void GrowDone()
     {
         state = StateType.Growed;
     }
