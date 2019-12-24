@@ -110,6 +110,7 @@ namespace GreeningEx2019
         static Vector3 targetJumpGround = Vector3.zero;
         static int defaultLayer = 0;
         static int jumpLayer = 0;
+        static ParticleSystem splashParticle = null;
 
         void Awake()
         {
@@ -123,6 +124,7 @@ namespace GreeningEx2019
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
             ForwardVector = Vector3.right;
+            splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
         }
 
         void FixedUpdate()
@@ -321,6 +323,16 @@ namespace GreeningEx2019
         void Restart()
         {
             SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
+        }
+
+        /// <summary>
+        /// 現在の場所で水しぶきを上げる
+        /// </summary>
+        public void Splash()
+        {
+            splashParticle.transform.position = new Vector3(chrController.bounds.center.x, chrController.bounds.min.y);
+            splashParticle.transform.forward = Vector3.up;
+            splashParticle.Play();
         }
 
         private void OnTriggerEnter(Collider other)
