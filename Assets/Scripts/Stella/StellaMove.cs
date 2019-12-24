@@ -32,6 +32,12 @@ namespace GreeningEx2019
         float miniJumpHeight = 1.2f;
         [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
         float miniJumpMargin = 0.25f;
+        [Tooltip("じょうろピボットオブジェクト"), SerializeField]
+        Transform zyouroPivot = null;
+        [Tooltip("じょうろの水のエミッターの位置"), SerializeField]
+        Transform zyouroEmitterPosition = null;
+        [Tooltip("じょうろの水のエミッター"), SerializeField]
+        Transform zyouroEmitter = null;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
@@ -101,6 +107,9 @@ namespace GreeningEx2019
 
         public static CharacterController chrController { get; private set; }
         public static Vector3 myVelocity = Vector3.zero;
+        public static Transform ZyouroPivot { get { return instance.zyouroPivot; } }
+        public static Transform ZyouroEmitterPosition { get { return instance.zyouroEmitterPosition; } }
+        public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
 
         static Animator anim;
         static ActionType nowAction = ActionType.None;
