@@ -17,7 +17,7 @@ namespace GreeningEx2019
         public static StellaMove instance = null;
 
         [Tooltip("移動速度(秒速)"), SerializeField]
-        float moveSpeed = 3f;
+        float moveSpeed = 3.5f;
         [Tooltip("重力加速度(速度/秒)"), SerializeField]
         float gravityAdd = 20f;
         [Tooltip("ステラの横向きの角度"), SerializeField]
@@ -316,6 +316,24 @@ namespace GreeningEx2019
         public void OnAnimEvent()
         {
             animEventAction?.Invoke();
+        }
+
+        void Restart()
+        {
+            SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerEnter(other);
+        }
+        private void OnTriggerStay(Collider other)
+        {
+            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerStay(other);
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
         }
     }
 }

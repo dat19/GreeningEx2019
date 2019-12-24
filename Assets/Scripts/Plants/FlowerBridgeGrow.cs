@@ -19,7 +19,6 @@ namespace GreeningEx2019
 
         protected override void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"trige {other.tag}");
             if ((state == StateType.Nae) && other.CompareTag("Water"))
             {
                 flowerBridge.PutFlower(StellaMove.ForwardVector.x);

@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06ba8ce6e25b75649baacd3ea8b4cac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 3.5
   gravityAdd: 20
   rotateY: 40
   stellaActionScriptableObjects:
@@ -348,6 +348,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3fde1576e30d3d841989fe2a85531fff, type: 2}
   - {fileID: 11400000, guid: 1eb9375e3d83363408e2a9e3796ee1a1, type: 2}
   - {fileID: 11400000, guid: 91d59a23516168b48860cfaecf86a74d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 81b0eafa9bb5c124696288ae449dfde1, type: 2}
+  - {fileID: 0}
   walkDownY: 0.1
   miniJumpCheckX: 0.5
   miniJumpHeight: 1.2

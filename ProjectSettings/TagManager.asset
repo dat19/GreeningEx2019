@@ -7,6 +7,7 @@ TagManager:
   - Water
   - Nae
   - Ground
+  - DeadZone
   layers:
   - Default
   - TransparentFX
