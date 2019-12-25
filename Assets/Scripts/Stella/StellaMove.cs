@@ -16,12 +16,8 @@ namespace GreeningEx2019
     {
         public static StellaMove instance = null;
 
-        [Tooltip("移動速度(秒速)"), SerializeField]
-        float moveSpeed = 3.5f;
         [Tooltip("重力加速度(速度/秒)"), SerializeField]
         float gravityAdd = 20f;
-        [Tooltip("ステラの横向きの角度"), SerializeField]
-        float rotateY = 40f;
         [Tooltip("ステラの各状態を制御するためのStellaActionアセット。Create > Greening > StellaActionsから、必要なものを作成"), SerializeField]
         StellaActionScriptableObject[] stellaActionScriptableObjects = null;
         [Tooltip("歩く際のデフォルトの落下距離"), SerializeField]
@@ -88,7 +84,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 前方を表すベクトル
         /// </summary>
-        public static Vector3 ForwardVector { get; private set; }
+        public static Vector3 forwardVector;
 
         /// <summary>
         /// 
@@ -132,7 +128,7 @@ namespace GreeningEx2019
             boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
-            ForwardVector = Vector3.right;
+            forwardVector = Vector3.right;
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
         }
 
@@ -173,34 +169,6 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 歩いたり止まったりします。
-        /// </summary>
-        public void Walk()
-        {
-            // キーの入力を調べる
-            float h = Input.GetAxisRaw("Horizontal");
-
-            // 左右の移動速度(秒速)を求める
-            float vx = h * moveSpeed;
-
-            // 動かす
-            myVelocity.x = vx;
-
-            Vector3 e = transform.eulerAngles;
-            if (h < -0.5f)
-            {
-                e.y = rotateY;
-                ForwardVector = Vector3.left;
-            }
-            else if (h > 0.5f)
-            {
-                e.y = -rotateY;
-                ForwardVector = Vector3.right;
-            }
-            transform.eulerAngles = e;
-        }
-
-        /// <summary>
         /// 重力加速を処理します。
         /// </summary>
         public void Gravity()
@@ -227,10 +195,10 @@ namespace GreeningEx2019
             float startOffset = chrController.radius + boxColliderHalfExtents.x;
             checkCenter = transform.position
                 + chrController.center
-                + ForwardVector * startOffset;
+                + forwardVector * startOffset;
             float dist = (miniJumpCheckX - startOffset);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, ForwardVector, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;

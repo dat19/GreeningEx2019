@@ -21,7 +21,7 @@ namespace GreeningEx2019
         {
             if ((state == StateType.Nae) && other.CompareTag("Water"))
             {
-                flowerBridge.PutFlower(StellaMove.ForwardVector.x);
+                flowerBridge.PutFlower(StellaMove.forwardVector.x);
                 state = StateType.Growing;
                 anim.SetTrigger("Grow");
                 flowerAnim.SetTrigger("Grow");

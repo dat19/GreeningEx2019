@@ -7,16 +7,39 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Walk", fileName = "StellaActionWalk")]
     public class StellaWalk : StellaActionScriptableObject
     {
+        [Tooltip("移動速度(秒速)"), SerializeField]
+        float moveSpeed = 3.5f;
+        [Tooltip("ステラの横向きの角度"), SerializeField]
+        float rotateY = 40f;
+        [Tooltip("方向転換秒数"), SerializeField]
+        float turnSeconds = 0.15f;
+
+        enum StateType
+        {
+            Walk,
+            Turn,
+        }
+
+        StateType state = StateType.Walk;
         const int RaycastHitMax = 8;
         RaycastHit[] raycastHits = new RaycastHit[RaycastHitMax];
+        float stateStartTime;
 
         public override void Init()
         {
             StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
+            state = StateType.Walk;
         }
 
         public override void UpdateAction()
         {
+            // ターン中処理
+            if (state == StateType.Turn)
+            {
+                Turn();
+                return;
+            }
+
             // 水まきチェック
             if (Input.GetButton("Water"))
             {
@@ -25,7 +48,7 @@ namespace GreeningEx2019
             }
             else
             {
-                StellaMove.instance.Walk();
+                Walk();
             }
 
             StellaMove.instance.Gravity();
@@ -41,6 +64,72 @@ namespace GreeningEx2019
             {
                 StellaMove.instance.CheckMiniJump();
             }
+        }
+
+        /// <summary>
+        /// 歩いたり止まったりします。
+        /// </summary>
+        void Walk()
+        {
+            // キーの入力を調べる
+            float h = Input.GetAxisRaw("Horizontal");
+
+            // 方向転換チェック
+            if ((h * StellaMove.forwardVector.x) < -0.5f)
+            {
+                state = StateType.Turn;
+                stateStartTime = Time.time - Time.fixedDeltaTime;
+                StellaMove.myVelocity.x = 0f;
+                Turn();
+                return;
+            }
+
+            // 左右の移動速度(秒速)を求める
+            float vx = h * moveSpeed;
+
+            // 動かす
+            StellaMove.myVelocity.x = vx;
+
+            Vector3 e = StellaMove.instance.transform.eulerAngles;
+            if (h < -0.5f)
+            {
+                e.y = rotateY;
+                StellaMove.forwardVector = Vector3.left;
+            }
+            else if (h > 0.5f)
+            {
+                e.y = -rotateY;
+                StellaMove.forwardVector = Vector3.right;
+            }
+            StellaMove.instance.transform.eulerAngles = e;
+        }
+
+        /// <summary>
+        /// ターン処理
+        /// </summary>
+        void Turn()
+        {
+            Vector3 e = StellaMove.instance.transform.eulerAngles;
+            if (StellaMove.forwardVector.x > -0.5f)
+            {
+                e.y = rotateY;
+            }
+            else
+            {
+                e.y = -rotateY;
+            }
+
+            float delta = (Time.time - stateStartTime) / turnSeconds;
+
+            if (delta >= 1f)
+            {
+                delta = 1f;
+                StellaMove.forwardVector.x = -Mathf.Sign(e.y);
+                state = StateType.Walk;
+            }
+
+            e.y = Mathf.LerpAngle(-e.y, e.y, delta);
+            StellaMove.instance.transform.eulerAngles = e;
         }
 
         /// <summary>

@@ -76,10 +76,10 @@ namespace GreeningEx2019
 
             // じょうろの方向を設定
             // index: 左0 右1
-            int index = StellaMove.ForwardVector.x < 0 ? 0 : 1;
+            int index = StellaMove.forwardVector.x < 0 ? 0 : 1;
             StellaMove.ZyouroPivot.localEulerAngles = zyouroEular[index];
             StellaMove.ZyouroPivot.localPosition = zyouroPivotPosition[index];
-            StellaMove.ZyouroEmitter.forward = StellaMove.ForwardVector;
+            StellaMove.ZyouroEmitter.forward = StellaMove.forwardVector;
             StellaMove.ZyouroEmitter.parent = null;
         }
 
