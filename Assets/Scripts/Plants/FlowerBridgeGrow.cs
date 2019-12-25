@@ -19,11 +19,9 @@ namespace GreeningEx2019
 
         protected override void OnTriggerEnter(Collider other)
         {
-            if ((state == StateType.Nae) && other.CompareTag("Water"))
+            if (CanGrow(other))
             {
                 flowerBridge.PutFlower(StellaMove.forwardVector.x);
-                state = StateType.Growing;
-                anim.SetTrigger("Grow");
                 flowerAnim.SetTrigger("Grow");
             }
         }

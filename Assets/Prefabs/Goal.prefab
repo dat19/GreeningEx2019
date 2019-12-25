@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2597785368449157421}
+  - component: {fileID: 1435105969831904022}
   - component: {fileID: 2597785368449157420}
   m_Layer: 10
   m_Name: Goal
@@ -32,6 +33,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1435105969831904022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2597785368449157422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b886abfb7d854f04186a06d2e97e5200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materials:
+  - {fileID: 2100000, guid: 197eb724c590e1c448787654649f8eb5, type: 2}
+  - {fileID: 2100000, guid: 715038f44246d0941ad43f0446e5daff, type: 2}
+  - {fileID: 2100000, guid: bfcd99bc3d024fd49be1884b0a2d1d32, type: 2}
+  naeMax: 1
+  changeColorSeconds: 0.5
 --- !u!135 &2597785368449157420
 SphereCollider:
   m_ObjectHideFlags: 0
