@@ -231,6 +231,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5767168248798744890}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &49355129 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 745748506592090061, guid: 3653e50c2e208934ba3e52457bcb811c,
+    type: 3}
+  m_PrefabInstance: {fileID: 950582666}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &82846614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1151,6 +1157,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4269892110473912335, guid: 1321f6e6e22e2e145a3f94405d2bdfff,
     type: 3}
   m_PrefabInstance: {fileID: 226755732}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &233187886 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 745748505986347021, guid: 3653e50c2e208934ba3e52457bcb811c,
+    type: 3}
+  m_PrefabInstance: {fileID: 950582666}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &235023134 stripped
 Transform:
@@ -3141,6 +3153,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1383379436163148124}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &925784288 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 745748505673920948, guid: 3653e50c2e208934ba3e52457bcb811c,
+    type: 3}
+  m_PrefabInstance: {fileID: 950582666}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &930236506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3293,6 +3311,121 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.2264151
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.2264151
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.2264151
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506592090058, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506592090058, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgObjects.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgTop.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottom.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraBottom
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottom
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraTop
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 233187886}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 925784288}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 49355129}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgTop.Array.data[0]
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgTop.Array.data[1]
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottom.Array.data[0]
+      value: -0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottom.Array.data[1]
+      value: -0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgTop.Array.data[2]
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgHalfs.Array.data[2]
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgTops.Array.data[2]
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottoms.Array.data[2]
+      value: -0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3653e50c2e208934ba3e52457bcb811c, type: 3}

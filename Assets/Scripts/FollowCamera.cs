@@ -2,41 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowCamera : MonoBehaviour
+namespace GreeningEx2019
 {
-    [Tooltip("プレイヤーの画面左端"), SerializeField]
-    float viewPointMin = 0.2f;
-    [Tooltip("プレイヤーの画面右端"), SerializeField]
-    float viewPointMax = 0.6f;
-
-    Transform playerTransform = null;
-    Vector3 camToPlayer;
-
-    /// <summary>
-    /// ターゲットを設定
-    /// </summary>
-    /// <param name="tg">目的のオブジェクトのトランスフォーム</param>
-    public void SetTarget(Transform tg)
+    public class FollowCamera : MonoBehaviour
     {
-        playerTransform = tg;
-        camToPlayer = playerTransform.position - transform.position;
-    }
+        [Tooltip("プレイヤーの画面左端"), SerializeField]
+        float viewPointMin = 0.2f;
+        [Tooltip("プレイヤーの画面右端"), SerializeField]
+        float viewPointMax = 0.6f;
 
-    private void Awake()
-    {
-        GameObject go = GameObject.FindGameObjectWithTag("Player");
-        if (go == null)
+        Transform playerTransform = null;
+        Vector3 camToPlayer;
+
+        /// <summary>
+        /// ターゲットを設定
+        /// </summary>
+        /// <param name="tg">目的のオブジェクトのトランスフォーム</param>
+        public void SetTarget(Transform tg)
         {
-            return;
+            playerTransform = tg;
+            camToPlayer = playerTransform.position - transform.position;
         }
-        SetTarget(go.transform);
-    }
 
-    private void LateUpdate()
-    {
-        if (!playerTransform) return;
+        private void Awake()
+        {
+            GameObject go = GameObject.FindGameObjectWithTag("Player");
+            if (go == null)
+            {
+                return;
+            }
+            SetTarget(go.transform);
+        }
 
-        Vector3 next = playerTransform.position - camToPlayer;
-        transform.position = next;
+        private void LateUpdate()
+        {
+            if (!playerTransform) return;
+
+            Vector3 next = playerTransform.position - camToPlayer;
+            transform.position = next;
+
+            BGScroller.instance.Scroll();
+        }
     }
 }
