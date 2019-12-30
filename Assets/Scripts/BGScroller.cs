@@ -70,5 +70,17 @@ namespace GreeningEx2019
                 bgMaterials[i] = bgObjects[i].material;
             }
         }
+
+        /// <summary>
+        /// 指定のマテリアルに切り替えます。
+        /// </summary>
+        /// <param name="mats">設定するマテリアル。空、星、木の順</param>
+        public void ChangeMaterials(Material[] mats)
+        {
+            for (int i = 0; i < mats.Length;i++)
+            {
+                bgObjects[i].material = mats[i];
+            }
+        }
     }
 }

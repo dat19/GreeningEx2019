@@ -47,6 +47,16 @@ namespace GreeningEx2019
         /// </summary>
         static int setNaeCount;
 
+        /// <summary>
+        /// コライダー
+        /// </summary>
+        static Collider myCollider = null;
+
+        /// <summary>
+        /// アニメーター
+        /// </summary>
+        static Animator anim = null;
+
 
         private void Awake()
         {
@@ -56,6 +66,9 @@ namespace GreeningEx2019
             startMaterial = new Material(myMaterial);
             targetMaterial = new Material(myMaterial);
             counter = 0;
+            myCollider = GetComponent<Collider>();
+            myCollider.enabled = false;
+            anim = GetComponent<Animator>();
         }
 
         private void FixedUpdate()
@@ -94,7 +107,34 @@ namespace GreeningEx2019
             else
             {
                 targetMaterial = new Material(instance.materials[(int)MaterialIndex.Completed]);
+                myCollider.enabled = true;
             }
+        }
+
+        /// <summary>
+        /// クリア時の回転アニメを開始します。
+        /// </summary>
+        public static void ClearAnim()
+        {
+            anim.SetTrigger("Rolling");
+        }
+
+        /// <summary>
+        /// 飛び立つアニメを開始します。
+        /// </summary>
+        public static void FlyAnim()
+        {
+            anim.SetTrigger("Fly");
+        }
+
+        /// <summary>
+        /// クリア処理をして、ステージ選択シーンへ移行します。
+        /// 飛び立つアニメから、完了時に呼び出します。
+        /// </summary>
+        public void ClearAndStageSelect()
+        {
+            GameParams.StageClear();
+            SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
         }
     }
 }

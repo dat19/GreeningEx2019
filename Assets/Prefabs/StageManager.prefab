@@ -45,3 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stellaPrefab: {fileID: 1934622103324141995, guid: 1de354135e9c32041be2f5210cbfdcd2,
     type: 3}
+  clearFadeColor: {r: 0.93607265, g: 1, b: 0.9009434, a: 1}
+  clearBGMaterials:
+  - {fileID: 2100000, guid: 637b95993951ca942811384dd5c6cdb2, type: 2}
+  - {fileID: 2100000, guid: 16215ab37b0d14f47a9e673af3ff45f9, type: 2}
+  - {fileID: 2100000, guid: e9cebef691aaaab4bbde7d97d82d2dbe, type: 2}

@@ -36,7 +36,7 @@ namespace GreeningEx2019
 
         private void LateUpdate()
         {
-            if (!playerTransform) return;
+            if (!playerTransform || StageManager.IsClearPlaying) return;
 
             Vector3 next = playerTransform.position - camToPlayer;
             transform.position = next;

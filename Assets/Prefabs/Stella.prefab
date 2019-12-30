@@ -326,9 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06ba8ce6e25b75649baacd3ea8b4cac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
   gravityAdd: 20
-  rotateY: 40
   stellaActionScriptableObjects:
   - {fileID: 0}
   - {fileID: 11400000, guid: 5c1f1bdd635655c469e7e396b6bd680f, type: 2}
@@ -350,7 +348,7 @@ MonoBehaviour:
   zyouroPivot: {fileID: 6774093908936242064}
   zyouroEmitterPosition: {fileID: 4761528081297712531}
   zyouroEmitter: {fileID: 8113470482104823767}
-  isDebugMovable: 1
+  isDebugMovable: 0
 --- !u!1 &2392662632966794372
 GameObject:
   m_ObjectHideFlags: 0

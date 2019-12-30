@@ -142,7 +142,7 @@ namespace GreeningEx2019
 #if UNITY_EDITOR
             }
 #endif
-            
+
             stellaActionScriptableObjects[(int)nowAction]?.UpdateAction();
         }
 
@@ -314,15 +314,37 @@ namespace GreeningEx2019
 
         private void OnTriggerEnter(Collider other)
         {
+            if (ClearCheck(other)) return;
+
             stellaActionScriptableObjects[(int)nowAction]?.OnTriggerEnter(other);
         }
         private void OnTriggerStay(Collider other)
         {
+            if (ClearCheck(other)) return;
+
             stellaActionScriptableObjects[(int)nowAction]?.OnTriggerStay(other);
         }
         private void OnTriggerExit(Collider other)
         {
             stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
+        }
+
+        /// <summary>
+        /// クリアチェック。これ以降の処理が不要な場合、trueを返します。
+        /// </summary>
+        /// <returns>以降の当たり判定が不要な時、true</returns>
+        bool ClearCheck(Collider other)
+        {
+            if (!StageManager.CanMove) return true;
+
+            // クリアチェック
+            if (other.CompareTag("Finish"))
+            {
+                StageManager.StartClear();
+                return true;
+            }
+
+            return false;
         }
     }
 }
