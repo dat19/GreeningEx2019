@@ -45,6 +45,11 @@ namespace GreeningEx2019
         public enum BgmType
         {
             Title,
+            StageSelect,
+            Game0,
+            Game1,
+            Game2,
+            Clear,
         }
         [Tooltip("BGMリスト"), SerializeField]
         private AudioClip[] bgmList = null;

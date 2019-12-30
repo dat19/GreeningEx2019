@@ -45,7 +45,7 @@ namespace GreeningEx2019
 
         public override void OnFadeOutDone()
         {
-            SoundController.PlayBGM(SoundController.BgmType.Title, true);
+            SoundController.PlayBGM(SoundController.BgmType.Game0, true);
             SceneManager.SetActiveScene(gameObject.scene);
 
             // プレイヤーを入れ替える
@@ -64,7 +64,8 @@ namespace GreeningEx2019
         public static void StartClear()
         {
             IsClearPlaying = true;
-            instance.StartCoroutine(instance.ClearSequence());            
+            instance.StartCoroutine(instance.ClearSequence());
+            SoundController.PlayBGM(SoundController.BgmType.Clear);
         }
 
         IEnumerator ClearSequence()

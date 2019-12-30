@@ -88,6 +88,7 @@ namespace GreeningEx2019
 
         public override void OnFadeOutDone()
         {
+            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
         }
