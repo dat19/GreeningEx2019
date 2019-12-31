@@ -20,16 +20,19 @@ namespace GreeningEx2019
 
         void HoldNae()
         {
-            Debug.Log($"hold nae");
-            StellaMove.RegisterAnimEvent(ToHoldWalk);
+            StellaMove.RegisterAnimEvent(ToHold);
             ((NaeActable)ActionBox.SelectedActable).Hold(StellaMove.ZyouroPivot);
+        }
+
+        void ToHold()
+        {
+            StellaMove.SetAnimBool("Nae", true);
+            StellaMove.RegisterAnimEvent(ToHoldWalk);
         }
 
         void ToHoldWalk()
         {
-            Debug.Log($"hold walk");
             StellaMove.instance.ChangeAction(StellaMove.ActionType.NaeWalk);
-            StellaMove.SetAnimBool("Nae", true);
         }
     }
 }
