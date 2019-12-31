@@ -36,7 +36,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 最寄りの行動候補のオブジェクト。
         /// </summary>
-        Actable selectedActable = null;
+        public static Actable SelectedActable { get; private set; }
 
         /// <summary>
         /// コライダーの中心座標
@@ -67,6 +67,7 @@ namespace GreeningEx2019
             colliderCenter = col.center;
             halfExtents = col.size * 0.5f;
             Debug.Log($"center={colliderCenter.x}, {colliderCenter.y} / half={halfExtents.x}, {halfExtents.y}");
+            SelectedActable = null;
 
             gameObject.SetActive(false);
         }
@@ -77,7 +78,6 @@ namespace GreeningEx2019
         /// <returns>有効なオブジェクトがあればnull以外のインスタンスを返します。</returns>
         public Actable GetActableInstance()
         {
-            Actable act = null;
             Vector3 ofs = colliderCenter;
             ofs.x *= StellaMove.forwardVector.x;
             Vector3 center = StellaMove.instance.transform.position + ofs;
@@ -93,11 +93,11 @@ namespace GreeningEx2019
             // 列挙するものがなければこの場でnullを返す
             if (hitCount == 0)
             {
-                if (selectedActable != null)
+                if (SelectedActable != null)
                 {
-                    selectedActable.Deselect();
+                    SelectedActable.Deselect();
                 }
-                selectedActable = null;
+                SelectedActable = null;
                 return null;
             }
 
@@ -118,23 +118,23 @@ namespace GreeningEx2019
                 }
             }
 
-            if (selectedActable != nextSelect)
+            if (SelectedActable != nextSelect)
             {
-                if (selectedActable != null)
+                if (SelectedActable != null)
                 {
-                    selectedActable.Deselect();
+                    SelectedActable.Deselect();
                 }
                 nextSelect.Select();
             }
-            selectedActable = nextSelect;
+            SelectedActable = nextSelect;
 
-            return selectedActable;
+            return SelectedActable;
         }
 
         public void Init()
         {
             actableCount = 0;
-            selectedActable = null;
+            SelectedActable = null;
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

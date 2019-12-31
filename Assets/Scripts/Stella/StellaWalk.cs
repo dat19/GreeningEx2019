@@ -27,7 +27,7 @@ namespace GreeningEx2019
 
         public override void Init()
         {
-            StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
+            StellaMove.SetAnimState(StellaMove.AnimType.Walk);
             state = StateType.Walk;
         }
 
@@ -53,7 +53,6 @@ namespace GreeningEx2019
                     Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
                     if (act != null)
                     {
-                        Debug.Log($"do action");
                         act.Action();
                         return;
                     }
@@ -67,7 +66,7 @@ namespace GreeningEx2019
 
             if (!StellaMove.chrController.isGrounded)
             {
-                StellaMove.instance.SetAnimState(StellaMove.AnimType.Jump);
+                StellaMove.SetAnimState(StellaMove.AnimType.Jump);
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                 FallNextBlock();
             }

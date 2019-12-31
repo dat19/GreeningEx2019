@@ -17,7 +17,7 @@ namespace GreeningEx2019
 
         public override void Init()
         {
-            StellaMove.instance.SetAnimState(StellaMove.AnimType.Obore);
+            StellaMove.SetAnimState(StellaMove.AnimType.Obore);
             StellaMove.myVelocity.Set(0, oboreFall, 0);
             StellaMove.instance.Invoke("Restart", toRestartSeconds);
             StellaMove.instance.Splash();

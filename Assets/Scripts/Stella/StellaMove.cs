@@ -50,8 +50,8 @@ namespace GreeningEx2019
             Air,      // 2落下、着地
             Jump,     // 3ジャンプまでのアニメ
             Water,    // 4水まき
-            Pickup,   // 5苗を持ち上げる
-            NaeMove,  // 6苗運び
+            LifetUp,  // 5苗を持ち上げる
+            NaeWalk,  // 6苗運び
             Putdown,  // 7苗を置く
             Ivy,      // 8ツタにつかまる
             Watage,   // 9綿毛につかまる
@@ -261,9 +261,28 @@ namespace GreeningEx2019
         /// アニメーターのStateを指定の状態にします。
         /// </summary>
         /// <param name="type">StellaMove.AnimTypeで指定</param>
-        public void SetAnimState(AnimType type)
+        public static void SetAnimState(AnimType type)
         {
             anim.SetInteger("State", (int)type);
+        }
+
+        /// <summary>
+        /// 指定のアニメのパラメーターのbool値を設定します。
+        /// </summary>
+        /// <param name="param">パラメーター名</param>
+        /// <param name="flag">設定したいbool値</param>
+        public static void SetAnimBool(string param, bool flag)
+        {
+            anim.SetBool(param, flag);
+        }
+
+        /// <summary>
+        /// 指定のトリガーを設定します。
+        /// </summary>
+        /// <param name="param"></param>
+        public static void SetAnimTrigger(string param)
+        {
+            anim.SetTrigger(param);
         }
 
         /// <summary>

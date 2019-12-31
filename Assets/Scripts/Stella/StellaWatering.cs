@@ -51,7 +51,7 @@ namespace GreeningEx2019
         public override void Init()
         {
             state = StateType.Start;
-            StellaMove.instance.SetAnimState(StellaMove.AnimType.Water);
+            StellaMove.SetAnimState(StellaMove.AnimType.Water);
 
             // アニメからイベントが呼ばれた時に、StartAction()を実行するように登録する
             StellaMove.RegisterAnimEvent(StartAction);
@@ -113,7 +113,7 @@ namespace GreeningEx2019
                 {
                     // 水まき終了
                     state = StateType.End;
-                    StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
+                    StellaMove.SetAnimState(StellaMove.AnimType.Walk);
                     StellaMove.RegisterAnimEvent(EndAction);
                     zyouroParticle.Stop();
                 }
