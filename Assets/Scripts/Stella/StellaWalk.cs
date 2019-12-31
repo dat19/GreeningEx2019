@@ -44,10 +44,21 @@ namespace GreeningEx2019
             if (Input.GetButton("Water"))
             {
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Water);
-
             }
             else
             {
+                // 行動ボタンチェック
+                if (Input.GetButton("Action"))
+                {
+                    Actable act = StellaMove.ActionBoxInstance.SelectedActable;
+                    if (act != null)
+                    {
+                        Debug.Log($"do action");
+                        act.Action();
+                        return;
+                    }
+                }
+
                 Walk();
             }
 
@@ -90,7 +101,7 @@ namespace GreeningEx2019
             // 動かす
             StellaMove.myVelocity.x = vx;
 
-            Vector3 e = StellaMove.instance.transform.eulerAngles;
+            Vector3 e = StellaMove.Pivot.eulerAngles;
             if (h < -0.5f)
             {
                 e.y = rotateY;
@@ -101,7 +112,8 @@ namespace GreeningEx2019
                 e.y = -rotateY;
                 StellaMove.forwardVector = Vector3.right;
             }
-            StellaMove.instance.transform.eulerAngles = e;
+            StellaMove.ActionBoxInstance.UpdateSide();
+            StellaMove.Pivot.eulerAngles = e;
         }
 
         /// <summary>
@@ -109,7 +121,7 @@ namespace GreeningEx2019
         /// </summary>
         void Turn()
         {
-            Vector3 e = StellaMove.instance.transform.eulerAngles;
+            Vector3 e = StellaMove.Pivot.eulerAngles;
             if (StellaMove.forwardVector.x > -0.5f)
             {
                 e.y = rotateY;
@@ -129,7 +141,7 @@ namespace GreeningEx2019
             }
 
             e.y = Mathf.LerpAngle(-e.y, e.y, delta);
-            StellaMove.instance.transform.eulerAngles = e;
+            StellaMove.Pivot.eulerAngles = e;
         }
 
         /// <summary>
@@ -168,7 +180,5 @@ namespace GreeningEx2019
             float t = Mathf.Sqrt(2f * h / StellaMove.GravityAdd);
             StellaMove.myVelocity.x = (origin.x - StellaMove.instance.transform.position.x) / t;
         }
-
-
     }
 }

@@ -11,6 +11,7 @@
 - [花の橋](Documents/FlowerBridge.md)
 - [溺れ](Documents/Obore.md)
 - [クリア](Documents/Clear.md)
+- [苗を持ち上げる](Documents/NaeLift.md)
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/

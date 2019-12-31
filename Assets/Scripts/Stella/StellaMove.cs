@@ -106,6 +106,10 @@ namespace GreeningEx2019
         public static Transform ZyouroPivot { get { return instance.zyouroPivot; } }
         public static Transform ZyouroEmitterPosition { get { return instance.zyouroEmitterPosition; } }
         public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
+        /// <summary>
+        /// ピボットのTransform
+        /// </summary>
+        public static Transform Pivot { get; private set; }
 
         static Animator anim;
         static ActionType nowAction = ActionType.None;
@@ -116,6 +120,7 @@ namespace GreeningEx2019
         static int defaultLayer = 0;
         static int jumpLayer = 0;
         static ParticleSystem splashParticle = null;
+        public static ActionBox ActionBoxInstance { get; private set; }
 
         void Awake()
         {
@@ -130,6 +135,9 @@ namespace GreeningEx2019
             jumpLayer = LayerMask.NameToLayer("Jump");
             forwardVector = Vector3.right;
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
+            Pivot = transform.Find("Pivot");
+            ActionBoxInstance = GetComponentInChildren<ActionBox>();
+            ActionBoxInstance.Init();
         }
 
         void FixedUpdate()
