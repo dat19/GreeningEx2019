@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GreeningEx2019
 {
@@ -15,7 +16,8 @@ namespace GreeningEx2019
         Color clearFadeColor = Color.green;
         [Tooltip("クリア用マテリアル"), SerializeField]
         Material[] clearBGMaterials = new Material[3];
-            
+        [Tooltip("クリアテキスト"), SerializeField]
+        Animator clearText = null;            
 
         const float RollingSeconds = 0.8f;
         const float ClearFadeSeconds = 0.24f;
@@ -70,6 +72,9 @@ namespace GreeningEx2019
 
         IEnumerator ClearSequence()
         {
+            // クリア表示
+            clearText.SetTrigger("Show");
+
             // 星を回転させる
             Goal.ClearAnim();
             yield return new WaitForSeconds(RollingSeconds);
