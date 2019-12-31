@@ -50,7 +50,7 @@ namespace GreeningEx2019
                 // 行動ボタンチェック
                 if (Input.GetButton("Action"))
                 {
-                    Actable act = StellaMove.ActionBoxInstance.SelectedActable;
+                    Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
                     if (act != null)
                     {
                         Debug.Log($"do action");
@@ -112,7 +112,6 @@ namespace GreeningEx2019
                 e.y = -rotateY;
                 StellaMove.forwardVector = Vector3.right;
             }
-            StellaMove.ActionBoxInstance.UpdateSide();
             StellaMove.Pivot.eulerAngles = e;
         }
 

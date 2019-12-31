@@ -27,7 +27,7 @@
 ### 探索範囲トリガーの作成
 - Hierarchyウィンドウで空のゲームオブジェクトを作成して、`ActionBox`という名前にしておく
 - ActionBoxに*BoxCollider*をアタッチする
-- 位置はActionBoxのTransformのPosition、大きさはBoxColliderのSizeで調整して、行動相手を検出したい範囲をコライダーが示すようにする
+- ActionBoxのTransformのPositionは0,0,0としておいて、位置と大きさはBoxColliderのCenterとSizeで調整して、行動相手を検出したい範囲をコライダーが示すようにする
 
 ![行動範囲の当たり判定](Images/ActionKey00.png)
 
