@@ -29,26 +29,9 @@ namespace GreeningEx2019
             }
 
             // 置けるかチェック
-            Vector3 naepos = StellaMove.instance.transform.position;
-            float absOffset = StellaMove.ActionBoxInstance.colliderCenter.x
-                + StellaMove.ActionBoxInstance.halfExtents.x
-                + naeActable.ColliderExtentsX;
-            float baseX = naepos.x + absOffset * StellaMove.forwardVector.x;
-
-            // 単位変換
-            float unitX = Mathf.Round(baseX / naeUnit) * naeUnit;
-            if (absOffset < (Mathf.Abs(unitX-naepos.x)))
-            {
-                // 遠くなっているので、1単位近づける
-                naepos.x = unitX - naeUnit * StellaMove.forwardVector.x;
-            }
-            else
-            {
-                naepos.x = unitX;
-            }
-
+            Vector3 naepos = GetPutPosition(StellaMove.instance.transform.position);
+            naepos.y = StellaMove.chrController.bounds.min.y + naeActable.HeightFromGround;
             NaeActable.MarkerObject.transform.position = naepos;
-
 
             // 水まきチェック
             if (Input.GetButton("Water"))
@@ -84,6 +67,31 @@ namespace GreeningEx2019
             {
                 StellaMove.instance.CheckMiniJump();
             }
+        }
+
+        /// <summary>
+        /// 苗を置く候補座標を返します。
+        /// </summary>
+        /// <param name="stellaPosition">ステラの座標</param>
+        /// <returns>求めた苗の座標</returns>
+        Vector3 GetPutPosition(Vector3 stellaPosition)
+        {
+            Vector3 naepos = stellaPosition;
+            float absOffset = StellaMove.ActionBoxInstance.colliderCenter.x
+                + StellaMove.ActionBoxInstance.halfExtents.x
+                + naeActable.ColliderExtentsX;
+            float baseX = naepos.x + absOffset * StellaMove.forwardVector.x;
+
+            // 単位変換
+            naepos.x = Mathf.Round(baseX / naeUnit) * naeUnit;
+            if (absOffset < (Mathf.Abs(naepos.x - stellaPosition.x)))
+            {
+                // 遠くなっているので、1単位近づける
+                naepos.x -= naeUnit * StellaMove.forwardVector.x;
+                return naepos;
+            }
+
+            return naepos;
         }
     }
 }

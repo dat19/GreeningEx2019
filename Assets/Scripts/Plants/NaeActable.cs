@@ -10,6 +10,8 @@ namespace GreeningEx2019
         Vector3 offset = new Vector3(0.08f, 0.08f);
         [Tooltip("マーカー状態にする際のα値"), SerializeField]
         float markerAlpha = 0.25f;
+        [Tooltip("マーカーの地面からの高さ"), SerializeField]
+        float heightFromGround = 0.5f;
 
         /// <summary>
         /// 持ち上げられている時、trueにします。
@@ -32,6 +34,7 @@ namespace GreeningEx2019
         /// コライダーの幅の半分を返します。
         /// </summary>
         public float ColliderExtentsX { get; private set; }
+        public float HeightFromGround { get { return heightFromGround; } }
 
         private void Awake()
         {
