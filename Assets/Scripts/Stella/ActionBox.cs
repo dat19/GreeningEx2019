@@ -41,12 +41,12 @@ namespace GreeningEx2019
         /// <summary>
         /// コライダーの中心座標
         /// </summary>
-        Vector3 colliderCenter;
+        public Vector3 colliderCenter { get; private set; }
 
         /// <summary>
         /// 半分のサイズ
         /// </summary>
-        Vector3 halfExtents;
+        public Vector3 halfExtents { get; private set; }
 
         /// <summary>
         /// 検出用のワーキング配列

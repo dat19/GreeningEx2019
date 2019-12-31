@@ -8,6 +8,8 @@ namespace GreeningEx2019
     {
         [Tooltip("手のピボットからのオフセット座標"), SerializeField]
         Vector3 offset = new Vector3(0.08f, 0.08f);
+        [Tooltip("マーカー状態にする際のα値"), SerializeField]
+        float markerAlpha = 0.25f;
 
         /// <summary>
         /// 持ち上げられている時、trueにします。
@@ -19,10 +21,35 @@ namespace GreeningEx2019
         /// </summary>
         Transform parentPivot;
 
+        Collider myCollider = null;
+
+        /// <summary>
+        /// マーカー用のオブジェクト。Hold()で作成します。
+        /// </summary>
+        public static GameObject MarkerObject { get; private set; }
+
+        /// <summary>
+        /// コライダーの幅の半分を返します。
+        /// </summary>
+        public float ColliderExtentsX { get; private set; }
+
         private void Awake()
         {
             CanAction = true;
             isHolding = false;
+            myCollider = GetComponent<Collider>();
+            if (myCollider is SphereCollider)
+            {
+                ColliderExtentsX = ((SphereCollider)myCollider).radius;
+            }
+            else if (myCollider is CapsuleCollider)
+            {
+                ColliderExtentsX = ((CapsuleCollider)myCollider).radius;
+            }
+            else
+            {
+                ColliderExtentsX = myCollider.bounds.extents.x;
+            }
         }
 
         public override void Action()
@@ -37,6 +64,32 @@ namespace GreeningEx2019
         {
             isHolding = true;
             parentPivot = pivot;
+            myCollider.enabled = false;
+
+            // マーカー用オブジェクトを作成
+            if (MarkerObject != null)
+            {
+                Destroy(MarkerObject);
+            }
+
+            MarkerObject = Instantiate(gameObject, transform.position, transform.rotation);
+            // 当たり判定を消す
+            Collider[] cols = MarkerObject.GetComponentsInChildren<Collider>();
+            for (int i=0; i<cols.Length;i++)
+            {
+                cols[i].enabled = false;
+            }
+            // 半透明にする
+            Renderer[] renderers = MarkerObject.GetComponentsInChildren<Renderer>();
+            for (int i=0;i<renderers.Length;i++)
+            {
+                Material mat = new Material(renderers[i].material);
+                mat.SetInt("_Mode", 2);
+                Color col = mat.color;
+                col.a = markerAlpha;
+                mat.color = col;
+                renderers[i].material = mat;
+            }
         }
 
         private void LateUpdate()
@@ -48,5 +101,6 @@ namespace GreeningEx2019
                 transform.up = Vector3.up;
             }
         }
+
     }
 }

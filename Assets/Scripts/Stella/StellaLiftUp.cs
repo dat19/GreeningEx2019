@@ -18,6 +18,12 @@ namespace GreeningEx2019
             StellaMove.SetAnimTrigger("LiftUp");
         }
 
+        public override void UpdateAction()
+        {
+            StellaMove.myVelocity.x = 0f;
+            StellaMove.instance.Move();
+        }
+
         void HoldNae()
         {
             StellaMove.RegisterAnimEvent(ToHold);

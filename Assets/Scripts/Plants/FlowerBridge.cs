@@ -45,6 +45,7 @@ namespace GreeningEx2019
                 flowerList.Add(go);
                 // 花を設定
                 flowerScriptableObject.Flower(go.transform.GetChild(0).transform);
+                go.transform.GetChild(0).transform.localScale = Vector3.zero;
             }
         }
 

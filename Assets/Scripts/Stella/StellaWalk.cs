@@ -14,13 +14,13 @@ namespace GreeningEx2019
         [Tooltip("方向転換秒数"), SerializeField]
         float turnSeconds = 0.15f;
 
-        enum StateType
+        protected enum StateType
         {
             Walk,
             Turn,
         }
 
-        StateType state = StateType.Walk;
+        protected StateType state = StateType.Walk;
         const int RaycastHitMax = 8;
         RaycastHit[] raycastHits = new RaycastHit[RaycastHitMax];
         float stateStartTime;
@@ -79,7 +79,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 歩いたり止まったりします。
         /// </summary>
-        void Walk()
+        protected void Walk()
         {
             // キーの入力を調べる
             float h = Input.GetAxisRaw("Horizontal");
@@ -117,7 +117,7 @@ namespace GreeningEx2019
         /// <summary>
         /// ターン処理
         /// </summary>
-        void Turn()
+        protected void Turn()
         {
             Vector3 e = StellaMove.Pivot.eulerAngles;
             if (StellaMove.forwardVector.x > -0.5f)
