@@ -175,7 +175,8 @@ namespace GreeningEx2019
             Vector3 move = myVelocity * Time.fixedDeltaTime;
             chrController.Move(move);
 
-            if (!chrController.isGrounded && (nowAction == ActionType.Walk))
+            if (!chrController.isGrounded 
+                && (nowAction == ActionType.Walk || nowAction == ActionType.NaeWalk))
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
@@ -232,9 +233,8 @@ namespace GreeningEx2019
                 }
             }
 
-            if (h <= miniJumpHeight)
+            if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
-                Debug.Log($"  jump height = {h} / {miniJumpHeight}");
                 targetJumpGround = raycastHits[hitIndex].transform.position;
                 targetJumpGround.y = chrController.bounds.min.y + h;
                 ChangeAction(ActionType.Jump);

@@ -99,7 +99,6 @@ namespace GreeningEx2019
 
             if (!StellaMove.chrController.isGrounded)
             {
-                StellaMove.SetAnimState(StellaMove.AnimType.Jump);
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                 FallNextBlock();
             }
