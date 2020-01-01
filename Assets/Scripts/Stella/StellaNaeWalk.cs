@@ -40,7 +40,7 @@ namespace GreeningEx2019
             if (pos.y < (StellaMove.chrController.bounds.min.y-naePutHeight)) return false;
 
             // 重なっているオブジェクトを探査
-            int hitCount = naeActable.FetchOverrideObjects(pos, hits, overlapLayer);
+            int hitCount = naeActable.FetchOverlapObjects(pos, hits, overlapLayer);
             return (hitCount == 0);
         }
 

@@ -31,7 +31,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 重なっているオブジェクトを検出するためのメソッド。保持しているコライダーに応じて登録するメソッドを切り替えます。
         /// </summary>
-        public FetchObjects FetchOverrideObjects;
+        public FetchObjects FetchOverlapObjects;
 
         /// <summary>
         /// オブジェクトをくっつける基準のトランスフォーム
@@ -66,19 +66,19 @@ namespace GreeningEx2019
             {
                 sphereCollider = ((SphereCollider)myCollider);
                 ColliderExtentsX = sphereCollider.radius;
-                FetchOverrideObjects = FetchOverrideObjectsWithSphereCollider;
+                FetchOverlapObjects = FetchOverlapObjectsWithSphereCollider;
             }
             else if (myCollider is CapsuleCollider)
             {
                 capsuleCollider = ((CapsuleCollider)myCollider);
                 ColliderExtentsX = capsuleCollider.radius;
-                FetchOverrideObjects = FetchOverrideObjectsWithCapsuleCollider;
+                FetchOverlapObjects = FetchOverlapObjectsWithCapsuleCollider;
             }
             else
             {
                 boxCollider = ((BoxCollider)myCollider);
                 ColliderExtentsX = myCollider.bounds.extents.x;
-                FetchOverrideObjects = FetchOverrideObjectsWithBoxCollider;
+                FetchOverlapObjects = FetchOverlapObjectsWithBoxCollider;
             }
         }
 
@@ -89,7 +89,7 @@ namespace GreeningEx2019
         /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverrideObjectsWithBoxCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithBoxCollider(Vector3 pos, RaycastHit[] hits, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + boxCollider.center;
             return Physics.BoxCastNonAlloc(center, myCollider.bounds.extents, Vector3.down, hits, Quaternion.identity, 0f, layer);
@@ -102,7 +102,7 @@ namespace GreeningEx2019
         /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverrideObjectsWithSphereCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithSphereCollider(Vector3 pos, RaycastHit[] hits, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + sphereCollider.center;
             return Physics.SphereCastNonAlloc(center, sphereCollider.radius, Vector3.down, hits, 0f, layer);
@@ -115,7 +115,7 @@ namespace GreeningEx2019
         /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverrideObjectsWithCapsuleCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithCapsuleCollider(Vector3 pos, RaycastHit[] hits, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + capsuleCollider.center;
             float offsetY = Mathf.Max(capsuleCollider.height * 0.5f - capsuleCollider.radius, 0f);
