@@ -12,6 +12,7 @@ namespace GreeningEx2019
         /// </summary>
         public override void Init()
         {
+            StellaMove.myVelocity.y = 0f;
             StellaMove.RegisterAnimEvent(StellaMove.instance.StartTargetJump);
             StellaMove.SetAnimState(StellaMove.AnimType.Jump);
         }

@@ -32,6 +32,7 @@ namespace GreeningEx2019
 
         void ToHold()
         {
+            StellaMove.hasNae = true;
             StellaMove.SetAnimBool("Nae", true);
             StellaMove.RegisterAnimEvent(ToHoldWalk);
         }

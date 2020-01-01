@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#define DEBUG_GUI
+
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace GreeningEx2019
@@ -38,6 +40,8 @@ namespace GreeningEx2019
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
         bool isDebugMovable = false;
+        [Tooltip("GUISkin"), SerializeField]
+        GUISkin guiSkin = null;
 
         /// <summary>
         /// ステラの行動定義
@@ -110,6 +114,11 @@ namespace GreeningEx2019
         /// ピボットのTransform
         /// </summary>
         public static Transform Pivot { get; private set; }
+
+        /// <summary>
+        /// 苗を持っている時、true
+        /// </summary>
+        public static bool hasNae = false;
 
         static Animator anim;
         static ActionType nowAction = ActionType.None;
@@ -225,6 +234,7 @@ namespace GreeningEx2019
 
             if (h <= miniJumpHeight)
             {
+                Debug.Log($"  jump height = {h} / {miniJumpHeight}");
                 targetJumpGround = raycastHits[hitIndex].transform.position;
                 targetJumpGround.y = chrController.bounds.min.y + h;
                 ChangeAction(ActionType.Jump);
@@ -355,6 +365,13 @@ namespace GreeningEx2019
         {
             stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
         }
+
+#if DEBUG_GUI
+        private void OnGUI()
+        {
+            GUI.Label(new Rect(30, 30, 1000, 50), $"Act={nowAction}", guiSkin.GetStyle("Label"));
+        }
+#endif
 
         /// <summary>
         /// クリアチェック。これ以降の処理が不要な場合、trueを返します。

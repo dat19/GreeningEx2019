@@ -39,6 +39,7 @@ namespace GreeningEx2019
         Transform parentPivot;
 
         Collider myCollider = null;
+        Animator anim = null;
 
         /// <summary>
         /// マーカー用のオブジェクト。Hold()で作成します。
@@ -60,6 +61,7 @@ namespace GreeningEx2019
             CanAction = true;
             isHolding = false;
             myCollider = GetComponent<Collider>();
+            anim = GetComponent<Animator>();
             if (myCollider is SphereCollider)
             {
                 sphereCollider = ((SphereCollider)myCollider);
@@ -132,6 +134,7 @@ namespace GreeningEx2019
         {
             isHolding = true;
             parentPivot = pivot;
+            anim.enabled = false;
             myCollider.enabled = false;
 
             // マーカー用オブジェクトを作成
