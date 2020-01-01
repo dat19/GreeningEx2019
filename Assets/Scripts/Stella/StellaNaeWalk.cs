@@ -36,25 +36,11 @@ namespace GreeningEx2019
         /// <returns>true=置ける / false=置けない</returns>
         bool CheckPut(Vector3 pos)
         {
-            // 置く候補の地面の座標
-            bool canPut = false;
-            Vector3 naepos = GetPutPosition(StellaMove.instance.transform.position);
-            naepos.y = StellaMove.chrController.bounds.min.y;
-
-            // 床を調べて、高さが足りていれば置ける
-            int hitCount = Physics.RaycastNonAlloc(naepos, Vector3.down, hits, naePutHeight, groundLayer);
-            for (int i = 0; i < hitCount; i++)
-            {
-                if (hits[i].collider.CompareTag(GroundTag))
-                {
-                    canPut = true;
-                    break;
-                }
-            }
-            if (!canPut) return false;
+            // 置く先が、ステラの足元より一定以上低い場合は置けない
+            if (pos.y < (StellaMove.chrController.bounds.min.y-naePutHeight)) return false;
 
             // 重なっているオブジェクトを探査
-            hitCount = naeActable.FetchOverrideObjects(naepos, hits, overlapLayer);
+            int hitCount = naeActable.FetchOverrideObjects(pos, hits, overlapLayer);
             return (hitCount == 0);
         }
 
@@ -69,7 +55,6 @@ namespace GreeningEx2019
 
             // 置く候補の地面の座標
             Vector3 naepos = GetPutPosition(StellaMove.instance.transform.position);
-            naepos.y = StellaMove.chrController.bounds.min.y;
             bool canPut = CheckPut(naepos);
 
             if (canPut)
@@ -127,7 +112,28 @@ namespace GreeningEx2019
             {
                 // 遠くなっているので、1単位近づける
                 naepos.x -= naeUnit * StellaMove.forwardVector.x;
+            }
+
+            // 床の位置を調べる
+            naepos.y = StellaMove.chrController.bounds.min.y;
+            int hitCount = Physics.RaycastNonAlloc(naepos, Vector3.down, hits, float.PositiveInfinity, groundLayer);
+            if (hitCount ==0)
+            {
+                // 置けない高さを設定
+                naepos.y -= naePutHeight * 2f;
                 return naepos;
+            }
+
+            naepos.y = hits[0].collider.bounds.max.y;
+            for (int i = 1; i < hitCount; i++)
+            {
+                if (hits[i].collider.CompareTag(GroundTag))
+                {
+                    if (hits[i].collider.bounds.max.y > naepos.y)
+                    {
+                        naepos.y = hits[i].collider.bounds.max.y;
+                    }
+                }
             }
 
             return naepos;
