@@ -1,9 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GreeningEx2019
 {
+    /// <summary>
+    /// オブジェクトを列挙するためのメソッド用のデリゲート定義
+    /// </summary>
+    /// <param name="pos">チェックする座標</param>
+    /// <param name="hits">列挙したオブジェクトの戻り値</param>
+    /// <param name="layer">対象のレイヤー</param>
+    /// <returns>見つけたオブジェクト数</returns>
+    public delegate int FetchObjects(Vector3 pos, RaycastHit[] hits, int layer);
+
     public class NaeActable : Actable
     {
         [Tooltip("手のピボットからのオフセット座標"), SerializeField]
@@ -17,6 +27,11 @@ namespace GreeningEx2019
         /// 持ち上げられている時、trueにします。
         /// </summary>
         bool isHolding = false;
+
+        /// <summary>
+        /// 重なっているオブジェクトを検出するためのメソッド。保持しているコライダーに応じて登録するメソッドを切り替えます。
+        /// </summary>
+        public FetchObjects FetchOverrideObjects;
 
         /// <summary>
         /// オブジェクトをくっつける基準のトランスフォーム
@@ -36,6 +51,10 @@ namespace GreeningEx2019
         public float ColliderExtentsX { get; private set; }
         public float HeightFromGround { get { return heightFromGround; } }
 
+        BoxCollider boxCollider = null;
+        SphereCollider sphereCollider = null;
+        CapsuleCollider capsuleCollider = null;
+
         private void Awake()
         {
             CanAction = true;
@@ -43,16 +62,62 @@ namespace GreeningEx2019
             myCollider = GetComponent<Collider>();
             if (myCollider is SphereCollider)
             {
-                ColliderExtentsX = ((SphereCollider)myCollider).radius;
+                sphereCollider = ((SphereCollider)myCollider);
+                ColliderExtentsX = sphereCollider.radius;
+                FetchOverrideObjects = FetchOverrideObjectsWithSphereCollider;
             }
             else if (myCollider is CapsuleCollider)
             {
-                ColliderExtentsX = ((CapsuleCollider)myCollider).radius;
+                capsuleCollider = ((CapsuleCollider)myCollider);
+                ColliderExtentsX = capsuleCollider.radius;
+                FetchOverrideObjects = FetchOverrideObjectsWithCapsuleCollider;
             }
             else
             {
+                boxCollider = ((BoxCollider)myCollider);
                 ColliderExtentsX = myCollider.bounds.extents.x;
+                FetchOverrideObjects = FetchOverrideObjectsWithBoxCollider;
             }
+        }
+
+        /// <summary>
+        /// ボックスコライダーのオブジェクトと重なっているオブジェクトを列挙して返します。
+        /// </summary>
+        /// <param name="pos">左右中央、下の座標</param>
+        /// <param name="hits">結果を返すための配列</param>
+        /// <param name="layer">対象のレイヤー</param>
+        /// <returns>見つけたオブジェクト数</returns>
+        int FetchOverrideObjectsWithBoxCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        {
+            Vector3 center = pos + Vector3.up * heightFromGround + boxCollider.center;
+            return Physics.BoxCastNonAlloc(center, myCollider.bounds.extents, Vector3.down, hits, Quaternion.identity, 0f, layer);
+        }
+
+        /// <summary>
+        /// スフィアコライダーのオブジェクトと重なっているオブジェクトを列挙して返します。
+        /// </summary>
+        /// <param name="pos">左右中央、下の座標</param>
+        /// <param name="hits">結果を返すための配列</param>
+        /// <param name="layer">対象のレイヤー</param>
+        /// <returns>見つけたオブジェクト数</returns>
+        int FetchOverrideObjectsWithSphereCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        {
+            Vector3 center = pos + Vector3.up * heightFromGround + sphereCollider.center;
+            return Physics.SphereCastNonAlloc(center, sphereCollider.radius, Vector3.down, hits, 0f, layer);
+        }
+
+        /// <summary>
+        /// カプセルコライダーのオブジェクトと重なっているオブジェクトを列挙して返します。
+        /// </summary>
+        /// <param name="pos">左右中央、下の座標</param>
+        /// <param name="hits">結果を返すための配列</param>
+        /// <param name="layer">対象のレイヤー</param>
+        /// <returns>見つけたオブジェクト数</returns>
+        int FetchOverrideObjectsWithCapsuleCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        {
+            Vector3 center = pos + Vector3.up * heightFromGround + capsuleCollider.center;
+            float offsetY = Mathf.Max(capsuleCollider.height * 0.5f - capsuleCollider.radius, 0f);
+            return Physics.CapsuleCastNonAlloc(center + Vector3.up * offsetY, center + Vector3.down * offsetY, capsuleCollider.radius, Vector3.down, hits, 0f, layer);
         }
 
         public override void Action()

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 113154779820061486}
   - component: {fileID: 113154779820061487}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,6 +136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.08, y: 0.08, z: 0}
+  markerAlpha: 0.25
+  heightFromGround: 0.5
 --- !u!135 &3014813791530174863
 SphereCollider:
   m_ObjectHideFlags: 0
