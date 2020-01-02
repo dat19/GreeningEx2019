@@ -421,12 +421,15 @@ namespace GreeningEx2019
             {
                 reached = true;
                 walkSpeed = dist * Time.fixedDeltaTime;
+                anim.SetBool("Back", false);
+            }
+            else
+            {
+                // 向きと移動方向が逆ならアニメをバックにする
+                anim.SetBool("Back", (sign * forwardVector.x) < -0.5f);
             }
 
             anim.SetFloat("VelX", walkSpeed);
-
-            // 向きと移動方向が逆ならアニメをバックにする
-            anim.SetBool("Back", (sign * forwardVector.x) < -0.5f);
 
             myVelocity.x = walkSpeed * sign;
             instance.Gravity();
