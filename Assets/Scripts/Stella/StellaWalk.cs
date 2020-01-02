@@ -170,6 +170,10 @@ namespace GreeningEx2019
             float h = StellaMove.chrController.bounds.min.y - top;
             float t = Mathf.Sqrt(2f * h / StellaMove.GravityAdd);
             StellaMove.myVelocity.x = (origin.x - StellaMove.instance.transform.position.x) / t;
+            if (StellaMove.myVelocity.x*StellaMove.forwardVector.x < 0f)
+            {
+                StellaMove.myVelocity.x = 0;
+            }
         }
     }
 }
