@@ -189,9 +189,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618f5638057b55643a28eb4c3bcc6ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   offset: {x: 0.08, y: 0.5, z: 0}
-  markerAlpha: 0.25
   heightFromGround: 0.5
+  naeMarkerData: {fileID: 11400000, guid: cdeaf7da1b2e5d74ba695c20df85a483, type: 2}
 --- !u!135 &7105358289731606287
 SphereCollider:
   m_ObjectHideFlags: 0

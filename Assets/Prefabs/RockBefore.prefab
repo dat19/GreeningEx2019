@@ -63,9 +63,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618f5638057b55643a28eb4c3bcc6ab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 4
   offset: {x: 0.08, y: 0.08, z: 0}
-  markerAlpha: 0.25
   heightFromGround: 0.5
+  naeMarkerData: {fileID: 11400000, guid: cdeaf7da1b2e5d74ba695c20df85a483, type: 2}
 --- !u!65 &2133537467306113878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -127,25 +128,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
---- !u!95 &574680228
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7109119705272410600}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1263619934323390689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -215,12 +197,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4daedd287ae6c344b5138b9894cfe62, type: 3}
---- !u!1 &7109119705272410600 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: c4daedd287ae6c344b5138b9894cfe62,
-    type: 3}
-  m_PrefabInstance: {fileID: 1263619934323390689}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6121503964344816635 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: c4daedd287ae6c344b5138b9894cfe62,

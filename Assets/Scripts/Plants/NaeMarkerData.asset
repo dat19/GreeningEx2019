@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e0a4ed3fdd1a1438a409df39f48405, type: 3}
+  m_Name: NaeMarkerData
+  m_EditorClassIdentifier: 
+  markerPrefabs:
+  - {fileID: 3771247379393185249, guid: 495ebc63b271c8744a78751d6ac8301f, type: 3}
+  - {fileID: 2186000322946833572, guid: bbbf6def991a26944bd658189b73ef0a, type: 3}
+  - {fileID: 2336821513848830333, guid: 6707f3793adcefe45b3f2a921c7f0c99, type: 3}
+  - {fileID: 378182585665365299, guid: 4a0ca3475f32f3649a246455932aa484, type: 3}
+  - {fileID: 1263619933716130604, guid: f11db8fc2de167e4c9aa311e0a55f55a, type: 3}

@@ -21,12 +21,26 @@ namespace GreeningEx2019
     [RequireComponent(typeof(Grow))]
     public class NaeActable : Actable
     {
+        [Tooltip("この苗の種類"), SerializeField]
+        NaeType type = NaeType.FlowerBridge;
         [Tooltip("手のピボットからのオフセット座標"), SerializeField]
         Vector3 offset = new Vector3(0.08f, 0.08f);
-        [Tooltip("マーカー状態にする際のα値"), SerializeField]
-        float markerAlpha = 0.25f;
         [Tooltip("マーカーの地面からの高さ"), SerializeField]
         float heightFromGround = 0.5f;
+        [Tooltip("苗マーカーなどのデータ"), SerializeField]
+        NaeMarkerData naeMarkerData = null;
+
+        /// <summary>
+        /// 苗の種類
+        /// </summary>
+        public enum NaeType
+        {
+            FlowerBridge,
+            Ivy,
+            Dandelion,
+            Mushroom,
+            Rock
+        }
 
         /// <summary>
         /// 持ち上げられている時、trueにします。
@@ -49,7 +63,14 @@ namespace GreeningEx2019
         /// <summary>
         /// マーカー用のオブジェクト。Hold()で作成します。
         /// </summary>
-        public static GameObject MarkerObject { get; private set; }
+        public static GameObject MarkerObject
+        {
+            get
+            {
+                Debug.Log($"  SelectedType={selectedType} / {NaeMarkerData.markerObjects[(int)selectedType].name}");
+                return NaeMarkerData.markerObjects[(int)selectedType];
+            }
+        }
 
         /// <summary>
         /// コライダーの幅の半分を返します。
@@ -61,14 +82,18 @@ namespace GreeningEx2019
         SphereCollider sphereCollider = null;
         CapsuleCollider capsuleCollider = null;
         Grow grow = null;
+        static NaeType selectedType;
 
         /// <summary>
         /// 動作フラグ。苗の時のみ有効
         /// </summary>
-        public override bool CanAction { get {
+        public override bool CanAction
+        {
+            get
+            {
                 return grow.state == Grow.StateType.Nae;
             }
-            protected set => base.CanAction = value; 
+            protected set => base.CanAction = value;
         }
 
         private void Awake()
@@ -100,6 +125,7 @@ namespace GreeningEx2019
                 ColliderExtentsX = myCollider.bounds.extents.x;
                 FetchOverlapObjects = FetchOverlapObjectsWithBoxCollider;
             }
+            naeMarkerData.Init();
         }
 
         /// <summary>
@@ -148,6 +174,7 @@ namespace GreeningEx2019
             anim.enabled = false;
             myCollider.enabled = false;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.LifetUp);
+            selectedType = type;
         }
 
         /// <summary>
@@ -158,31 +185,6 @@ namespace GreeningEx2019
             isHolding = true;
             parentPivot = pivot;
             SetCollider(false);
-
-            // マーカー用オブジェクトを作成
-            if (MarkerObject != null)
-            {
-                Destroy(MarkerObject);
-            }
-
-            MarkerObject = Instantiate(gameObject, transform.position, transform.rotation);
-            // 当たり判定を消す
-            Collider[] cols = MarkerObject.GetComponentsInChildren<Collider>();
-            for (int i=0; i<cols.Length;i++)
-            {
-                cols[i].enabled = false;
-            }
-            // 半透明にする
-            Renderer[] renderers = MarkerObject.GetComponentsInChildren<Renderer>();
-            for (int i=0;i<renderers.Length;i++)
-            {
-                Material mat = new Material(renderers[i].material);
-                mat.SetInt("_Mode", 2);
-                Color col = mat.color;
-                col.a = markerAlpha;
-                mat.color = col;
-                renderers[i].material = mat;
-            }
         }
 
         /// <summary>
@@ -194,10 +196,7 @@ namespace GreeningEx2019
             transform.position = StellaMove.naePutPosition + Vector3.up * heightFromGround;
 
             // マーカー用オブジェクトを削除
-            if (MarkerObject != null)
-            {
-                Destroy(MarkerObject);
-            }
+            MarkerObject.SetActive(false);
         }
 
         /// <summary>
