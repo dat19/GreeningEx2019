@@ -7,12 +7,15 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Walk", fileName = "StellaActionWalk")]
     public class StellaWalk : StellaActionScriptableObject
     {
-        [Tooltip("移動速度(秒速)"), SerializeField]
-        float moveSpeed = 3.5f;
         [Tooltip("ステラの横向きの角度"), SerializeField]
         float rotateY = 40f;
         [Tooltip("方向転換秒数"), SerializeField]
         float turnSeconds = 0.15f;
+
+        /// <summary>
+        /// 移動速度(秒速)
+        /// </summary>
+        public const float MoveSpeed = 3.5f;
 
         protected enum StateType
         {
@@ -95,7 +98,7 @@ namespace GreeningEx2019
             }
 
             // 左右の移動速度(秒速)を求める
-            StellaMove.myVelocity.x = h * moveSpeed;
+            StellaMove.myVelocity.x = h * MoveSpeed;
 
             return true;
         }

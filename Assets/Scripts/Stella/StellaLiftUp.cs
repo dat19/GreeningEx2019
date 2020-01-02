@@ -7,21 +7,51 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create LiftUp", fileName = "StellaActionLiftUp")]
     public class StellaLiftUp : StellaActionScriptableObject
     {
+        protected enum StateType
+        {
+            TargetWalk,
+            Action,
+        }
+
+        protected StateType state;
+        protected float targetX;
+
         /// <summary>
         /// 目的地を設定
         /// </summary>
         public override void Init()
         {
-            StellaMove.RegisterAnimEvent(HoldNae);
-            StellaMove.myVelocity = Vector3.zero;
+            state = StateType.TargetWalk;
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
-            StellaMove.SetAnimTrigger("LiftUp");
+            targetX = StellaMove.naePutPosition.x - StellaMove.NaePutDownOffsetX * StellaMove.forwardVector.x;
         }
 
         public override void UpdateAction()
         {
-            StellaMove.myVelocity.x = 0f;
-            StellaMove.instance.Move();
+            switch (state)
+            {
+                case StateType.TargetWalk:
+                    if (StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed))
+                    {
+                        state = StateType.Action;
+                        StellaMove.myVelocity = Vector3.zero;
+                        ToAction();
+                    }
+                    break;
+                case StateType.Action:
+                    StellaMove.myVelocity.x = 0f;
+                    StellaMove.instance.Move();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 行動へ
+        /// </summary>
+        protected virtual void ToAction()
+        {
+            StellaMove.RegisterAnimEvent(HoldNae);
+            StellaMove.SetAnimState(StellaMove.AnimType.LiftUp);
         }
 
         void HoldNae()

@@ -66,7 +66,6 @@ namespace GreeningEx2019
             BoxCollider col = GetComponent<BoxCollider>();
             colliderCenter = col.center;
             halfExtents = col.size * 0.5f;
-            Debug.Log($"center={colliderCenter.x}, {colliderCenter.y} / half={halfExtents.x}, {halfExtents.y}");
             SelectedActable = null;
 
             gameObject.SetActive(false);
@@ -124,7 +123,10 @@ namespace GreeningEx2019
                 {
                     SelectedActable.Deselect();
                 }
-                nextSelect.Select();
+                if (nextSelect != null)
+                {
+                    nextSelect.Select();
+                }
             }
             SelectedActable = nextSelect;
 

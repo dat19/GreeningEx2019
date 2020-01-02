@@ -10,7 +10,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 行動可能な時、trueを返します。
         /// </summary>
-        public bool CanAction { get; protected set; }
+        public virtual bool CanAction { get; protected set; }
 
         /// <summary>
         /// 行動を実行します。

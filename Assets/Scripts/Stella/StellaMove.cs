@@ -56,7 +56,7 @@ namespace GreeningEx2019
             Water,    // 4水まき
             LifetUp,  // 5苗を持ち上げる
             NaeWalk,  // 6苗運び
-            Putdown,  // 7苗を置く
+            PutDown,  // 7苗を置く
             Ivy,      // 8ツタにつかまる
             Watage,   // 9綿毛につかまる
             Tamanori, // 10岩にのる
@@ -77,13 +77,20 @@ namespace GreeningEx2019
             Obore,      // 5溺れ
             Ivy,        // 6ツタ
             Dandelion,  // 7綿毛に捕まる
-            Clear,      // 8クリア
+            LiftUp,     // 8持ち上げる
+            PutDown,    // 9下す
+            Clear,      // 10クリア
         }
 
         /// <summary>
         /// 列挙する接触したオブジェクトの上限数
         /// </summary>
         const int CollisionMax = 8;
+
+        /// <summary>
+        /// 苗を置く場所
+        /// </summary>
+        public const float NaePutDownOffsetX = 0.5f;
 
         /// <summary>
         /// 前方を表すベクトル
@@ -119,6 +126,11 @@ namespace GreeningEx2019
         /// 苗を持っている時、true
         /// </summary>
         public static bool hasNae = false;
+
+        /// <summary>
+        /// 苗を置く座標
+        /// </summary>
+        public static Vector3 naePutPosition;
 
         static Animator anim;
         static ActionType nowAction = ActionType.None;
@@ -389,6 +401,38 @@ namespace GreeningEx2019
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// 指定の座標に、向きをそのままで歩きます。到着したらtrueを返します。
+        /// </summary>
+        /// <param name="targetX">目的地X座標</param>
+        /// <param name="walkSpeed">歩き速度</param>
+        /// <returns>到着した時、true</returns>
+        public static bool AdjustWalk(float targetX, float walkSpeed)
+        {
+            float dist = targetX - instance.transform.position.x;
+            float sign = Mathf.Sign(dist);
+            dist = Mathf.Abs(dist);
+            bool reached = false;
+            float step = walkSpeed * Time.fixedDeltaTime;
+
+            if (dist <= step)
+            {
+                reached = true;
+                walkSpeed = dist * Time.fixedDeltaTime;
+            }
+
+            anim.SetFloat("VelX", walkSpeed);
+
+            // 向きと移動方向が逆ならアニメをバックにする
+            anim.SetBool("Back", (sign * forwardVector.x) < -0.5f);
+
+            myVelocity.x = walkSpeed * sign;
+            instance.Gravity();
+            instance.Move();
+
+            return reached;
         }
     }
 }

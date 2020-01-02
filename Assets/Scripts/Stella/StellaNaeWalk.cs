@@ -62,13 +62,14 @@ namespace GreeningEx2019
                 // 置けるならボタンによって苗を置く
                 if (Input.GetButton("Water") || Input.GetButton("Action"))
                 {
-                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Putdown);
+                    StellaMove.naePutPosition = naepos;
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.PutDown);
                     return;
                 }
 
                 // 今置いたらここという場所に苗マーカーを表示
                 NaeActable.MarkerObject.SetActive(true);
-                naepos.y = StellaMove.chrController.bounds.min.y + naeActable.HeightFromGround;
+                naepos.y += naeActable.HeightFromGround;
                 NaeActable.MarkerObject.transform.position = naepos;
             }
             else

@@ -14,6 +14,11 @@ namespace GreeningEx2019
     /// <returns>見つけたオブジェクト数</returns>
     public delegate int FetchObjects(Vector3 pos, RaycastHit[] hits, int layer);
 
+    /// <summary>
+    /// 苗として持ち上げられる処理のためのスクリプト。
+    /// タグがNaeの時のみ発動します。成長したら、タグをGrowに変えます。
+    /// </summary>
+    [RequireComponent(typeof(Grow))]
     public class NaeActable : Actable
     {
         [Tooltip("手のピボットからのオフセット座標"), SerializeField]
@@ -55,6 +60,16 @@ namespace GreeningEx2019
         BoxCollider boxCollider = null;
         SphereCollider sphereCollider = null;
         CapsuleCollider capsuleCollider = null;
+        Grow grow = null;
+
+        /// <summary>
+        /// 動作フラグ。苗の時のみ有効
+        /// </summary>
+        public override bool CanAction { get {
+                return grow.state == Grow.StateType.Nae;
+            }
+            protected set => base.CanAction = value; 
+        }
 
         private void Awake()
         {
@@ -62,6 +77,7 @@ namespace GreeningEx2019
             isHolding = false;
             myCollider = GetComponent<Collider>();
             anim = GetComponent<Animator>();
+            grow = GetComponent<Grow>();
             if (myCollider is SphereCollider)
             {
                 sphereCollider = ((SphereCollider)myCollider);
@@ -124,6 +140,7 @@ namespace GreeningEx2019
 
         public override void Action()
         {
+            StellaMove.naePutPosition = transform.position;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.LifetUp);
         }
 
@@ -160,6 +177,23 @@ namespace GreeningEx2019
                 col.a = markerAlpha;
                 mat.color = col;
                 renderers[i].material = mat;
+            }
+        }
+
+        /// <summary>
+        /// 苗をおろします。
+        /// </summary>
+        public void PutDown()
+        {
+            isHolding = false;
+            anim.enabled = true;
+            myCollider.enabled = true;
+            transform.position = StellaMove.naePutPosition + Vector3.up * heightFromGround;
+
+            // マーカー用オブジェクトを削除
+            if (MarkerObject != null)
+            {
+                Destroy(MarkerObject);
             }
         }
 

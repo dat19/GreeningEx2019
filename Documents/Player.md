@@ -164,9 +164,9 @@ public enum ActionType {
   Air,      // 2落下、着地
   Jump,     // 3ジャンプまでのアニメ
   Water,    // 4水まき
-  Pickup,   // 5苗を持ち上げる
-  NaeMove,  // 6苗運び
-  Putdown,  // 7苗を置く
+  LiftUp,   // 5苗を持ち上げる
+  NaeWalk,  // 6苗運び
+  PutDown,  // 7苗を置く
   Ivy,      // 8ツタにつかまる
   Watage,   // 9綿毛につかまる
   Tamanori, // 10岩にのる
@@ -196,6 +196,8 @@ public enum AnimType {
   Obore,
   Ivy,
   Dandelion,
+  LiftUp,
+  PutDown,
   Clear,
 }
 
@@ -212,10 +214,8 @@ public enum AnimType {
 - Float VelY
   - Y速度を渡して、上昇中と下降中のパターンを切り替える
   - ジャンプと落下はJumpに統合
-- Trigger LiftUp
-  - 苗を持ち上げるアニメ。再生が終わったら、立ちに戻る
-- Trigger LiftDown
-  - 苗を置くアニメ。再生が終わったら、立ちに戻る
+- Bool Back
+  - 後ろ向きに歩かせる時にtrueにする
 - Tsutaのアニメの速度は、VelYに連動させる
 - キノコジャンプと玉乗りジャンプと花ジャンプは、全てJumpから開始
 - Jumpモーションが完了して初速を設定したら、Airに移行する
