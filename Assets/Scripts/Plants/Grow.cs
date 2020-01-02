@@ -98,6 +98,7 @@ namespace GreeningEx2019
         public static void Init()
         {
             WaitGrowCount = 0;
+            NaeGrowedCount = 0;
         }
     }
 }

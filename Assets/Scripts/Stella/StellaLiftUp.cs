@@ -22,6 +22,8 @@ namespace GreeningEx2019
         /// </summary>
         public override void Init()
         {
+            base.Init();
+
             state = StateType.TargetWalk;
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
             targetX = StellaMove.naePutPosition.x - StellaMove.NaePutDownOffsetX * StellaMove.forwardVector.x;

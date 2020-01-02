@@ -50,6 +50,8 @@ namespace GreeningEx2019
 
         public override void Init()
         {
+            base.Init();
+
             state = StateType.Start;
             StellaMove.SetAnimState(StellaMove.AnimType.Water);
 
@@ -99,6 +101,7 @@ namespace GreeningEx2019
             {
                 StellaMove.ZyouroEmitter.transform.position = StellaMove.ZyouroEmitterPosition.position;
 
+                // 水オブジェクトを生成
                 if (Time.time-lastTriggerTime >= triggerEmitSeconds)
                 {
                     lastTriggerTime = Time.time;
@@ -109,6 +112,7 @@ namespace GreeningEx2019
                     triggerIndex = (triggerIndex + 1) % triggerCount;
                 }
 
+                // 水まき終了チェック
                 if (!Input.GetButton("Water") && (Grow.WaitGrowCount <= 0))
                 {
                     // 水まき終了
@@ -116,6 +120,34 @@ namespace GreeningEx2019
                     StellaMove.SetAnimState(StellaMove.AnimType.Walk);
                     StellaMove.RegisterAnimEvent(EndAction);
                     zyouroParticle.Stop();
+                    return;
+                }
+
+                // 後ずさりチェック
+                float ofsy = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
+                int hitCount = Physics.CapsuleCastNonAlloc(
+                    StellaMove.chrController.bounds.center + Vector3.up * ofsy,
+                    StellaMove.chrController.bounds.center + Vector3.down * ofsy,
+                    StellaMove.chrController.radius,
+                    Vector3.down,
+                    hits,
+                    0,
+                    groundLayer);
+                for (int i=0;i<hitCount;i++)
+                {
+                    // 下げる
+                    float colx = hits[i].collider.bounds.extents.x;
+                    float dist = StellaMove.chrController.radius + colx;
+                    float target = hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
+                    float move = target - StellaMove.instance.transform.position.x;
+                    if (move * StellaMove.forwardVector.x >= 0f)
+                    {
+                        // 向いている方向には動かさない
+                        return;
+                    }
+                    StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
+                    StellaMove.instance.Move();
+                    StellaMove.myVelocity.x = 0f;
                 }
             }
         }

@@ -18,6 +18,7 @@ namespace GreeningEx2019
 
         public override void Init()
         {
+            base.Init();
             isLanding = false;
             StellaMove.SetAnimState(StellaMove.AnimType.Air);
         }

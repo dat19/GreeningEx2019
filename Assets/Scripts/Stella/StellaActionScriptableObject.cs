@@ -6,9 +6,27 @@ namespace GreeningEx2019
     public class StellaActionScriptableObject : ScriptableObject
     {
         /// <summary>
+        /// Groundタグ
+        /// </summary>
+        protected const string GroundTag = "Ground";
+        protected const int HitMax = 8;
+        protected RaycastHit[] hits = new RaycastHit[HitMax];
+        /// <summary>
+        /// MapCollisionレイヤーのGetMaskした値
+        /// </summary>
+        protected int groundLayer;
+        /// <summary>
+        /// MapCollision, Nae, MapTriggerの3レイヤーをGetMaskした値
+        /// </summary>
+        protected int overlapLayer;
+
+        /// <summary>
         /// 動作を開始する時に必要な処理があったら、overrideして実装します。
         /// </summary>
-        public virtual void Init() { }
+        public virtual void Init() {
+            groundLayer = LayerMask.GetMask("MapCollision");
+            overlapLayer = LayerMask.GetMask("MapCollision", "Nae", "MapTrigger");
+        }
 
         /// <summary>
         /// 更新処理です。

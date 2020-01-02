@@ -67,7 +67,6 @@ namespace GreeningEx2019
         {
             get
             {
-                Debug.Log($"  SelectedType={selectedType} / {NaeMarkerData.markerObjects[(int)selectedType].name}");
                 return NaeMarkerData.markerObjects[(int)selectedType];
             }
         }

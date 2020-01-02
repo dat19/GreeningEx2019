@@ -24,12 +24,11 @@ namespace GreeningEx2019
         }
 
         protected StateType state = StateType.Walk;
-        const int RaycastHitMax = 8;
-        RaycastHit[] raycastHits = new RaycastHit[RaycastHitMax];
         float stateStartTime;
 
         public override void Init()
         {
+            base.Init();
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
             state = StateType.Walk;
         }
@@ -147,7 +146,7 @@ namespace GreeningEx2019
             // 着地目標のX座標と自分の足元のYから下方向にレイを飛ばして、着地点を見つける
             origin.y = StellaMove.chrController.bounds.min.y;
 
-            int cnt = Physics.RaycastNonAlloc(origin, Vector3.down, raycastHits, float.PositiveInfinity, StellaMove.MapCollisionLayerMask);
+            int cnt = Physics.RaycastNonAlloc(origin, Vector3.down, hits, float.PositiveInfinity, StellaMove.MapCollisionLayerMask);
             if (cnt == 0)
             {
 #if UNITY_EDITOR
@@ -159,12 +158,12 @@ namespace GreeningEx2019
             }
 
             // 一番上を探す
-            float top = raycastHits[0].collider.bounds.max.y;
+            float top = hits[0].collider.bounds.max.y;
             for (int i = 1; i < cnt; i++)
             {
-                if (raycastHits[i].collider.bounds.max.y > top)
+                if (hits[i].collider.bounds.max.y > top)
                 {
-                    top = raycastHits[i].collider.bounds.max.y;
+                    top = hits[i].collider.bounds.max.y;
                 }
             }
             float h = StellaMove.chrController.bounds.min.y - top;

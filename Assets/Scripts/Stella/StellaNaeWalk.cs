@@ -12,21 +12,13 @@ namespace GreeningEx2019
         [Tooltip("苗を置ける下方向の高さ"), SerializeField]
         float naePutHeight = 0.5f;
 
-        const string GroundTag = "Ground";
-        const int HitMax = 8;
-
         NaeActable naeActable = null;
-        int groundLayer;
-        int overlapLayer;
-        RaycastHit[] hits = new RaycastHit[HitMax];
 
         public override void Init()
         {
             base.Init();
 
             naeActable = (NaeActable)ActionBox.SelectedActable;
-            groundLayer = LayerMask.GetMask("MapCollision");
-            overlapLayer = LayerMask.GetMask("MapCollision", "Nae", "MapTrigger");
         }
 
         /// <summary>
