@@ -41,7 +41,6 @@ namespace GreeningEx2019
                 // ジャンプ中断完了確認
                 if (StellaMove.AnimTime <= 0f)
                 {
-                    Debug.Log($"  done");
                     StellaMove.SetAnimFloat("JumpRev", 1f);
                     jumpAbort = false;
                     StellaMove.SetAnimState(StellaMove.AnimType.Walk);

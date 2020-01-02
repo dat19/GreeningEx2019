@@ -173,6 +173,7 @@ namespace GreeningEx2019
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
             Pivot = transform.Find("Pivot");
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
+            hasNae = false;
             ActionBoxInstance.Init();
         }
 

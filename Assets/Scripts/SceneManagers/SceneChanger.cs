@@ -192,13 +192,12 @@ namespace GreeningEx2019
 
             // シーンを非アクティブで読み込み開始
             string sceneName = NextScene.ToString();
-            if (NextScene == SceneType.Game)
+            if (NextScene != SceneType.Game)
             {
-                sceneName = $"Stage{GameParams.SelectedStage+1}";
+                loadingSceneOperations[loadingSceneOperationCount] = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                loadingSceneOperations[loadingSceneOperationCount].allowSceneActivation = false;
+                loadingSceneOperationCount++;
             }
-            loadingSceneOperations[loadingSceneOperationCount] = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            loadingSceneOperations[loadingSceneOperationCount].allowSceneActivation = false;
-            loadingSceneOperationCount++;
 
             // フェードアウト
             yield return Fade.StartFade(Fade.FadeStateType.Out, fadeTime, true);
@@ -210,14 +209,30 @@ namespace GreeningEx2019
                 unloadSceneCount++;
             }
 
-            loadedSceneName = sceneName;
+            // シーンをアクティブにして、解放を待つ
+            if (loadingSceneOperationCount > 0)
+            {
+                loadingSceneOperations[0].allowSceneActivation = true;
+            }
+            for (int i = 0; i < unloadSceneCount; i++)
+            {
+                if (!unloadSceneOperations[i].isDone)
+                {
+                    yield return unloadSceneOperations[i];
+                }
+            }
 
             // シーン切り替え
             NowScene = NextScene;
             NextScene = SceneType.None;
 
-            // シーンをアクティブにする
-            loadingSceneOperations[0].allowSceneActivation = true;
+            if (NowScene == SceneType.Game)
+            {
+                sceneName = $"Stage{GameParams.SelectedStage + 1}";
+                loadingSceneOperations[loadingSceneOperationCount] = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                loadingSceneOperationCount++;
+            }
+            loadedSceneName = sceneName;
 
             // シーンの読み込みと解放の完了を待つ
             for (int i=0;i<loadingSceneOperationCount;i++)
@@ -227,13 +242,7 @@ namespace GreeningEx2019
                     yield return loadingSceneOperations[i];
                 }
             }
-            for (int i = 0; i < unloadSceneCount; i++)
-            {
-                if (!unloadSceneOperations[i].isDone)
-                {
-                    yield return unloadSceneOperations[i];
-                }
-            }
+
             // シーンの初期化を待つ
             while (loadingSceneManagerCount < loadingSceneOperationCount)
             {
