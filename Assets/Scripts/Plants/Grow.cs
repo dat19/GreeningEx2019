@@ -11,6 +11,9 @@ namespace GreeningEx2019
     /// </summary>
     public class Grow : MonoBehaviour
     {
+        [Tooltip("苗が成長しきるまで、水まきを続ける植物にはチェックを入れる"), SerializeField]
+        bool waitGrowDone = false;
+
         /// <summary>
         /// 汎用の状態
         /// </summary>
@@ -30,6 +33,11 @@ namespace GreeningEx2019
         /// 苗が成長した数
         /// </summary>
         public static int NaeGrowedCount { get; private set; }
+
+        /// <summary>
+        /// 生長完了を待つ残り数
+        /// </summary>
+        public static int WaitGrowCount { get; private set; }
 
         protected Animator anim;
 
@@ -61,6 +69,10 @@ namespace GreeningEx2019
                 anim.SetTrigger("Grow");
                 NaeGrowedCount++;
                 Goal.IncrementNaeCount();
+                if (waitGrowDone)
+                {
+                    WaitGrowCount++;
+                }
                 return true;
             }
 
@@ -74,6 +86,18 @@ namespace GreeningEx2019
         public virtual void GrowDone()
         {
             state = StateType.Growed;
+            if (waitGrowDone)
+            {
+                WaitGrowCount--;
+            }
+        }
+
+        /// <summary>
+        /// 生長数の初期化など
+        /// </summary>
+        public static void Init()
+        {
+            WaitGrowCount = 0;
         }
     }
 }

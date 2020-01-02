@@ -109,7 +109,7 @@ namespace GreeningEx2019
                     triggerIndex = (triggerIndex + 1) % triggerCount;
                 }
 
-                if (!Input.GetButton("Water"))
+                if (!Input.GetButton("Water") && (Grow.WaitGrowCount <= 0))
                 {
                     // 水まき終了
                     state = StateType.End;

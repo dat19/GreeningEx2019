@@ -67,6 +67,8 @@ namespace GreeningEx2019
             // 苗の数を数える
             Grow[] gr = GameObject.FindObjectsOfType<Grow>();
             NaeCount = gr.Length;
+
+            Grow.Init();
         }
 
         /// <summary>
