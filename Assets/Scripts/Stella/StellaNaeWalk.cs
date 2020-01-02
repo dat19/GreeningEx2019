@@ -112,7 +112,11 @@ namespace GreeningEx2019
             }
             else
             {
-                StellaMove.instance.CheckMiniJump();
+                // 移動しているなら、ジャンプチェック
+                if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
+                {
+                    StellaMove.instance.CheckMiniJump();
+                }
             }
         }
 

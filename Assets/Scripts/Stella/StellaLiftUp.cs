@@ -11,6 +11,7 @@ namespace GreeningEx2019
         {
             TargetWalk,
             Action,
+            BackOff,
         }
 
         protected StateType state;

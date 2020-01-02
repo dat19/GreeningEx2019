@@ -7,6 +7,23 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create PutDown", fileName = "StellaActionPutDown")]
     public class StellaPutDown : StellaLiftUp
     {
+        public override void UpdateAction()
+        {
+            if (state != StateType.BackOff)
+            {
+                base.UpdateAction();
+            }
+            else
+            {
+                if (StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed))
+                {
+                    ((NaeActable)ActionBox.SelectedActable).SetCollider(true);
+                    StellaMove.myVelocity.x = 0;
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+                }
+            }
+        }
+
         protected override void ToAction()
         {
             StellaMove.RegisterAnimEvent(PutDownNae);
@@ -23,13 +40,15 @@ namespace GreeningEx2019
 
         void PutDownNae()
         {
-            StellaMove.RegisterAnimEvent(ToWalk);
+            StellaMove.RegisterAnimEvent(BackOff);
             ((NaeActable)ActionBox.SelectedActable).PutDown();
         }
 
-        void ToWalk()
+        void BackOff()
         {
-            StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+            state = StateType.BackOff;
+            targetX = StellaMove.naePutPosition.x - (StellaMove.chrController.radius + ((NaeActable)ActionBox.SelectedActable).ColliderExtentsX)*StellaMove.forwardVector.x;
+            StellaMove.SetAnimState(StellaMove.AnimType.Walk);
         }
     }
 }

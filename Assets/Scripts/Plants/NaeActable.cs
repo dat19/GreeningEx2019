@@ -157,8 +157,7 @@ namespace GreeningEx2019
         {
             isHolding = true;
             parentPivot = pivot;
-            anim.enabled = false;
-            myCollider.enabled = false;
+            SetCollider(false);
 
             // マーカー用オブジェクトを作成
             if (MarkerObject != null)
@@ -192,8 +191,6 @@ namespace GreeningEx2019
         public void PutDown()
         {
             isHolding = false;
-            anim.enabled = true;
-            myCollider.enabled = true;
             transform.position = StellaMove.naePutPosition + Vector3.up * heightFromGround;
 
             // マーカー用オブジェクトを削除
@@ -201,6 +198,16 @@ namespace GreeningEx2019
             {
                 Destroy(MarkerObject);
             }
+        }
+
+        /// <summary>
+        /// コライダーとアニメの有効無効を設定します。
+        /// </summary>
+        /// <param name="flag">コライダーとアニメの状態</param>
+        public void SetCollider(bool flag)
+        {
+            anim.enabled = flag;
+            myCollider.enabled = flag;
         }
 
         /// <summary>
