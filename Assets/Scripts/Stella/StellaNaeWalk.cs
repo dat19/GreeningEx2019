@@ -78,8 +78,30 @@ namespace GreeningEx2019
             }
 
             // 行動
-            Walk();
+            if (!Walk())
+            {
+                // ターン時はこれ以降の処理不要
+                return;
+            }
+
             StellaMove.instance.Gravity();
+
+            // 移動先の候補を調べる
+            Vector3 nextNaePos = GetPutPosition(StellaMove.instance.transform.position + StellaMove.myVelocity * Time.fixedDeltaTime);
+            if (!Mathf.Approximately(Vector3.Distance(naepos, nextNaePos), 0f)) {
+                // 苗の候補場所が変わるので、移動キャンセル調査
+                int hitCount = naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
+                for (int i=0; i<hitCount;i++)
+                {
+                    if (hits[i].collider.CompareTag(GroundTag))
+                    {
+                        // ぶつかるので移動をキャンセル
+                        StellaMove.myVelocity.x = 0f;
+                        break;
+                    }
+                }
+            }
+
             StellaMove.instance.Move();
 
             if (!StellaMove.chrController.isGrounded)

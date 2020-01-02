@@ -76,9 +76,10 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 歩いたり止まったりします。
+        /// 歩いたり止まったりします。継続時はtrue、ターンに移行するのでこれ以降の処理が不要な時、falseを返します。
         /// </summary>
-        protected void Walk()
+        /// <returns>歩き継続の時、true</returns>
+        protected bool Walk()
         {
             // キーの入力を調べる
             float h = Input.GetAxisRaw("Horizontal");
@@ -90,27 +91,13 @@ namespace GreeningEx2019
                 stateStartTime = Time.time - Time.fixedDeltaTime;
                 StellaMove.myVelocity.x = 0f;
                 Turn();
-                return;
+                return false;
             }
 
             // 左右の移動速度(秒速)を求める
-            float vx = h * moveSpeed;
+            StellaMove.myVelocity.x = h * moveSpeed;
 
-            // 動かす
-            StellaMove.myVelocity.x = vx;
-
-            Vector3 e = StellaMove.Pivot.eulerAngles;
-            if (h < -0.5f)
-            {
-                e.y = rotateY;
-                StellaMove.forwardVector = Vector3.left;
-            }
-            else if (h > 0.5f)
-            {
-                e.y = -rotateY;
-                StellaMove.forwardVector = Vector3.right;
-            }
-            StellaMove.Pivot.eulerAngles = e;
+            return true;
         }
 
         /// <summary>
