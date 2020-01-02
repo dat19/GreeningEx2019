@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 7937882301023864054}
   - component: {fileID: 3669179022348427913}
   - component: {fileID: 7105358289731606287}
-  - component: {fileID: 9155566636553786354}
   m_Layer: 9
   m_Name: DandelionLittle
   m_TagString: Nae
@@ -206,19 +205,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.1, z: 0}
---- !u!114 &9155566636553786354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2336821513848830333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40453d3ed28db4c4680d26ad5a01772f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
 --- !u!1 &7702757606659715458
 GameObject:
   m_ObjectHideFlags: 0

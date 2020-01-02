@@ -65,8 +65,8 @@ namespace GreeningEx2019
             fcam.SetTarget(myp.transform);
 
             // 苗の数を数える
-            NaeCount = GameObject.FindObjectsOfType<Grow>().Length;
-            Debug.Log($"naecount={NaeCount}");
+            Grow[] gr = GameObject.FindObjectsOfType<Grow>();
+            NaeCount = gr.Length;
         }
 
         /// <summary>
