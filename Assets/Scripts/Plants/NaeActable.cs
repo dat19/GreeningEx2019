@@ -145,6 +145,7 @@ namespace GreeningEx2019
         public override void Action()
         {
             StellaMove.naePutPosition = transform.position;
+            anim.enabled = false;
             myCollider.enabled = false;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.LifetUp);
         }
@@ -154,10 +155,10 @@ namespace GreeningEx2019
         /// </summary>
         public void Hold(Transform pivot)
         {
-            myCollider.enabled = false;
             isHolding = true;
             parentPivot = pivot;
             anim.enabled = false;
+            myCollider.enabled = false;
 
             // マーカー用オブジェクトを作成
             if (MarkerObject != null)
