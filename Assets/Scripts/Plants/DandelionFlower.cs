@@ -2,48 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DandelionFlower : MonoBehaviour
+namespace GreeningEx2019
 {
-    Animator animator = null;
-    int state = 0;
-    [SerializeField]
-    Vector3 fluffOffset = new Vector3(0f, 0.5f, 0);
-    [SerializeField]
-    GameObject Fluff = null;
-    [SerializeField]
-    float insTime = 2;
-    float lastTime;
-    [SerializeField]
-    Vector2 direction = new Vector2(0.3f, 0.3f);
-    [SerializeField]
-    float FluffLifeTime = 5f;
+    public class DandelionFlower : Grow
+    {
+        [Tooltip("綿毛を放出する時のオフセット座標"), SerializeField]
+        Vector3 fluffOffset = new Vector3(0f, 0.5f, 0);
+        [Tooltip("綿毛プレハブ"), SerializeField]
+        GameObject Fluff = null;
+        [Tooltip("生成間隔"), SerializeField]
+        float insTime = 2;
+        [Tooltip("綿毛を飛ばす速度"), SerializeField]
+        Vector2 direction = new Vector2(0.3f, 0.3f);
+        [Tooltip("綿毛を掴んでからの寿命"), SerializeField]
+        float FluffLifeTime = 5f;
 
-    private void Awake()
-    {
-        animator = GetComponentInChildren<Animator>();
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Water") && state == 0)
+        float lastTime;
+
+        /// <summary>
+        /// アニメーションで開花が完了したら呼び出すメソッド。
+        /// </summary>
+        public void ToFluff()
         {
-            animator.SetTrigger("bloom");
-            state = 1;
+            lastTime = Time.time;
+            GrowDone();
         }
-    }
-    public void ToFluff()
-    {
-        state = 2;
-        lastTime = Time.time;
-    }
-    private void FixedUpdate()
-    {
-        if (state == 2)
+
+        private void FixedUpdate()
         {
-            if (Time.time - lastTime > insTime)
+            if (state == StateType.Growed)
             {
-                GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
-                lastTime = Time.time;
-                Go.GetComponent<Fluff>().init(direction, FluffLifeTime);
+                if (Time.time - lastTime > insTime)
+                {
+                    GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
+                    lastTime = Time.time;
+                    Go.GetComponent<Fluff>().init(direction, FluffLifeTime);
+                }
             }
         }
     }

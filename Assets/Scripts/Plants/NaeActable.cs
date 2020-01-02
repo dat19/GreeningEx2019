@@ -77,6 +77,10 @@ namespace GreeningEx2019
             isHolding = false;
             myCollider = GetComponent<Collider>();
             anim = GetComponent<Animator>();
+            if (anim == null)
+            {
+                anim = GetComponentInChildren<Animator>();
+            }
             grow = GetComponent<Grow>();
             if (myCollider is SphereCollider)
             {
@@ -141,6 +145,7 @@ namespace GreeningEx2019
         public override void Action()
         {
             StellaMove.naePutPosition = transform.position;
+            myCollider.enabled = false;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.LifetUp);
         }
 
@@ -149,10 +154,10 @@ namespace GreeningEx2019
         /// </summary>
         public void Hold(Transform pivot)
         {
+            myCollider.enabled = false;
             isHolding = true;
             parentPivot = pivot;
             anim.enabled = false;
-            myCollider.enabled = false;
 
             // マーカー用オブジェクトを作成
             if (MarkerObject != null)
@@ -197,6 +202,9 @@ namespace GreeningEx2019
             }
         }
 
+        /// <summary>
+        /// 持っている時に位置を調整します。
+        /// </summary>
         private void LateUpdate()
         {
             if (isHolding)
@@ -206,6 +214,5 @@ namespace GreeningEx2019
                 transform.up = Vector3.up;
             }
         }
-
     }
 }
