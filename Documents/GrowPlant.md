@@ -6,7 +6,7 @@
 
 - 現在の状態を、苗(Nae)、生長中(Growing)、生長完了(Growed)で表す
 - 現在の状態は、publicのstate変数で、他のスクリプトからも参照できる
-- Naeの時に、水と接触したら(OnTriggetEnter)、Animatorの`Grow`トリガーを有効にする
+- Naeの時に水と接触(OnTriggetEnter)したら、Animatorの`Grow`トリガーを有効にする
 - 生長アニメーションが完了した時に呼び出すGrowDoneメソッドを持つ。これが呼ばれたら生長が完了した状態に設定する
 
 # アニメーション

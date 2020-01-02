@@ -123,6 +123,22 @@ namespace GreeningEx2019
         public static Transform Pivot { get; private set; }
 
         /// <summary>
+        /// アクション用判定インスタンス
+        /// </summary>
+        public static ActionBox ActionBoxInstance { get; private set; }
+
+        /// <summary>
+        /// アニメの再生時間を返します。
+        /// </summary>
+        public static float AnimTime
+        {
+            get
+            {
+                return anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            }
+        }
+
+        /// <summary>
         /// 苗を持っている時、true
         /// </summary>
         public static bool hasNae = false;
@@ -141,7 +157,6 @@ namespace GreeningEx2019
         static int defaultLayer = 0;
         static int jumpLayer = 0;
         static ParticleSystem splashParticle = null;
-        public static ActionBox ActionBoxInstance { get; private set; }
 
         void Awake()
         {
@@ -286,6 +301,16 @@ namespace GreeningEx2019
         public static void SetAnimState(AnimType type)
         {
             anim.SetInteger("State", (int)type);
+        }
+
+        /// <summary>
+        /// アニメに状態を設定
+        /// </summary>
+        /// <param name="key">パラメーター</param>
+        /// <param name="value">設定する値</param>
+        public static void SetAnimFloat(string key, float value)
+        {
+            anim.SetFloat(key, value);
         }
 
         /// <summary>
