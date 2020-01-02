@@ -190,9 +190,6 @@ namespace GreeningEx2019
         {
             isBooting = false;
 
-            // 苗を初期化
-            Grow.ClearNaeCount();
-
             // シーンを非アクティブで読み込み開始
             string sceneName = NextScene.ToString();
             if (NextScene == SceneType.Game)

@@ -75,7 +75,8 @@ namespace GreeningEx2019
         {
             if ((frameCount == Time.frameCount) || (counter >= Grow.NaeGrowedCount)) return;
             frameCount = Time.frameCount;
-                
+
+            // 星の色を段階的に変化させる
             changeColorTime += Time.fixedDeltaTime;
             float t = changeColorTime / changeColorSeconds;
             if (t >= 1f)
@@ -87,7 +88,7 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 開花させた苗の数を増やす
+        /// 開花させた苗の数を増やして、星のマテリアルを設定する
         /// </summary>
         public static void IncrementNaeCount()
         {
@@ -97,12 +98,12 @@ namespace GreeningEx2019
             changeColorTime = 0;
             startMaterial.Lerp(myMaterial, myMaterial, 0);
 
-            if (Grow.NaeGrowedCount < Grow.NaeCount)
+            if (Grow.NaeGrowedCount < StageManager.NaeCount)
             {
                 targetMaterial.Lerp(
                     instance.materials[(int)MaterialIndex.First],
                     instance.materials[(int)MaterialIndex.Last],
-                    (float)Grow.NaeGrowedCount / (float)(Grow.NaeCount - 1));
+                    (float)Grow.NaeGrowedCount / (float)(StageManager.NaeCount - 1));
             }
             else
             {

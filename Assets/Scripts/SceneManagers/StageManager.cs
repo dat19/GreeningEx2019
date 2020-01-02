@@ -28,6 +28,11 @@ namespace GreeningEx2019
         public static bool IsClearPlaying { get; private set; }
 
         /// <summary>
+        /// ステージの苗の数
+        /// </summary>
+        public static int NaeCount { get; private set; }
+
+        /// <summary>
         /// 操作可能な状態かどうかを返します。
         /// </summary>
         public static bool CanMove
@@ -58,6 +63,10 @@ namespace GreeningEx2019
             // カメラにターゲットを設定
             FollowCamera fcam = Camera.main.gameObject.GetComponent<FollowCamera>();
             fcam.SetTarget(myp.transform);
+
+            // 苗の数を数える
+            NaeCount = GameObject.FindObjectsOfType<Grow>().Length;
+            Debug.Log($"naecount={NaeCount}");
         }
 
         /// <summary>

@@ -27,11 +27,6 @@ namespace GreeningEx2019
         public StateType state = StateType.Nae;
 
         /// <summary>
-        /// 苗の数
-        /// </summary>
-        public static int NaeCount { get; private set; }
-
-        /// <summary>
         /// 苗が成長した数
         /// </summary>
         public static int NaeGrowedCount { get; private set; }
@@ -46,7 +41,6 @@ namespace GreeningEx2019
             {
                 anim = GetComponentInChildren<Animator>();
             }
-            NaeCount++;
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -80,14 +74,6 @@ namespace GreeningEx2019
         public virtual void GrowDone()
         {
             state = StateType.Growed;
-        }
-
-        /// <summary>
-        /// シーン切り替え時に呼び出す。
-        /// </summary>
-        public static void ClearNaeCount()
-        {
-            NaeCount = 0;
         }
     }
 }
