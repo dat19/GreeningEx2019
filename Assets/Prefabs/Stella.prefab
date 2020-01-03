@@ -399,6 +399,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 11400000, guid: 81b0eafa9bb5c124696288ae449dfde1, type: 2}
+  - {fileID: 11400000, guid: b1dadb7149ec8164abe15cb8a0000f3f, type: 2}
   - {fileID: 0}
   walkDownY: 0.1
   miniJumpCheckX: 0.5

@@ -31,8 +31,9 @@ namespace GreeningEx2019
             if (!jumpAbort)
             {
                 // 中断チェック
-                if (    ((StellaMove.forwardVector.x < -0.5f) && (Input.GetAxisRaw("Horizontal") >= 0f)
-                    ||  ((StellaMove.forwardVector.x > 0.5f) && (Input.GetAxisRaw("Horizontal") <= 0f))))
+                if (    (((StellaMove.forwardVector.x < -0.5f) && (Input.GetAxisRaw("Horizontal") >= 0f))
+                    ||  ((StellaMove.forwardVector.x > 0.5f) && (Input.GetAxisRaw("Horizontal") <= 0f)))
+                    &&  !Input.GetButton("Action"))
                 {
                     jumpAbort = true;
                     StellaMove.SetAnimFloat("JumpRev", -1f);

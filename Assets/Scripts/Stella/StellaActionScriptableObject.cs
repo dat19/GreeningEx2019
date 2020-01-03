@@ -46,9 +46,10 @@ namespace GreeningEx2019
         public virtual void OnTriggerStay(Collider other) { }
         public virtual void OnTriggerExit(Collider other) { }
 
-        public virtual void OnCollisionEnter(Collision col) { }
-        public virtual void OnCollisionStay(Collision col) { }
-        public virtual void OnCollisionExit(Collision col) { }
-
+        /// <summary>
+        /// コライダーとの接触を処理したい場合はoverrideします。
+        /// </summary>
+        /// <param name="hit"></param>
+        public virtual void OnControllerColliderHit(ControllerColliderHit hit) { }
     }
 }

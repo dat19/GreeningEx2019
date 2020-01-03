@@ -61,7 +61,8 @@ namespace GreeningEx2019
             Watage,   // 9綿毛につかまる
             Tamanori, // 10岩にのる
             Obore,    // 11溺れ
-            Clear     // 12ステージクリア
+            MushroomJump,   // 12マッシュルームジャンプ
+            Clear     // 13ステージクリア
         }
 
         /// <summary>
@@ -148,12 +149,16 @@ namespace GreeningEx2019
         /// </summary>
         public static Vector3 naePutPosition;
 
+        /// <summary>
+        /// ジャンプ時の目的地面座標
+        /// </summary>        
+        public static Vector3 targetJumpGround = Vector3.zero;
+
         static Animator anim;
         static ActionType nowAction = ActionType.None;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
-        static Vector3 targetJumpGround = Vector3.zero;
         static int defaultLayer = 0;
         static int jumpLayer = 0;
         static ParticleSystem splashParticle = null;
@@ -220,7 +225,7 @@ namespace GreeningEx2019
         public void Gravity()
         {
             // 落下
-            if (chrController.isGrounded)
+            if (chrController.isGrounded && myVelocity.y <= 0f)
             {
                 myVelocity.y = 0f;
             }
@@ -270,6 +275,20 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 静止状態から指定の高さを落下するのにかかる秒数を返します。
+        /// この値にgravityAddをかけるとジャンプの初速が得られる。
+        /// </summary>
+        /// <param name="h">高さ</param>
+        /// <returns>指定の高さ落下するのにかかる秒数</returns>
+        public static float GetFallTime(float h)
+        {
+            // Y方向の初速を決める
+            // h = (g*t*t)/2;
+            // 2h/g  = t*t
+            return Mathf.Sqrt(2f * h / GravityAdd);
+        }
+
+        /// <summary>
         /// targetJumpGroundへのジャンプを開始します。
         /// </summary>
         public void StartTargetJump()
@@ -282,7 +301,7 @@ namespace GreeningEx2019
             // Y方向の初速を決める
             // h = (g*t*t)/2;
             // 2h/g  = t*t
-            float t = Mathf.Sqrt(2f * top / gravityAdd);
+            float t = GetFallTime(top);
             myVelocity.y = gravityAdd * (t - Time.fixedDeltaTime);
 
             // X方向の速度を決める
@@ -404,6 +423,11 @@ namespace GreeningEx2019
             stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
         }
 
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            stellaActionScriptableObjects[(int)nowAction]?.OnControllerColliderHit(hit);
+        }
+
 #if DEBUG_GUI
         private void OnGUI()
         {
@@ -462,6 +486,16 @@ namespace GreeningEx2019
             instance.Move();
 
             return reached;
+        }
+
+        /// <summary>
+        /// 下にあるMapCollisionレイヤーのオブジェクトを返します。
+        /// </summary>
+        /// <returns>見つけたオブジェクト。オブジェクトがなければnull</returns>
+        public static int GetUnderMap(RaycastHit[] hits)
+        {
+            Vector3 origin = chrController.bounds.center;
+            return Physics.RaycastNonAlloc(origin, Vector3.down, hits, chrController.height * 0.5f + 0.1f, MapCollisionLayerMask); ;
         }
     }
 }

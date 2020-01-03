@@ -105,15 +105,19 @@ namespace GreeningEx2019
             Actable nextSelect = null;
             for (int i=0; i<hitCount;i++)
             {
-                Actable hitAct = hits[i].collider.GetComponent<Actable>();
-                if (hitAct == null || !hitAct.CanAction) continue;
+                Actable []hitActs = hits[i].collider.GetComponents<Actable>();
 
-                // 距離の更新確認
-                float dist = Mathf.Abs(transform.position.x - hits[i].transform.position.x);
-                if (dist < min)
+                for (int j = 0; j < hitActs.Length; j++)
                 {
-                    min = dist;
-                    nextSelect = hitAct;
+                    if (hitActs[j] == null || !hitActs[j].CanAction) continue;
+
+                    // 距離の更新確認
+                    float dist = Mathf.Abs(transform.position.x - hits[i].transform.position.x);
+                    if (dist < min)
+                    {
+                        min = dist;
+                        nextSelect = hitActs[j];
+                    }
                 }
             }
 

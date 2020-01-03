@@ -18,7 +18,6 @@ namespace GreeningEx2019
     /// 苗として持ち上げられる処理のためのスクリプト。
     /// タグがNaeの時のみ発動します。成長したら、タグをGrowに変えます。
     /// </summary>
-    [RequireComponent(typeof(Grow))]
     public class NaeActable : Actable
     {
         [Tooltip("この苗の種類"), SerializeField]
@@ -80,7 +79,6 @@ namespace GreeningEx2019
         BoxCollider boxCollider = null;
         SphereCollider sphereCollider = null;
         CapsuleCollider capsuleCollider = null;
-        Grow grow = null;
         static NaeType selectedType;
 
         /// <summary>
@@ -90,7 +88,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return grow.state == Grow.StateType.Nae;
+                return GrowInstance.state == Grow.StateType.Nae;
             }
             protected set => base.CanAction = value;
         }
@@ -105,7 +103,6 @@ namespace GreeningEx2019
             {
                 anim = GetComponentInChildren<Animator>();
             }
-            grow = GetComponent<Grow>();
             if (myCollider is SphereCollider)
             {
                 sphereCollider = ((SphereCollider)myCollider);

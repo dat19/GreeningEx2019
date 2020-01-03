@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 378182585665365298}
   - component: {fileID: 8284680413389918369}
   - component: {fileID: 5975555314084452221}
+  - component: {fileID: 679637579890085624}
+  - component: {fileID: 3431257477466090173}
   - component: {fileID: 6290440475279386744}
   - component: {fileID: 1356511117578463138}
   m_Layer: 11
@@ -66,6 +68,30 @@ MonoBehaviour:
   offset: {x: 0.08, y: 0.08, z: 0}
   heightFromGround: 0.5
   naeMarkerData: {fileID: 11400000, guid: cdeaf7da1b2e5d74ba695c20df85a483, type: 2}
+--- !u!114 &679637579890085624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378182585665365299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018a2689412b62b4aaa752c2926bff0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3431257477466090173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378182585665365299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e544220aded174f9c362be0e10f70b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &6290440475279386744
 Animator:
   serializedVersion: 3

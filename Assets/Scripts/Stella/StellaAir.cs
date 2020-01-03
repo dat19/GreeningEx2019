@@ -25,14 +25,26 @@ namespace GreeningEx2019
 
         public override void UpdateAction()
         {
+            Debug.Log($"  b {StellaMove.myVelocity.y}");
             StellaMove.instance.Gravity();
+            Debug.Log($"  m {StellaMove.myVelocity.y}");
             StellaMove.instance.Move();
+            Debug.Log($"  a {StellaMove.myVelocity.y}");
 
-            if (!isLanding && StellaMove.chrController.isGrounded)
+            if (!isLanding && StellaMove.chrController.isGrounded && StellaMove.myVelocity.y < 0f)
             {
                 StellaMove.myVelocity.x = 0;
                 StellaMove.RegisterAnimEvent(Grounded);
                 isLanding = true;
+                int hcnt = StellaMove.GetUnderMap(hits);
+                for (int i=0;i<hcnt;i++)
+                {
+                    IStepOn so = hits[i].collider.GetComponent<IStepOn>();
+                    if( so != null)
+                    {
+                        so.StepOn();
+                    }
+                }
             }
         }
 
