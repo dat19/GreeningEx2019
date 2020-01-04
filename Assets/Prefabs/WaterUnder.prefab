@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3767001414668562938}
   - component: {fileID: 3767001414668562939}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: WaterUnder
   m_TagString: DeadZone
   m_Icon: {fileID: 0}
