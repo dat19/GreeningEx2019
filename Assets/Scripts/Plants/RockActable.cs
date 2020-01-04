@@ -42,11 +42,11 @@ namespace GreeningEx2019 {
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Jump);
         }
 
-        public override void PushAction()
+        public override bool PushAction()
         {
             if (!CanAction)
             {
-                return;
+                return false;
             }
 
             // 重力加速
@@ -66,6 +66,7 @@ namespace GreeningEx2019 {
             // 移動した分、回転
             float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
             transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+            return true;
         }
 
         private void FixedUpdate()

@@ -34,7 +34,8 @@ namespace GreeningEx2019
         /// <summary>
         /// 押す時に発動する動作があればこれを上書きします。
         /// </summary>
-        public virtual void PushAction() { }
+        /// <returns>動作後にステラを下がらせたい場合、trueを返します。</returns>
+        public virtual bool PushAction() { return false; }
 
         /// <summary>
         /// 選択された時に呼び出します。

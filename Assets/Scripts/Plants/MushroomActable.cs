@@ -39,9 +39,10 @@ namespace GreeningEx2019 {
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Jump);
         }
 
-        public override void PushAction()
+        public override bool PushAction()
         {
             Action();
+            return false;
         }
     }
 }
