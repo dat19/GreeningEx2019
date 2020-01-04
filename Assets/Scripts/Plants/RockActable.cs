@@ -53,15 +53,7 @@ namespace GreeningEx2019 {
             Vector3 move = Vector3.zero;
             move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime;
             Vector3 lastPos = transform.position;
-            if (!Mathf.Approximately(move.x, 0))
-            {
-                Debug.Log($"  push {move.x} frame={Time.frameCount}");
-            }
             ChrController.Move(move);
-            if (ChrController.collisionFlags != CollisionFlags.Below)
-            {
-                Debug.Log($"  flag={ChrController.collisionFlags}");
-            }
 
             // 移動した分、回転
             float zrot = (transform.position.x - lastPos.x) / ChrController.radius;

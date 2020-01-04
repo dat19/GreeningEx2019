@@ -168,6 +168,13 @@ namespace GreeningEx2019
                 }
             }
             float h = StellaMove.chrController.bounds.min.y - top;
+            if (Mathf.Approximately(h, 0f))
+            {
+                Debug.Log($"  h=zeroo");
+                StellaMove.myVelocity.x = 0f;
+                return;
+            }
+
             float t = Mathf.Sqrt(2f * h / StellaMove.GravityAdd);
             StellaMove.myVelocity.x = (origin.x - StellaMove.instance.transform.position.x) / t;
             if (StellaMove.myVelocity.x*StellaMove.forwardVector.x < 0f)
@@ -208,22 +215,22 @@ namespace GreeningEx2019
                         continue;
                     }
 
-                    // 移動があって、移動方向とオブジェクトの位置が等しい場合、押す
+                    // 移動していて、移動先にオブジェクトがある場合、押す
                     float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
                     if (StellaMove.myVelocity.x * to > 0f)
                     {
                         Debug.Log($"  push {StellaMove.myVelocity.x} to={to}");
                         if (!acts[j].PushAction()) continue;
+                    }
 
-                        // 向いている方向に対象物があれば、ステラを下げるチェック
-                        float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
-                        if (((to * StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
-                        {
-                            float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
-                            Debug.Log($"  to={to} / range={range} / posx={posx}");
-                            StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x) / Time.fixedDeltaTime;
-                            Debug.Log($"  下げる={StellaMove.myVelocity.x}");
-                        }
+                    // 向いている方向に対象物がある時、対象物に触れていたらステラを下げる
+                    float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
+                    if (((to * StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
+                    {
+                        float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
+                        Debug.Log($"  to={to} / range={range} / posx={posx}");
+                        StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x) / Time.fixedDeltaTime;
+                        Debug.Log($"  下げる={StellaMove.myVelocity.x}");
                     }
                     else
                     {
