@@ -18,11 +18,6 @@ namespace GreeningEx2019 {
             }
         }
 
-        /// <summary>
-        /// 押された距離
-        /// </summary>
-        float pushX = 0f;
-
         Vector3 myVelocity = Vector3.zero;
         SphereCollider sphereCollider;
 
@@ -54,7 +49,23 @@ namespace GreeningEx2019 {
                 return;
             }
 
-            pushX += StellaMove.myVelocity.x * Time.fixedDeltaTime;
+            // 重力加速
+            Vector3 move = Vector3.zero;
+            move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime;
+            Vector3 lastPos = transform.position;
+            if (!Mathf.Approximately(move.x, 0))
+            {
+                Debug.Log($"  push {move.x} frame={Time.frameCount}");
+            }
+            ChrController.Move(move);
+            if (ChrController.collisionFlags != CollisionFlags.Below)
+            {
+                Debug.Log($"  flag={ChrController.collisionFlags}");
+            }
+
+            // 移動した分、回転
+            float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
+            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
         }
 
         private void FixedUpdate()
@@ -75,23 +86,8 @@ namespace GreeningEx2019 {
             if (!CanAction) return;
 
             // 重力加速
-            myVelocity.x = pushX;
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
-            pushX = 0f;
-            Vector3 lastPos = transform.position;
-            if (!Mathf.Approximately(pushX, 0))
-            {
-                Debug.Log($"  push {pushX}");
-            }
             ChrController.Move(myVelocity);
-            if (ChrController.collisionFlags != CollisionFlags.Below)
-            {
-                Debug.Log($"  flag={ChrController.collisionFlags}");
-            }
-
-            // 移動した分、回転
-            float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
-            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
 
             // 着地チェック
             if (ChrController.isGrounded && myVelocity.y <= 0f)
