@@ -17,6 +17,16 @@ namespace GreeningEx2019 {
                 return sphereCollider;
             }
         }
+        Rigidbody rb = null;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+        /// <summary>
+        /// 押された距離
+        /// </summary>
+        float pushX = 0f;
 
         /// <summary>
         /// 生長後に有効になる
@@ -41,7 +51,32 @@ namespace GreeningEx2019 {
 
         public override void PushAction()
         {
-            Debug.Log($"押す");
+            if (!CanAction) return;
+
+            Debug.Log($"  pushed");
+
+            pushX += StellaMove.myVelocity.x * Time.fixedDeltaTime;
+        }
+
+        private void FixedUpdate()
+        {
+            if (Mathf.Approximately(pushX, 0f))
+            {
+                // 押していなければZ回転なし
+                rb.constraints |= RigidbodyConstraints.FreezeRotationZ;
+                return;
+            }
+            else
+            {
+                rb.constraints &= ~RigidbodyConstraints.FreezeRotationZ;
+            }
+
+            float zrot = pushX / SphereColliderInstance.radius;
+            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+            Vector3 v = rb.velocity;
+            v.x = pushX;
+            rb.velocity = v;
+            pushX = 0f;
         }
     }
 }

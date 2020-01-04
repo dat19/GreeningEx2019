@@ -177,8 +177,8 @@ namespace GreeningEx2019
 
         public override void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            // 押すチェック。自分が移動していない時は発動しない
-            if (Mathf.Approximately(StellaMove.myVelocity.x, 0f))
+            // 押すチェック。自分が移動していない時や、歩きや苗歩き以外は発動しない
+            if (    Mathf.Approximately(StellaMove.myVelocity.x, 0f))
             {
                 return;
             }
@@ -186,10 +186,7 @@ namespace GreeningEx2019
             Actable[] acts = hit.collider.GetComponents<Actable>();
             for (int i=0;i<acts.Length;i++)
             {
-                if (acts[i].CanAction)
-                {
-                    acts[i].PushAction();
-                }
+                acts[i].PushAction();
             }
         }
     }
