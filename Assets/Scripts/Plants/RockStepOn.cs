@@ -17,7 +17,13 @@ namespace GreeningEx2019
         {
             if (grow.state != Grow.StateType.Growed) return;
 
-            Debug.Log($"岩着地");
+            // 着地したオブジェクトとしてステラに報告
+            StellaMove.stepOnObject = gameObject;
+
+            // 着地済みの時は切り替え不要
+            if (StellaMove.NowAction == StellaMove.ActionType.Tamanori) return;
+
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Tamanori);
         }
     }
 }

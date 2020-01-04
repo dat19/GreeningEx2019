@@ -77,6 +77,7 @@ namespace GreeningEx2019
                 return;
             }
 
+            PushCheck();
             StellaMove.instance.Gravity();
 
             // 移動先の候補を調べる
@@ -104,6 +105,9 @@ namespace GreeningEx2019
             }
             else
             {
+                // 乗っかりチェック
+                StellaMove.CheckStepOn();
+
                 // 移動しているなら、ジャンプチェック
                 if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
                 {

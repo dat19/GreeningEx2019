@@ -33,15 +33,7 @@ namespace GreeningEx2019
                 StellaMove.myVelocity.x = 0;
                 StellaMove.RegisterAnimEvent(Grounded);
                 isLanding = true;
-                int hcnt = StellaMove.GetUnderMap(hits);
-                for (int i=0;i<hcnt;i++)
-                {
-                    IStepOn so = hits[i].collider.GetComponent<IStepOn>();
-                    if( so != null)
-                    {
-                        so.StepOn();
-                    }
-                }
+                StellaMove.CheckStepOn();
             }
         }
 

@@ -159,8 +159,17 @@ namespace GreeningEx2019
         /// </summary>        
         public static Vector3 targetJumpGround = Vector3.zero;
 
+        /// <summary>
+        /// 現在の行動
+        /// </summary>
+        public static ActionType NowAction { get; private set; }
+
+        /// <summary>
+        /// ステップオンを有効にしたオブジェクト
+        /// </summary>
+        public static GameObject stepOnObject;
+
         static Animator anim;
-        static ActionType nowAction = ActionType.None;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
@@ -174,7 +183,7 @@ namespace GreeningEx2019
             chrController = GetComponent<CharacterController>();
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
-            nowAction = ActionType.Walk;
+            NowAction = ActionType.Walk;
             MapCollisionLayerMask = LayerMask.GetMask("MapCollision");
             boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
@@ -198,7 +207,7 @@ namespace GreeningEx2019
             }
 #endif
 
-            stellaActionScriptableObjects[(int)nowAction]?.UpdateAction();
+            stellaActionScriptableObjects[(int)NowAction]?.UpdateAction();
         }
 
         /// <summary>
@@ -214,7 +223,7 @@ namespace GreeningEx2019
             chrController.Move(move);
 
             if (!chrController.isGrounded 
-                && stellaActionScriptableObjects[(int)nowAction].canStepDown)
+                && stellaActionScriptableObjects[(int)NowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
@@ -364,7 +373,7 @@ namespace GreeningEx2019
         public void ChangeAction(ActionType type)
         {
             EndAction();
-            nowAction = type;
+            NowAction = type;
             stellaActionScriptableObjects[(int)type].Init();
         }
 
@@ -373,9 +382,9 @@ namespace GreeningEx2019
         /// </summary>
         public void EndAction()
         {
-            if (nowAction != ActionType.None)
+            if (NowAction != ActionType.None)
             {
-                stellaActionScriptableObjects[(int)nowAction].End();
+                stellaActionScriptableObjects[(int)NowAction].End();
             }
         }
 
@@ -415,28 +424,28 @@ namespace GreeningEx2019
         {
             if (ClearCheck(other)) return;
 
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerEnter(other);
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerEnter(other);
         }
         private void OnTriggerStay(Collider other)
         {
             if (ClearCheck(other)) return;
 
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerStay(other);
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerStay(other);
         }
         private void OnTriggerExit(Collider other)
         {
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerExit(other);
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            stellaActionScriptableObjects[(int)nowAction]?.OnControllerColliderHit(hit);
+            stellaActionScriptableObjects[(int)NowAction]?.OnControllerColliderHit(hit);
         }
 
 #if DEBUG_GUI
         private void OnGUI()
         {
-            GUI.Label(new Rect(30, 30, 1000, 50), $"Act={nowAction}", guiSkin.GetStyle("Label"));
+            GUI.Label(new Rect(30, 30, 1000, 50), $"Act={NowAction}", guiSkin.GetStyle("Label"));
         }
 #endif
 
@@ -501,6 +510,22 @@ namespace GreeningEx2019
         {
             Vector3 origin = chrController.bounds.center;
             return Physics.RaycastNonAlloc(origin, Vector3.down, hits, chrController.height * 0.5f + 0.1f, MapCollisionLayerMask); ;
+        }
+
+        /// <summary>
+        /// 足元のチェックをして、StepOnを呼び出します。
+        /// </summary>
+        public static void CheckStepOn()
+        {
+            int hcnt = StellaMove.GetUnderMap(raycastHits);
+            for (int i = 0; i < hcnt; i++)
+            {
+                IStepOn so = raycastHits[i].collider.GetComponent<IStepOn>();
+                if (so != null)
+                {
+                    so.StepOn();
+                }
+            }
         }
     }
 }

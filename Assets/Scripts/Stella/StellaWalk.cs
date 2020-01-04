@@ -74,6 +74,9 @@ namespace GreeningEx2019
             }
             else
             {
+                // 乗っかりチェック
+                StellaMove.CheckStepOn();
+
                 // 移動しているなら、ジャンプチェック
                 if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
                 {
@@ -189,7 +192,7 @@ namespace GreeningEx2019
         /// 移動先のチェックを行ってPushActionを呼び出します。
         /// また、岩にめり込む対策のため、移動方向で埋まっていたら、埋まらない場所まで戻します。
         /// </summary>
-        void PushCheck()
+        protected void PushCheck()
         {
             float h = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
             Vector3 p1 = StellaMove.chrController.bounds.center + Vector3.up * h;

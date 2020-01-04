@@ -10,13 +10,17 @@ namespace GreeningEx2019
         [Tooltip("中心からの距離を、岩に与える速度に変換する係数"), SerializeField]
         float distanceToSpeed = 1f;
 
+        GameObject lastRockObject = null;
         RockActable rockActable;
+        SphereCollider rockCollider;
 
         public override void Init()
         {
             base.Init();
 
-            rockActable = (RockActable)ActionBox.SelectedActable;
+            lastRockObject = StellaMove.stepOnObject;
+            rockActable = lastRockObject.GetComponent<RockActable>();
+            rockCollider = lastRockObject.GetComponent<SphereCollider>();
         }
 
         public override void UpdateAction()
@@ -31,8 +35,8 @@ namespace GreeningEx2019
             StellaMove.instance.Move();
 
             // 逆再生設定
-            float back = h * StellaMove.forwardVector.x > 0.5f ? 1f : -1f;
-            StellaMove.SetAnimFloat("Back", back);
+            bool back = h * StellaMove.forwardVector.x < -0.5f;
+            StellaMove.SetAnimBool("Back", back);
 
             if (!StellaMove.chrController.isGrounded)
             {
@@ -42,7 +46,34 @@ namespace GreeningEx2019
             else
             {
                 // 岩に力を加える
-                Debug.Log($"  down force");
+                if (lastRockObject != StellaMove.stepOnObject)
+                {
+                    lastRockObject = StellaMove.stepOnObject;
+                    rockActable = lastRockObject.GetComponent<RockActable>();
+                    rockCollider = lastRockObject.GetComponent<SphereCollider>();
+                }
+                if (rockActable != null)
+                {
+                    Vector3 lastPos = lastRockObject.transform.position;
+                    float dist = StellaMove.instance.transform.position.x - lastPos.x;
+                    float move = dist * distanceToSpeed;
+                    StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
+                    StellaMove.chrController.enabled = false;
+                    Debug.Log($"dist={dist} / move={move} / velx={StellaMove.myVelocity.x}");
+                    rockActable.PushAction();
+                    // ステラの座標を修正する
+                    Vector3 stellaMove = Vector3.zero;
+                    float moved = lastRockObject.transform.position.x - lastPos.x;
+                    Debug.Log($"  moved={moved} / rockrad={rockCollider.radius}");
+                    float rad = moved / rockCollider.radius;
+                    stellaMove.Set(
+                        moved + Mathf.Sin(rad) * rockCollider.radius,
+                        -StellaMove.chrController.stepOffset, 0);
+                    StellaMove.chrController.enabled = true;
+                    StellaMove.chrController.Move(stellaMove);
+
+                    // 真下に岩が無ければ飛び降りる
+                }
 
                 // 移動しているなら、ジャンプチェック
                 if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
