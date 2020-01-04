@@ -178,9 +178,7 @@ namespace GreeningEx2019
             }
 
             float t = Mathf.Sqrt(2f * h / StellaMove.GravityAdd);
-            Debug.Log($"  c {StellaMove.myVelocity.x} / origin={origin.x} / pos={StellaMove.instance.transform.position.x} / h={h}");
             StellaMove.myVelocity.x = (origin.x - StellaMove.instance.transform.position.x) / t;
-            Debug.Log($"  d {StellaMove.myVelocity.x}");
             if (StellaMove.myVelocity.x*StellaMove.forwardVector.x < 0f)
             {
                 StellaMove.myVelocity.x = 0;
@@ -223,7 +221,6 @@ namespace GreeningEx2019
                     float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
                     if (StellaMove.myVelocity.x * to > 0f)
                     {
-                        Debug.Log($"  push {StellaMove.myVelocity.x} to={to}");
                         if (!acts[j].PushAction()) continue;
                     }
 
@@ -232,13 +229,7 @@ namespace GreeningEx2019
                     if (((to * StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
                     {
                         float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
-                        Debug.Log($"  to={to} / range={range} / posx={posx}");
                         StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x) / Time.fixedDeltaTime;
-                        Debug.Log($"  下げる={StellaMove.myVelocity.x}");
-                    }
-                    else
-                    {
-                        Debug.Log($"  cant push {StellaMove.myVelocity.x} / to={to}");
                     }
                 }
             }

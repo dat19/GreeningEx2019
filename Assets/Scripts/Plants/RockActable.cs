@@ -5,6 +5,11 @@ using UnityEngine;
 namespace GreeningEx2019 {
     public class RockActable :Actable
     {
+        /// <summary>
+        /// ステラの速度より少し速く押して、ひっかかりをなくす
+        /// </summary>
+        const float PushRate = 1.1f;
+
         CharacterController chrController = null;
         CharacterController ChrController
         {
@@ -51,7 +56,7 @@ namespace GreeningEx2019 {
 
             // 重力加速
             Vector3 move = Vector3.zero;
-            move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime;
+            move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime * PushRate;
             Vector3 lastPos = transform.position;
             ChrController.Move(move);
 
