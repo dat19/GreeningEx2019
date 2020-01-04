@@ -22,7 +22,7 @@ StellaAirの着地時に、着地したオブジェクトにStepOnBaseを継承�
 
 - IStepOnインターフェースを作成して、StepOn()を定義
 - MushroomStepOnを作成して、IStepOnを実装して、StepOn()を実装。とりあえず何か表示させる
-- StellaAirの着地時に、何に乗っているかを調べて、IStepOnのStepOn()があれば呼び出す
+- StellaAirの着地時に、CapsuleCastで何に乗っているかを調べて、IStepOnのStepOn()があれば呼び出す
 
 以上で動作確認して、キノコに乗ったらメッセージが表示されるようにする。
 
@@ -36,6 +36,7 @@ StellaAirの着地時に、着地したオブジェクトにStepOnBaseを継承�
   - ジャンプアニメが完了したら呼び出すジャンプ実行のメソッドを登録
 - UpdateActionでは、キノコの当たり判定に合わせて高さを下げる処理を実行する
 - ジャンプ実行メソッドを定義して、myVelocityを算出して設定して、それ以降はAirに処理を譲る
+- MushroomStepOnのStepOn()メソッドで、発芽していたら、ステラをきのこジャンプアクションにする処理を実装
 
 ## 不具合修正
 - StellaMove.instance.Gravity()において、落下していない時でもisGroundedがtrueの場合は着地動作に入っていたので、上昇時は着地処理をしないように条件を追加
