@@ -63,8 +63,8 @@ namespace GreeningEx2019
                 Walk();
             }
 
-            StellaMove.instance.Gravity();
             PushCheck();
+            StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
             if (!StellaMove.chrController.isGrounded)
