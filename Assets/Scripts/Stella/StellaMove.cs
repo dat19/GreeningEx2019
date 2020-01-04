@@ -94,6 +94,11 @@ namespace GreeningEx2019
         public const float NaePutDownOffsetX = 0.5f;
 
         /// <summary>
+        /// 当たり判定を補正する際に間に入れるすきま
+        /// </summary>
+        public const float CollisionMargin = 0.01f;
+
+        /// <summary>
         /// 前方を表すベクトル
         /// </summary>
         public static Vector3 forwardVector;

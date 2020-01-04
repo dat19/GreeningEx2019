@@ -197,18 +197,27 @@ namespace GreeningEx2019
                 Actable[] acts = hits[i].collider.GetComponents<Actable>();
                 for (int j=0;j<acts.Length;j++)
                 {
-                    if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
+                    if (!acts[j].CanAction) continue;
+
+                    // 移動があって、移動方向とオブジェクトの位置が等しい場合、押す
+                    float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
+                    if (StellaMove.myVelocity.x * to > 0f)
                     {
+                        Debug.Log($"  push {StellaMove.myVelocity.x} to={to}");
                         acts[j].PushAction();
+                    }else
+                    {
+                        Debug.Log($"  cant push {StellaMove.myVelocity.x} / to={to}");
                     }
 
                     // 向いている方向に対象物があれば、ステラを下げるチェック
-                    float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
-                    float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x;
+                    float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
                     if (((to*StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
                     {
                         float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
-                        StellaMove.myVelocity.x = posx - StellaMove.instance.transform.position.x;
+                        Debug.Log($"  to={to} / range={range} / posx={posx}");
+                        StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x)/Time.fixedDeltaTime;
+                        Debug.Log($"  下げる={StellaMove.myVelocity.x}");
                     }
                 }
             }

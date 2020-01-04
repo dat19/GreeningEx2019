@@ -135,10 +135,9 @@ namespace GreeningEx2019
                     groundLayer);
                 for (int i=0;i<hitCount;i++)
                 {
-                    Debug.Log($"  i={i}");
                     // 下げる
                     float colx = hits[i].collider.bounds.extents.x;
-                    float dist = StellaMove.chrController.radius + colx;
+                    float dist = StellaMove.chrController.radius + colx + StellaMove.CollisionMargin;
                     float target = hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
                     float move = target - StellaMove.instance.transform.position.x;
                     if (move * StellaMove.forwardVector.x >= 0f)
@@ -147,7 +146,10 @@ namespace GreeningEx2019
                         return;
                     }
                     StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
+                    Vector3 lastPos = StellaMove.instance.transform.position;
                     StellaMove.instance.Move();
+                    lastPos.x = StellaMove.instance.transform.position.x;
+                    StellaMove.instance.transform.position = lastPos;
                     StellaMove.myVelocity.x = 0f;
                 }
             }

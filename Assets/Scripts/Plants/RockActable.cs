@@ -79,7 +79,15 @@ namespace GreeningEx2019 {
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             pushX = 0f;
             Vector3 lastPos = transform.position;
+            if (!Mathf.Approximately(pushX, 0))
+            {
+                Debug.Log($"  push {pushX}");
+            }
             ChrController.Move(myVelocity);
+            if (ChrController.collisionFlags != CollisionFlags.Below)
+            {
+                Debug.Log($"  flag={ChrController.collisionFlags}");
+            }
 
             // 移動した分、回転
             float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
