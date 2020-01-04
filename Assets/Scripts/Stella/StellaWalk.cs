@@ -64,6 +64,7 @@ namespace GreeningEx2019
             }
 
             StellaMove.instance.Gravity();
+            PushCheck();
             StellaMove.instance.Move();
 
             if (!StellaMove.chrController.isGrounded)
@@ -175,18 +176,41 @@ namespace GreeningEx2019
             }
         }
 
-        public override void OnControllerColliderHit(ControllerColliderHit hit)
+        /// <summary>
+        /// 移動先のチェックを行ってPushActionを呼び出します。
+        /// また、岩にめり込む対策のため、移動方向で埋まっていたら、埋まらない場所まで戻します。
+        /// </summary>
+        void PushCheck()
         {
-            // 押すチェック。自分が移動していない時や、歩きや苗歩き以外は発動しない
-            if (    Mathf.Approximately(StellaMove.myVelocity.x, 0f))
+            float h = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
+            Vector3 p1 = StellaMove.chrController.bounds.center + Vector3.up * h;
+            Vector3 p2 = StellaMove.chrController.bounds.center + Vector3.down * h;
+            int hitCount = Physics.CapsuleCastNonAlloc(p1,p2,
+                StellaMove.chrController.radius,
+                StellaMove.forwardVector,
+                hits,
+                Mathf.Abs(StellaMove.myVelocity.x*Time.fixedDeltaTime),
+                groundLayer
+                );
+            for (int i=0; i<hitCount;i++)
             {
-                return;
-            }
+                Actable[] acts = hits[i].collider.GetComponents<Actable>();
+                for (int j=0;j<acts.Length;j++)
+                {
+                    if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
+                    {
+                        acts[j].PushAction();
+                    }
 
-            Actable[] acts = hit.collider.GetComponents<Actable>();
-            for (int i=0;i<acts.Length;i++)
-            {
-                acts[i].PushAction();
+                    // 向いている方向に対象物があれば、ステラを下げるチェック
+                    float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
+                    float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x;
+                    if (((to*StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
+                    {
+                        float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
+                        StellaMove.myVelocity.x = posx - StellaMove.instance.transform.position.x;
+                    }
+                }
             }
         }
     }

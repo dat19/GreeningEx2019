@@ -169,7 +169,7 @@ namespace GreeningEx2019
             StellaMove.naePutPosition = transform.position;
             anim.enabled = false;
             myCollider.enabled = false;
-            StellaMove.instance.ChangeAction(StellaMove.ActionType.LifetUp);
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.LiftUp);
             selectedType = type;
         }
 

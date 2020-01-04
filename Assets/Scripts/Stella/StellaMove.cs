@@ -54,7 +54,7 @@ namespace GreeningEx2019
             Air,      // 2落下、着地
             Jump,     // 3ジャンプまでのアニメ
             Water,    // 4水まき
-            LifetUp,  // 5苗を持ち上げる
+            LiftUp,   // 5苗を持ち上げる
             NaeWalk,  // 6苗運び
             PutDown,  // 7苗を置く
             Ivy,      // 8ツタにつかまる

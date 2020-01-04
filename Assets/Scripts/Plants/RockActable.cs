@@ -5,28 +5,26 @@ using UnityEngine;
 namespace GreeningEx2019 {
     public class RockActable :Actable
     {
-        SphereCollider sphereCollider = null;
-        SphereCollider SphereColliderInstance
+        CharacterController chrController = null;
+        CharacterController ChrController
         {
             get
             {
-                if (sphereCollider == null)
+                if (chrController == null)
                 {
-                    sphereCollider = GetComponent<SphereCollider>();
+                    chrController = GetComponent<CharacterController>();
                 }
-                return sphereCollider;
+                return chrController;
             }
         }
-        Rigidbody rb = null;
 
-        private void Awake()
-        {
-            rb = GetComponent<Rigidbody>();
-        }
         /// <summary>
         /// 押された距離
         /// </summary>
         float pushX = 0f;
+
+        Vector3 myVelocity = Vector3.zero;
+        SphereCollider sphereCollider;
 
         /// <summary>
         /// 生長後に有効になる
@@ -44,39 +42,54 @@ namespace GreeningEx2019 {
             if (!CanAction) return;
 
             StellaMove.targetJumpGround = transform.position;
-            StellaMove.targetJumpGround.y = SphereColliderInstance.bounds.max.y;
+            StellaMove.targetJumpGround.y = ChrController.bounds.max.y;
             StellaMove.myVelocity.x = 0f;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Jump);
         }
 
         public override void PushAction()
         {
-            if (!CanAction) return;
-
-            Debug.Log($"  pushed");
+            if (!CanAction)
+            {
+                return;
+            }
 
             pushX += StellaMove.myVelocity.x * Time.fixedDeltaTime;
         }
 
         private void FixedUpdate()
         {
-            if (Mathf.Approximately(pushX, 0f))
+            // 当たり判定を一致させる
+            if (sphereCollider == null)
             {
-                // 押していなければZ回転なし
-                rb.constraints |= RigidbodyConstraints.FreezeRotationZ;
-                return;
+                sphereCollider = GetComponent<SphereCollider>();
             }
-            else
+            if (ChrController.enabled)
             {
-                rb.constraints &= ~RigidbodyConstraints.FreezeRotationZ;
+                sphereCollider.radius = ChrController.radius;
+                sphereCollider.center = ChrController.center;
+                sphereCollider.enabled = true;
             }
 
-            float zrot = pushX / SphereColliderInstance.radius;
-            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
-            Vector3 v = rb.velocity;
-            v.x = pushX;
-            rb.velocity = v;
+            // 苗の時は何もしない
+            if (!CanAction) return;
+
+            // 重力加速
+            myVelocity.x = pushX;
+            myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             pushX = 0f;
+            Vector3 lastPos = transform.position;
+            ChrController.Move(myVelocity);
+
+            // 移動した分、回転
+            float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
+            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+
+            // 着地チェック
+            if (ChrController.isGrounded && myVelocity.y <= 0f)
+            {
+                myVelocity.y = 0f;
+            }
         }
     }
 }

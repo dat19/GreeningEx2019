@@ -135,6 +135,7 @@ namespace GreeningEx2019
                     groundLayer);
                 for (int i=0;i<hitCount;i++)
                 {
+                    Debug.Log($"  i={i}");
                     // 下げる
                     float colx = hits[i].collider.bounds.extents.x;
                     float dist = StellaMove.chrController.radius + colx;

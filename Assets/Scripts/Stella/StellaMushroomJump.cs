@@ -41,7 +41,6 @@ namespace GreeningEx2019
             float h = Input.GetAxisRaw("Horizontal");
             float t = StellaMove.GetFallTime(jumpHeight);
             StellaMove.myVelocity.y = t * StellaMove.GravityAdd;
-            Debug.Log($" veoy={StellaMove.myVelocity.y} / t={t} / grav={StellaMove.GravityAdd}");
 
             if (Mathf.Approximately(h, 0f))
             {
