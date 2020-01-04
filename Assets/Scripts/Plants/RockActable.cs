@@ -88,7 +88,7 @@ namespace GreeningEx2019 {
 
             // 重力加速
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
-            ChrController.Move(myVelocity);
+            ChrController.Move(myVelocity * Time.fixedDeltaTime);
 
             // 着地チェック
             if (ChrController.isGrounded && myVelocity.y <= 0f)
