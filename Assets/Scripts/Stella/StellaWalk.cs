@@ -162,21 +162,25 @@ namespace GreeningEx2019
             float top = hits[0].collider.bounds.max.y;
             for (int i = 1; i < cnt; i++)
             {
+                // 地面と水以外は対象外
+                if (!hits[i].collider.CompareTag("Ground")
+                    && !hits[i].collider.CompareTag("Water")) continue;
                 if (hits[i].collider.bounds.max.y > top)
                 {
                     top = hits[i].collider.bounds.max.y;
                 }
             }
             float h = StellaMove.chrController.bounds.min.y - top;
-            if (Mathf.Approximately(h, 0f))
+            // 高さがないか、負の値の時は、1段分で算出
+            if (h <= 0f)
             {
-                Debug.Log($"  h=zeroo");
-                StellaMove.myVelocity.x = 0f;
-                return;
+                h = 1f;
             }
 
             float t = Mathf.Sqrt(2f * h / StellaMove.GravityAdd);
+            Debug.Log($"  c {StellaMove.myVelocity.x} / origin={origin.x} / pos={StellaMove.instance.transform.position.x} / h={h}");
             StellaMove.myVelocity.x = (origin.x - StellaMove.instance.transform.position.x) / t;
+            Debug.Log($"  d {StellaMove.myVelocity.x}");
             if (StellaMove.myVelocity.x*StellaMove.forwardVector.x < 0f)
             {
                 StellaMove.myVelocity.x = 0;
