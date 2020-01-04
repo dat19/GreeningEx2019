@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469bc88c1c8e7914caab09a102220ca0, type: 3}
   m_Name: StellaActionWalk
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
+  canStepDown: 1
   rotateY: 40
   turnSeconds: 0.15

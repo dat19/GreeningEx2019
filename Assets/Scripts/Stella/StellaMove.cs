@@ -214,7 +214,7 @@ namespace GreeningEx2019
             chrController.Move(move);
 
             if (!chrController.isGrounded 
-                && (nowAction == ActionType.Walk || nowAction == ActionType.NaeWalk))
+                && stellaActionScriptableObjects[(int)nowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);

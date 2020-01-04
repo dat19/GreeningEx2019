@@ -5,6 +5,9 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Base", fileName = "StellaAction")]
     public class StellaActionScriptableObject : ScriptableObject
     {
+        [Tooltip("下方向の段差を降りて歩けるかどうか。歩き系の動作はチェックします。")]
+        public bool canStepDown = false;
+
         /// <summary>
         /// Groundタグ
         /// </summary>

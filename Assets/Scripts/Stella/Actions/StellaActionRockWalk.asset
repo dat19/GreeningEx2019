@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26ab2b7cc30227646b18a356cb505d17, type: 3}
-  m_Name: StellaActionNaeWalk
+  m_Script: {fileID: 11500000, guid: a68f7a35dab5b9441bdc18e3eba213a2, type: 3}
+  m_Name: StellaActionRockWalk
   m_EditorClassIdentifier: 
   canStepDown: 1
   rotateY: 40
   turnSeconds: 0.15
-  naeUnit: 1
-  naePutHeight: 0.5
+  distanceToSpeed: 1
