@@ -46,6 +46,7 @@ namespace GreeningEx2019
             if (Input.GetButton("Water"))
             {
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Water);
+                return;
             }
             else
             {

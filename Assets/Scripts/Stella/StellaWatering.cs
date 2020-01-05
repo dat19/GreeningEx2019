@@ -153,6 +153,11 @@ namespace GreeningEx2019
                     StellaMove.myVelocity.x = 0f;
                 }
             }
+            else
+            {
+                StellaMove.instance.Gravity();
+                StellaMove.instance.Move();
+            }
         }
 
         // 水まきアニメが終わった処理
