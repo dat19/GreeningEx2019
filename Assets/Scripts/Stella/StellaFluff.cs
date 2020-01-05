@@ -55,7 +55,6 @@ namespace GreeningEx2019
             if (flags != CollisionFlags.None)
             {
                 holded = false;
-                fluffActable.Release();
                 if ((flags & CollisionFlags.Below) != 0)
                 {
                     StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
@@ -70,6 +69,12 @@ namespace GreeningEx2019
         void HoldStart()
         {
             holded = true;
+        }
+
+        public override void End()
+        {
+            base.End();
+            fluffActable.Release();
         }
     }
 }
