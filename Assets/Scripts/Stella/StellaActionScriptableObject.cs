@@ -26,7 +26,8 @@ namespace GreeningEx2019
         /// <summary>
         /// 動作を開始する時に必要な処理があったら、overrideして実装します。
         /// </summary>
-        public virtual void Init() {
+        public virtual void Init()
+        {
             groundLayer = LayerMask.GetMask("MapCollision");
             overlapLayer = LayerMask.GetMask("MapCollision", "Nae", "MapTrigger");
         }
@@ -39,7 +40,13 @@ namespace GreeningEx2019
         /// <summary>
         /// 終了時に必要な処理があったら、overrideして実装します。
         /// </summary>
-        public virtual void End() { }
+        public virtual void End()
+        {
+            // Zを0にします。
+            Vector3 pos = StellaMove.instance.transform.position;
+            pos.z = 0f;
+            StellaMove.instance.transform.position = pos;
+        }
 
         /// <summary>
         /// 接触時の処理のうち、必要なものをoverrideします。
