@@ -23,6 +23,26 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 指定の座標の真下にある地面を返します。ない場合はnullを返します。
+        /// </summary>
+        /// <param name="origin">調査開始座標</param>
+        /// <param name="distance">チェックする距離</param>
+        /// <returns>地面のオブジェクト。何もなければnull</returns>
+        public static GameObject GetGround(Vector3 origin, float distance)
+        {
+            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, distance, GroundLayer);
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (hits[i].collider.CompareTag(GroundTag))
+                {
+                    return hits[i].collider.gameObject;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// 指定の座標の真下にある地面や水を返します。ない場合はnullを返します。
         /// </summary>
         /// <param name="origin">調査開始座標</param>

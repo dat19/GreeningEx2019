@@ -92,6 +92,20 @@ namespace GreeningEx2019 {
                 sphereCollider.enabled = true;
             }
 
+            // 生長中、地面のめり込みを防ぐ
+            if (GrowInstance.state == Grow.StateType.Growing)
+            {
+                GameObject go = PhysicsCaster.GetGround(chrController.bounds.center, chrController.bounds.extents.y);
+                if (go != null)
+                {
+                    float targetY = go.GetComponent<Collider>().bounds.max.y + chrController.bounds.extents.y;
+                    if (transform.position.y < targetY)
+                    {
+                        transform.Translate(0, targetY - transform.position.y, 0);
+                    }
+                }
+            }
+
             // 苗の時は何もしない
             if (!CanAction) return;
 
