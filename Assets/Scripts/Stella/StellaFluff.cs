@@ -44,7 +44,7 @@ namespace GreeningEx2019
             }
             else
             {
-                next -= StellaMove.HoldPosition;
+                next -= (StellaMove.HoldPosition-StellaMove.instance.transform.position);
             }
 
             Vector3 move = next - StellaMove.instance.transform.position;
