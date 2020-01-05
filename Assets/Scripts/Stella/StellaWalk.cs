@@ -64,7 +64,7 @@ namespace GreeningEx2019
                 Walk();
             }
 
-            PushCheck();
+            bool isBack = PushCheck();
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
@@ -79,7 +79,7 @@ namespace GreeningEx2019
                 StellaMove.CheckStepOn();
 
                 // 移動しているなら、ジャンプチェック
-                if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
+                if (!isBack && !Mathf.Approximately(StellaMove.myVelocity.x, 0))
                 {
                     StellaMove.instance.CheckMiniJump();
                 }
@@ -193,7 +193,8 @@ namespace GreeningEx2019
         /// 移動先のチェックを行ってPushActionを呼び出します。
         /// また、岩にめり込む対策のため、移動方向で埋まっていたら、埋まらない場所まで戻します。
         /// </summary>
-        protected void PushCheck()
+        /// <returns>戻す処理をしていたらtrueを返します。</returns>
+        protected bool PushCheck()
         {
             float h = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
             Vector3 p1 = StellaMove.chrController.bounds.center + Vector3.up * h;
@@ -205,6 +206,7 @@ namespace GreeningEx2019
                 Mathf.Abs(StellaMove.myVelocity.x*Time.fixedDeltaTime),
                 groundLayer
                 );
+            bool isBack = false;
 
             for (int i=0; i<hitCount;i++)
             {
@@ -234,9 +236,12 @@ namespace GreeningEx2019
                     {
                         float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
                         StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x) / Time.fixedDeltaTime;
+                        isBack = true;
                     }
                 }
             }
+
+            return isBack;
         }
     }
 }

@@ -77,7 +77,7 @@ namespace GreeningEx2019
                 return;
             }
 
-            PushCheck();
+            bool isBack = PushCheck();
             StellaMove.instance.Gravity();
 
             // 移動先の候補を調べる
@@ -108,8 +108,8 @@ namespace GreeningEx2019
                 // 乗っかりチェック
                 StellaMove.CheckStepOn();
 
-                // 移動しているなら、ジャンプチェック
-                if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
+                // 戻しじゃなく移動しているなら、ジャンプチェック
+                if (!isBack && !Mathf.Approximately(StellaMove.myVelocity.x, 0))
                 {
                     StellaMove.instance.CheckMiniJump();
                 }
