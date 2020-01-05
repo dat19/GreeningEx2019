@@ -50,12 +50,20 @@ namespace GreeningEx2019
             Vector3 move = next - StellaMove.instance.transform.position;
 
             CollisionFlags flags = StellaMove.chrController.Move(move);
+
             // 衝突があったら離す
             if (flags != CollisionFlags.None)
             {
                 holded = false;
                 fluffActable.Release();
-                StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+                if ((flags & CollisionFlags.Below) != 0)
+                {
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+                }
+                else
+                {
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+                }
             }
         }
 

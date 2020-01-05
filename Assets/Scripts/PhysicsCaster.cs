@@ -50,8 +50,20 @@ namespace GreeningEx2019
         /// <returns>地面のオブジェクト。何もなければnull</returns>
         public static GameObject GetGroundWater(Vector3 origin, float distance)
         {
-            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, distance, GroundLayer);
-            for (int i=0;i<hitCount;i++)
+            return GetGroundWater(origin, Vector3.down, distance);
+        }
+
+        /// <summary>
+        /// 方向を指定して、地面と水面を探して返します。
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="dir"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public static GameObject GetGroundWater(Vector3 origin, Vector3 dir, float distance)
+        {
+            int hitCount = Physics.RaycastNonAlloc(origin, dir, hits, distance, GroundLayer);
+            for (int i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.CompareTag(GroundTag)
                     || hits[i].collider.CompareTag(DeadZoneTag))

@@ -102,7 +102,14 @@ namespace GreeningEx2019
 
                 case StateType.Fall:
                     // 消す確認
-                    Debug.Log($"消す確認");
+                    Vector3 origin = boxCollider.bounds.center;
+                    origin.y = boxCollider.bounds.max.y;
+                    GameObject go = PhysicsCaster.GetGroundWater(origin, Vector3.up, 1f);
+                    if (go != null)
+                    {
+                        Destroy(gameObject);
+                    }
+
                     break;
             }
         }
