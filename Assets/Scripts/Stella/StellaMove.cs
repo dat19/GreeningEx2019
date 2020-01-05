@@ -97,7 +97,6 @@ namespace GreeningEx2019
         {
             get
             {
-                Debug.Log($"  ofset={((NaeActable)ActionBox.SelectedActable).NaeOffsetX}");
                 return instance.naePutDownOffsetX + ((NaeActable)ActionBox.SelectedActable).NaeOffsetX;
             }
         }

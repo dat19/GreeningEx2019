@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6820182565492851368
 Transform:
@@ -56,6 +56,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: stella_ground02_texture
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: ec0cdd8c38400ac46a81eccbbe34d026,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ec0cdd8c38400ac46a81eccbbe34d026,
         type: 3}

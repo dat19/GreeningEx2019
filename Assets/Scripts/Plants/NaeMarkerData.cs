@@ -20,6 +20,9 @@ namespace GreeningEx2019
             if (markerObjects == null)
             {
                 markerObjects = new GameObject[System.Enum.GetNames(typeof(NaeActable.NaeType)).Length];
+            }
+
+            if (markerObjects[0] == null) {
                 for (int i = 0; i < markerObjects.Length; i++)
                 {
                     markerObjects[i] = Instantiate(markerPrefabs[i]);
