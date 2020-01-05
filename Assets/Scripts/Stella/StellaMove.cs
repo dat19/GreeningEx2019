@@ -243,6 +243,7 @@ namespace GreeningEx2019
             jumpLayer = LayerMask.NameToLayer("Jump");
             forwardVector = Vector3.right;
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
+            splashParticle.transform.SetParent(null);
             Pivot = transform.Find("Pivot");
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
             naeActable = null;
