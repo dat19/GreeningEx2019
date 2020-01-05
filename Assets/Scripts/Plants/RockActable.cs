@@ -31,19 +31,25 @@ namespace GreeningEx2019 {
             }
         }
 
-        Vector3 myVelocity = Vector3.zero;
-        SphereCollider sphereCollider;
-
         /// <summary>
         /// 生長後に有効になる
         /// </summary>
-        public override bool CanAction { 
+        public override bool CanAction
+        {
             get
             {
                 return GrowInstance.state == Grow.StateType.Growed;
             }
-            protected set => base.CanAction = value; 
+            protected set => base.CanAction = value;
         }
+
+
+        Vector3 myVelocity = Vector3.zero;
+        SphereCollider sphereCollider;
+        /// <summary>
+        /// 水しぶきを上げた
+        /// </summary>
+        bool isSplashed = false;
 
         public override void Action()
         {
@@ -141,6 +147,18 @@ namespace GreeningEx2019 {
             if (ChrController.isGrounded && myVelocity.y <= 0f)
             {
                 myVelocity.y = 0f;
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            // 水しぶき
+            if (!isSplashed && other.CompareTag("DeadZone"))
+            {
+                isSplashed = true;
+                Vector3 pos = chrController.bounds.center;
+                pos.y = chrController.bounds.min.y;
+                StellaMove.Splash(pos);
             }
         }
 
