@@ -34,11 +34,20 @@ namespace GreeningEx2019
             switch (state)
             {
                 case StateType.TargetWalk:
-                    if (StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed))
+                    StellaMove.AdjustWalkResult res = StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed);
+                    if (res == StellaMove.AdjustWalkResult.Reach)
                     {
                         state = StateType.Action;
                         StellaMove.myVelocity = Vector3.zero;
                         ToAction();
+                    }
+                    else if (res == StellaMove.AdjustWalkResult.Abort)
+                    {
+                        // 移動できなければ歩きに戻します
+                        StellaMove.myVelocity = Vector3.zero;
+                        StellaMove.instance.ChangeAction(
+                            StellaMove.hasNae ? StellaMove.ActionType.NaeWalk:
+                            StellaMove.ActionType.Walk);
                     }
                     break;
                 case StateType.Action:

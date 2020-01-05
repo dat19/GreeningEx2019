@@ -15,7 +15,7 @@ namespace GreeningEx2019
             }
             else
             {
-                if (StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed))
+                if (StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed) != StellaMove.AdjustWalkResult.Continue)
                 {
                     ((NaeActable)ActionBox.SelectedActable).SetCollider(true);
                     StellaMove.myVelocity.x = 0;

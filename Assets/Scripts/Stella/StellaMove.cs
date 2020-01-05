@@ -86,6 +86,16 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// AdjustWalkの結果の列挙子
+        /// </summary>
+        public enum AdjustWalkResult
+        {
+            Continue,   // 継続
+            Reach,      // 到着
+            Abort       // 引っかかったので中断
+        }
+
+        /// <summary>
         /// 列挙する接触したオブジェクトの上限数
         /// </summary>
         const int CollisionMax = 8;
@@ -510,18 +520,18 @@ namespace GreeningEx2019
         /// </summary>
         /// <param name="targetX">目的地X座標</param>
         /// <param name="walkSpeed">歩き速度</param>
-        /// <returns>到着した時、true</returns>
-        public static bool AdjustWalk(float targetX, float walkSpeed)
+        /// <returns>結果をAdjustWalkResultで返します。</returns>
+        public static AdjustWalkResult AdjustWalk(float targetX, float walkSpeed)
         {
             float dist = targetX - instance.transform.position.x;
             float sign = Mathf.Sign(dist);
             dist = Mathf.Abs(dist);
-            bool reached = false;
+            AdjustWalkResult reached = AdjustWalkResult.Continue;
             float step = walkSpeed * Time.fixedDeltaTime;
 
             if (dist <= step)
             {
-                reached = true;
+                reached = AdjustWalkResult.Reach;
                 walkSpeed = dist * Time.fixedDeltaTime;
                 anim.SetBool("Back", false);
             }
@@ -535,7 +545,15 @@ namespace GreeningEx2019
 
             myVelocity.x = walkSpeed * sign;
             instance.Gravity();
+            float lastx = instance.transform.position.x;
             instance.Move();
+
+            // 移動していないのでアボート
+            if ((reached != AdjustWalkResult.Reach)
+                && Mathf.Approximately(lastx, instance.transform.position.x))
+            {
+                return AdjustWalkResult.Abort;
+            }
 
             return reached;
         }
