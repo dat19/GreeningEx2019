@@ -9,6 +9,8 @@ namespace GreeningEx2019
     {
         [Tooltip("ツタの昇り降り速度"), SerializeField]
         float upDownSpeed = 2.5f;
+        [Tooltip("左右方向移動速度"), SerializeField]
+        float sideSpeed = 2f;
 
         public override void Init()
         {
@@ -28,6 +30,13 @@ namespace GreeningEx2019
             StellaMove.myVelocity.y = v * upDownSpeed;
 
             // 左右補正設定
+            float ivyx = StellaMove.IvyInstance.transform.position.x;
+            float stx = ivyx - (StellaMove.HoldPosition.x- StellaMove.instance.transform.position.x);
+            float movex = (stx - StellaMove.instance.transform.position.x);
+            float step = sideSpeed * Time.fixedDeltaTime;
+            float sign = Mathf.Sign(movex);
+            movex = Mathf.Min(Mathf.Abs(movex), step);
+            StellaMove.myVelocity.x = movex * sign / Time.fixedDeltaTime;
 
             // 移動
             float lastY = StellaMove.instance.transform.position.y;
@@ -40,7 +49,12 @@ namespace GreeningEx2019
                 return;
             }
 
-            StellaMove.SetAnimFloat("VelY", (lastY - StellaMove.instance.transform.position.y)/Time.fixedDeltaTime);
+            float vely = (lastY - StellaMove.instance.transform.position.y) / Time.fixedDeltaTime;
+            if (Mathf.Abs(vely) < Mathf.Abs(StellaMove.myVelocity.x))
+            {
+                vely = StellaMove.myVelocity.x;
+            }
+            StellaMove.SetAnimFloat("VelY", vely);
         }
     }
 }
