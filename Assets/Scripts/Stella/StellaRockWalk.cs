@@ -56,7 +56,11 @@ namespace GreeningEx2019
                 {
                     Vector3 lastPos = lastRockObject.transform.position;
                     float dist = StellaMove.instance.transform.position.x - lastPos.x;
+                    /*
                     float move = dist * distanceToSpeed;
+                    */
+                    float move = Mathf.Log10(Mathf.Abs(dist * distanceToSpeed) + 1);
+                    move *= Mathf.Sign(dist);
                     StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
                     StellaMove.chrController.enabled = false;
                     Debug.Log($"dist={dist} / move={move} / velx={StellaMove.myVelocity.x}");
@@ -73,6 +77,9 @@ namespace GreeningEx2019
                     StellaMove.chrController.Move(stellaMove);
 
                     // 真下に岩が無ければ飛び降りる
+                    if (!CheckGetOff()) {
+                        return;
+                    }
                 }
 
                 // 移動しているなら、ジャンプチェック
@@ -81,6 +88,44 @@ namespace GreeningEx2019
                     StellaMove.instance.CheckMiniJump();
                 }
             }
+        }
+
+        /// <summary>
+        /// 乗っていた岩が下にあるかを確認します。
+        /// </summary>
+        /// <returns>岩がある時、trueを返します。</returns>
+        bool CheckGetOff()
+        {
+            int hitCount = Physics.RaycastNonAlloc(StellaMove.chrController.bounds.center, Vector3.down, hits, float.PositiveInfinity, groundLayer, QueryTriggerInteraction.Collide);
+
+            float top = float.NegativeInfinity;
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (hits[i].collider.gameObject == lastRockObject)
+                {
+                    return true;
+                }
+
+                float h = hits[i].collider.GetComponent<Collider>().bounds.max.y;
+                top = Mathf.Max(top, h);
+            }
+
+            GetOffOutside(StellaMove.chrController.bounds.min.y - top);
+            return false;
+        }
+
+        /// <summary>
+        /// 岩からステラへの方向に降ります。
+        /// </summary>
+        /// <param name="top">床までの高さ</param>
+        void GetOffOutside(float top)
+        {
+            float dir = StellaMove.chrController.bounds.center.x - lastRockObject.transform.position.x;
+            float offset = StellaMove.chrController.bounds.extents.x + StellaMove.CollisionMargin + rockCollider.bounds.extents.x;
+            float t = StellaMove.GetFallTime(top + StellaMove.MiniJumpMargin * 2f);
+            float jumpt = StellaMove.GetFallTime(StellaMove.MiniJumpMargin);
+            StellaMove.myVelocity.Set(offset * Mathf.Sign(dir) / t, jumpt * StellaMove.GravityAdd, 0f);
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
         }
     }
 }

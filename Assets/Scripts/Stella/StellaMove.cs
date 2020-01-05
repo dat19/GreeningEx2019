@@ -28,8 +28,6 @@ namespace GreeningEx2019
         float miniJumpCheckX = 0.5f;
         [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
         float miniJumpHeight = 1.2f;
-        [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
-        float miniJumpMargin = 0.25f;
         [Tooltip("じょうろピボットオブジェクト"), SerializeField]
         Transform zyouroPivot = null;
         [Tooltip("じょうろの水のエミッターの位置"), SerializeField]
@@ -97,6 +95,11 @@ namespace GreeningEx2019
         /// 当たり判定を補正する際に間に入れるすきま
         /// </summary>
         public const float CollisionMargin = 0.01f;
+
+        /// <summary>
+        /// ミニジャンプ時に、余分にジャンプする高さ
+        /// </summary>
+        public const float MiniJumpMargin = 0.25f;
 
         /// <summary>
         /// 前方を表すベクトル
@@ -310,7 +313,7 @@ namespace GreeningEx2019
             gameObject.layer = jumpLayer;
 
             // 目的の高さと、目的高さからの段差分を求める
-            float top = targetJumpGround.y + miniJumpMargin - chrController.bounds.min.y;
+            float top = targetJumpGround.y + MiniJumpMargin - chrController.bounds.min.y;
 
             // Y方向の初速を決める
             // h = (g*t*t)/2;
@@ -319,7 +322,7 @@ namespace GreeningEx2019
             myVelocity.y = gravityAdd * (t - Time.fixedDeltaTime);
 
             // X方向の速度を決める
-            float total = top + miniJumpMargin;
+            float total = top + MiniJumpMargin;
             t = Mathf.Sqrt(2f * total / gravityAdd);
             myVelocity.x = (targetJumpGround.x - transform.position.x) / (t + Time.fixedDeltaTime);
 

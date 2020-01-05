@@ -15,4 +15,4 @@ MonoBehaviour:
   canStepDown: 1
   rotateY: 40
   turnSeconds: 0.15
-  distanceToSpeed: 0.04
+  distanceToSpeed: 0.075
