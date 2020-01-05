@@ -440,13 +440,22 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 指定の座標に水しぶきを発生させます。
+        /// </summary>
+        /// <param name="pos"></param>
+        public static void Splash(Vector3 pos)
+        {
+            splashParticle.transform.position = pos;
+            splashParticle.transform.forward = Vector3.up;
+            splashParticle.Play();
+        }
+
+        /// <summary>
         /// 現在の場所で水しぶきを上げる
         /// </summary>
         public void Splash()
         {
-            splashParticle.transform.position = new Vector3(chrController.bounds.center.x, chrController.bounds.min.y);
-            splashParticle.transform.forward = Vector3.up;
-            splashParticle.Play();
+            Splash(new Vector3(chrController.bounds.center.x, chrController.bounds.min.y));
         }
 
         private void OnTriggerEnter(Collider other)

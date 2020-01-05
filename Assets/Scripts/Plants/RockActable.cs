@@ -106,7 +106,7 @@ namespace GreeningEx2019 {
                 }
             }
 
-            // 苗の時は何もしない
+            // 苗の時はここまで
             if (!CanAction) return;
 
             // 真下に地面がない場合、自動的に転がす

@@ -75,6 +75,7 @@ namespace GreeningEx2019
                     StellaMove.chrController.enabled = false;
                     Debug.Log($"dist={dist} / velx={StellaMove.myVelocity.x}");
                     rockActable.PushAction();
+
                     // ステラの座標を修正する
                     Vector3 stellaMove = Vector3.zero;
                     float moved = lastRockObject.transform.position.x - lastPos.x;
@@ -107,21 +108,49 @@ namespace GreeningEx2019
             origin.x += getOffDistance * Mathf.Sign(lastRockObject.transform.position.x - origin.x);
             int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, float.PositiveInfinity, groundLayer, QueryTriggerInteraction.Collide);
 
+            Collider res = FindRock(hitCount);
+            if (res.gameObject == lastRockObject) return true;
+
+            // 列挙が越えていたら、一番上までで再列挙
+            while (hitCount >= HitMax)
+            {
+                hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, origin.y-res.bounds.max.y, groundLayer, QueryTriggerInteraction.Collide);
+                res = FindRock(hitCount);
+                if (res.gameObject == lastRockObject) return true;
+            }
+
+            GetOffOutside(StellaMove.chrController.bounds.min.y - res.bounds.max.y);
+            return false;
+        }
+
+        /// <summary>
+        /// 列挙した接触情報から岩を探します。見つからない場合は、一番上のコライダーを返します。
+        /// </summary>
+        /// <param name="hitCount">検出したオブジェクトの数</param>
+        /// <returns>岩があれば岩のコライダー。違う場合は見つけた一番上のコライダー</returns>
+        Collider FindRock(int hitCount)
+        {
             float top = float.NegativeInfinity;
+            Collider res = null;
+
             for (int i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.gameObject == lastRockObject)
                 {
-                    return true;
+                    return hits[i].collider;
                 }
 
-                float h = hits[i].collider.GetComponent<Collider>().bounds.max.y;
-                top = Mathf.Max(top, h);
+                float h = hits[i].collider.bounds.max.y;
+                if (h > top)
+                {
+                    res = hits[i].collider;
+                    top = h;
+                }
             }
 
-            GetOffOutside(StellaMove.chrController.bounds.min.y - top);
-            return false;
+            return res;
         }
+
 
         /// <summary>
         /// 岩からステラへの方向に降ります。
