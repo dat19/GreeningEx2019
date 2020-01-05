@@ -44,6 +44,7 @@ namespace GreeningEx2019
         private void Awake()
         {
             LoadClearedStageCount();
+            PhysicsCaster.Init();
 
             SelectedStage = Mathf.Min(clearedStageCount, StageCount-1);
             if (SelectedStage == StageCount - 1)

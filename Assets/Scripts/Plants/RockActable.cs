@@ -5,10 +5,18 @@ using UnityEngine;
 namespace GreeningEx2019 {
     public class RockActable :Actable
     {
+        [Tooltip("真下に地面がない時の移動速度"), SerializeField]
+        float rollSpeed = 0.75f;
+
         /// <summary>
         /// ステラの速度より少し速く押して、ひっかかりをなくす
         /// </summary>
         const float PushRate = 1.1f;
+
+        /// <summary>
+        /// 地面を調べる時の距離
+        /// </summary>
+        const float GroundCheckDistance = 0.01f;
 
         CharacterController chrController = null;
         CharacterController ChrController
@@ -59,10 +67,14 @@ namespace GreeningEx2019 {
             move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime * PushRate;
             Vector3 lastPos = transform.position;
             ChrController.Move(move);
+            if (transform.position.y > lastPos.y)
+            {
+                // 持ちあがる時は押しキャンセル
+                transform.position = lastPos;
+            }
 
             // 移動した分、回転
-            float zrot = (transform.position.x - lastPos.x) / ChrController.radius;
-            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+            setRotate(lastPos.x);
             return true;
         }
 
@@ -83,9 +95,33 @@ namespace GreeningEx2019 {
             // 苗の時は何もしない
             if (!CanAction) return;
 
+            // 真下に地面がない場合、自動的に転がす
+            Vector3 origin = chrController.bounds.center;
+            float dist = chrController.bounds.extents.y + GroundCheckDistance;
+            GameObject ground = PhysicsCaster.GetGroundWater(origin, dist);
+            if (ground == null)
+            {
+                origin.x = chrController.bounds.min.x;
+                ground = PhysicsCaster.GetGroundWater(origin, dist);
+                myVelocity.x = 0;
+                if (ground != null)
+                {
+                    myVelocity.x += rollSpeed;
+                }
+
+                origin.x = chrController.bounds.max.x;
+                ground = PhysicsCaster.GetGroundWater(origin, dist);
+                if (ground != null)
+                {
+                    myVelocity.x -= rollSpeed;
+                }
+            }
+
             // 重力加速
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
+            Vector3 lastPos = transform.position;
             ChrController.Move(myVelocity * Time.fixedDeltaTime);
+            setRotate(lastPos.x);
 
             // 着地チェック
             if (ChrController.isGrounded && myVelocity.y <= 0f)
@@ -93,5 +129,16 @@ namespace GreeningEx2019 {
                 myVelocity.y = 0f;
             }
         }
+
+        /// <summary>
+        /// 前回のX座標を指定して、現在のX座標に移動するのに必要な回転をさせます。
+        /// </summary>
+        /// <param name="lastPosX">前回のX座標</param>
+        void setRotate(float lastPosX)
+        {
+            float zrot = (transform.position.x - lastPosX) / ChrController.radius;
+            transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+        }
+
     }
 }
