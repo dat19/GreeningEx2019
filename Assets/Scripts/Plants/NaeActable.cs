@@ -97,11 +97,20 @@ namespace GreeningEx2019
         {
             CanAction = true;
             isHolding = false;
-            myCollider = GetComponent<Collider>();
             anim = GetComponent<Animator>();
             if (anim == null)
             {
                 anim = GetComponentInChildren<Animator>();
+            }
+
+            Collider[] cols = GetComponents<Collider>();
+            for (int i=0;i<cols.Length;i++)
+            {
+                if (cols[i].enabled)
+                {
+                    myCollider = GetComponent<Collider>();
+                    break;
+                }
             }
             if (myCollider is SphereCollider)
             {

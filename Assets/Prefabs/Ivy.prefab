@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40453d3ed28db4c4680d26ad5a01772f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitGrowDone: 0
   state: 0
 --- !u!114 &3364238702109696665
 MonoBehaviour:
@@ -107,7 +108,7 @@ BoxCollider:
   m_GameObject: {fileID: 2186000322946833572}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.5, y: 6.5, z: 0.5}
   m_Center: {x: 0, y: 2.8, z: 0}
