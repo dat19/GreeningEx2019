@@ -7,7 +7,7 @@ namespace GreeningEx2019
     public class FluffActable : Actable
     {
         [Tooltip("発生してから、これ以上高くなったら消す"), SerializeField]
-        float removeHight = 10;
+        float removeHeight = 10;
         [Tooltip("ステラへのオフセット上端"), SerializeField]
         Vector3 stellaOffsetTop = new Vector3(0, 0.85f, 0);
         [Tooltip("ステラへのオフセット下端"), SerializeField]
@@ -15,7 +15,7 @@ namespace GreeningEx2019
         [Tooltip("ステラが綿毛を持つ基準座標"), SerializeField]
         Vector3 stellaStandardHoldOffset = new Vector3(0.35f, 0.47f, -0.17f);
         [Tooltip("落下速度"), SerializeField]
-        float fallSpeed = 0.5f;
+        float fallSpeed = -1.0f;
 
         /// <summary>
         /// 状態
@@ -80,32 +80,13 @@ namespace GreeningEx2019
         {
             if (state == StateType.Spawn) return;
 
-            if (transform.position.y - startY > removeHight)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        public override void Action()
-        {
-            if (state == StateType.Spawn) return;
-
-            switch(state)
+            switch (state)
             {
                 case StateType.Fly:
-                    // ステラがつかむ手の高さ
-                    Vector3 holdPos = StellaMove.instance.transform.position;
-                    holdPos.x += stellaStandardHoldOffset.x * StellaMove.forwardVector.x;
-                    holdPos.y += stellaStandardHoldOffset.y;
-
-                    holdOffsetY = holdPos.y - transform.position.y;
-                    if ((holdOffsetY < stellaOffsetBottom.y) || (holdOffsetY > stellaOffsetTop.y))
+                    if (transform.position.y - startY > removeHeight)
                     {
-                        return;
+                        Destroy(gameObject);
                     }
-
-                    state = StateType.Hold;
-                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Watage);
                     break;
 
                 case StateType.Hold:
@@ -124,6 +105,25 @@ namespace GreeningEx2019
                     Debug.Log($"消す確認");
                     break;
             }
+        }
+
+        public override void Action()
+        {
+            if (state != StateType.Fly) return;
+
+            // ステラがつかむ手の高さ
+            Vector3 holdPos = StellaMove.instance.transform.position;
+            holdPos.x += stellaStandardHoldOffset.x * StellaMove.forwardVector.x;
+            holdPos.y += stellaStandardHoldOffset.y;
+
+            holdOffsetY = holdPos.y - transform.position.y;
+            if ((holdOffsetY < stellaOffsetBottom.y) || (holdOffsetY > stellaOffsetTop.y))
+            {
+                return;
+            }
+
+            state = StateType.Hold;
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Watage);
         }
 
         /// <summary>
