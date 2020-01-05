@@ -627,14 +627,19 @@ namespace GreeningEx2019
 
             IvyInstance = CheckIvyOverlap();
             if (IvyInstance == null) return false;
-            return IvyInstance.Hold();
+            if (IsIvyUp())
+            {
+                return IvyInstance.Hold();
+            }
+
+            return false;
         }
 
         /// <summary>
         /// ツタと重なっているかを確認します。重なっていたら、ツタのインスタンスを返します。
         /// </summary>
         /// <returns>見つけたツタのインスタンス。なければnull</returns>
-        public static Ivy CheckIvyOverlap()
+        static Ivy CheckIvyOverlap()
         {
             int hitCount = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, 0f, PhysicsCaster.MapLayer, QueryTriggerInteraction.Collide);
             for (int i=0;i<hitCount;i++)
@@ -644,6 +649,28 @@ namespace GreeningEx2019
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// ツタが手の上にあればtrueを返します。
+        /// </summary>
+        /// <returns>ツタが手の上にある時、true</returns>
+        public static bool IsIvyUp()
+        {
+            // 上にツタがあるか？
+            Vector3 origin = HoldPosition;
+            origin.x = IvyInstance.BoxColliderInstance.bounds.min.x - 0.05f;
+            origin.z = IvyInstance.transform.position.z;
+            int hitCount = PhysicsCaster.Raycast(origin, Vector3.right, 0.1f, PhysicsCaster.NaeLayer, QueryTriggerInteraction.Collide);
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (PhysicsCaster.hits[i].collider.GetComponent<Ivy>() != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

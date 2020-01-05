@@ -82,22 +82,7 @@ namespace GreeningEx2019
             // 登り切ったチェック
             if (v > 0.5f)
             {
-                // 上にツタがあるか？
-                Vector3 origin = StellaMove.HoldPosition;
-                origin.x = StellaMove.IvyInstance.BoxColliderInstance.bounds.min.x-0.05f;
-                origin.z = StellaMove.IvyInstance.transform.position.z;
-                int hitCount = PhysicsCaster.Raycast(origin, Vector3.right, 0.1f, PhysicsCaster.NaeLayer, QueryTriggerInteraction.Collide);
-                bool isIvy = false;
-                for (int i=0; i<hitCount;i++)
-                {
-                    if (PhysicsCaster.hits[i].collider.GetComponent<Ivy>() != null)
-                    {
-                        isIvy = true;
-                        break;
-                    }
-                }
-
-                if (!isIvy)
+                if (!StellaMove.IsIvyUp())
                 {
                     // 前方に飛び降り
                     StellaMove.myVelocity.x = StellaMove.MiniJumpSpeedMax * StellaMove.forwardVector.x;
@@ -127,6 +112,5 @@ namespace GreeningEx2019
             }
             StellaMove.SetAnimFloat("VelY", vely);
         }
-
     }
 }

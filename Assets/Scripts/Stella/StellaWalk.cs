@@ -50,7 +50,6 @@ namespace GreeningEx2019
             }
             else if (StellaMove.CheckIvyHold())
             {
-                //StellaMove.instance.ChangeAction(StellaMove.ActionType.Ivy);
                 return;
             }
             else

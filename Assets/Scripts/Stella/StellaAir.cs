@@ -25,6 +25,12 @@ namespace GreeningEx2019
 
         public override void UpdateAction()
         {
+            // つた掴みチェック
+            if (StellaMove.CheckIvyHold())
+            {
+                return;
+            }            
+
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
