@@ -198,9 +198,9 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 苗を持っている時、true
+        /// 苗を持っている時、インスタンスを設定します。離したらnullにします。
         /// </summary>
-        public static bool hasNae = false;
+        public static NaeActable naeActable = null;
 
         /// <summary>
         /// 苗を置く座標
@@ -245,7 +245,7 @@ namespace GreeningEx2019
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
             Pivot = transform.Find("Pivot");
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
-            hasNae = false;
+            naeActable = null;
             ActionBoxInstance.Init();
         }
 

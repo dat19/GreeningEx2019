@@ -47,7 +47,7 @@ namespace GreeningEx2019
                     StellaMove.SetAnimFloat("JumpRev", 1f);
                     jumpAbort = false;
                     StellaMove.SetAnimState(StellaMove.AnimType.Walk);
-                    StellaMove.instance.ChangeAction(StellaMove.hasNae ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
+                    StellaMove.instance.ChangeAction(StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
                 }
             }
         }

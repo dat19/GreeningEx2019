@@ -16,6 +16,7 @@ namespace GreeningEx2019
 
         protected StateType state;
         protected float targetX;
+        NaeActable naeActable = null;
 
         /// <summary>
         /// 目的地を設定
@@ -27,6 +28,7 @@ namespace GreeningEx2019
             state = StateType.TargetWalk;
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
             targetX = StellaMove.naePutPosition.x - StellaMove.NaePutDownOffsetX * StellaMove.forwardVector.x;
+            naeActable = ((NaeActable)ActionBox.SelectedActable);
         }
 
         public override void UpdateAction()
@@ -46,7 +48,7 @@ namespace GreeningEx2019
                         // 移動できなければ歩きに戻します
                         StellaMove.myVelocity = Vector3.zero;
                         StellaMove.instance.ChangeAction(
-                            StellaMove.hasNae ? StellaMove.ActionType.NaeWalk:
+                            StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk:
                             StellaMove.ActionType.Walk);
                     }
                     break;
@@ -74,7 +76,7 @@ namespace GreeningEx2019
 
         void ToHold()
         {
-            StellaMove.hasNae = true;
+            StellaMove.naeActable = naeActable;
             StellaMove.SetAnimBool("Nae", true);
             StellaMove.RegisterAnimEvent(ToHoldWalk);
         }

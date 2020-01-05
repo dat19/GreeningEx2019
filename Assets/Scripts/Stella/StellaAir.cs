@@ -58,7 +58,7 @@ namespace GreeningEx2019
 
         void Grounded()
         {
-            StellaMove.instance.ChangeAction(StellaMove.hasNae ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
+            StellaMove.instance.ChangeAction(StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
             isLanding = false;
         }
 

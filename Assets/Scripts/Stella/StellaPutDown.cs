@@ -34,7 +34,7 @@ namespace GreeningEx2019
         void NaeOff()
         {
             StellaMove.SetAnimBool("Nae", false);
-            StellaMove.hasNae = false;
+            StellaMove.naeActable = null;
             StellaMove.RegisterAnimEvent(PutDownNae);
         }
 
