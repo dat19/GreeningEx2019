@@ -7,8 +7,12 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Rock Walk", fileName = "StellaActionRockWalk")]
     public class StellaRockWalk : StellaWalk
     {
-        [Tooltip("中心からの距離を、岩に与える速度に変換する係数"), SerializeField]
-        float distanceToSpeed = 1f;
+        [Tooltip("速度を変える中心からの距離"), SerializeField]
+        float changeDistance = 0.2f;
+        [Tooltip("速度"), SerializeField]
+        float[] rockSpeed = { 0.5f, 1f };
+        [Tooltip("降りるチェックをする中心からの距離"), SerializeField]
+        float getOffDistance = 0.1f;
 
         GameObject lastRockObject = null;
         RockActable rockActable;
@@ -56,14 +60,20 @@ namespace GreeningEx2019
                 {
                     Vector3 lastPos = lastRockObject.transform.position;
                     float dist = StellaMove.instance.transform.position.x - lastPos.x;
-                    /*
-                    float move = dist * distanceToSpeed;
-                    */
-                    float move = Mathf.Log10(Mathf.Abs(dist * distanceToSpeed) + 1);
-                    move *= Mathf.Sign(dist);
-                    StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
+                    if (dist < -changeDistance)
+                    {
+                        StellaMove.myVelocity.x = -rockSpeed[1];
+                    }
+                    else if (dist > changeDistance)
+                    {
+                        StellaMove.myVelocity.x = rockSpeed[1];
+                    }
+                    else
+                    {
+                        StellaMove.myVelocity.x = rockSpeed[0]*Mathf.Sign(dist);
+                    }
                     StellaMove.chrController.enabled = false;
-                    Debug.Log($"dist={dist} / move={move} / velx={StellaMove.myVelocity.x}");
+                    Debug.Log($"dist={dist} / velx={StellaMove.myVelocity.x}");
                     rockActable.PushAction();
                     // ステラの座標を修正する
                     Vector3 stellaMove = Vector3.zero;
@@ -76,17 +86,14 @@ namespace GreeningEx2019
                     StellaMove.chrController.enabled = true;
                     StellaMove.chrController.Move(stellaMove);
 
-                    // 真下に岩が無ければ飛び降りる
+                    // 足元に岩が無ければ飛び降りる
                     if (!CheckGetOff()) {
                         return;
                     }
                 }
 
                 // 移動しているなら、ジャンプチェック
-                if (!Mathf.Approximately(StellaMove.myVelocity.x, 0))
-                {
-                    StellaMove.instance.CheckMiniJump();
-                }
+                StellaMove.instance.CheckMiniJump();
             }
         }
 
@@ -96,7 +103,9 @@ namespace GreeningEx2019
         /// <returns>岩がある時、trueを返します。</returns>
         bool CheckGetOff()
         {
-            int hitCount = Physics.RaycastNonAlloc(StellaMove.chrController.bounds.center, Vector3.down, hits, float.PositiveInfinity, groundLayer, QueryTriggerInteraction.Collide);
+            Vector3 origin = StellaMove.chrController.bounds.center;
+            origin.x += getOffDistance * Mathf.Sign(lastRockObject.transform.position.x - origin.x);
+            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, float.PositiveInfinity, groundLayer, QueryTriggerInteraction.Collide);
 
             float top = float.NegativeInfinity;
             for (int i = 0; i < hitCount; i++)

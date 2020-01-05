@@ -255,18 +255,22 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 移動先の高さをチェックして、必要ならミニジャンプします。
+        /// 移動先の高さをボックスコライダーでチェックして、必要ならミニジャンプします。
+        /// 移動していない時は、チェックしません。
         /// </summary>
         public void CheckMiniJump()
         {
+            Vector3 move = Vector3.zero;
+            move.x = Mathf.Sign(myVelocity.x);
+            if (Mathf.Approximately(move.x, 0f)) return;
+
             // 移動先に段差がないかを確認
             float startOffset = chrController.radius + boxColliderHalfExtents.x;
-            checkCenter = transform.position
-                + chrController.center
-                + forwardVector * startOffset;
+            checkCenter = chrController.bounds.center
+                + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, forwardVector, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
