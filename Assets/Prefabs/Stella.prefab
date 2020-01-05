@@ -408,6 +408,7 @@ MonoBehaviour:
   zyouroEmitterPosition: {fileID: 4761528081297712531}
   zyouroEmitter: {fileID: 8113470482104823767}
   leftTransform: {fileID: 6988236172730180146}
+  naePutDownOffsetX: 0.4
   isDebugMovable: 0
   guiSkin: {fileID: 11400000, guid: 08a00d7c313c0ba4983821e0c3a26507, type: 2}
 --- !u!1 &2392662632966794372

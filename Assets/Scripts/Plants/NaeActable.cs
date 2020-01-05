@@ -51,9 +51,6 @@ namespace GreeningEx2019
         /// </summary>
         public FetchObjects FetchOverlapObjects;
 
-        Collider myCollider = null;
-        Animator anim = null;
-
         /// <summary>
         /// マーカー用のオブジェクト。Hold()で作成します。
         /// </summary>
@@ -66,11 +63,24 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 苗を持つオフセットX座標
+        /// </summary>
+        public float NaeOffsetX
+        {
+            get
+            {
+                return offset.x;
+            }
+        }
+
+        /// <summary>
         /// コライダーの幅の半分を返します。
         /// </summary>
         public float ColliderExtentsX { get; private set; }
         public float HeightFromGround { get { return heightFromGround; } }
 
+        Collider myCollider = null;
+        Animator anim = null;
         BoxCollider boxCollider = null;
         SphereCollider sphereCollider = null;
         CapsuleCollider capsuleCollider = null;

@@ -47,7 +47,12 @@ namespace GreeningEx2019
         void BackOff()
         {
             state = StateType.BackOff;
-            targetX = StellaMove.naePutPosition.x - (StellaMove.chrController.radius + ((NaeActable)ActionBox.SelectedActable).ColliderExtentsX)*StellaMove.forwardVector.x;
+            targetX = StellaMove.naePutPosition.x - (StellaMove.chrController.radius + ((NaeActable)ActionBox.SelectedActable).ColliderExtentsX) * StellaMove.forwardVector.x + StellaMove.CollisionMargin;
+            // 前進はしない
+            if ((targetX-StellaMove.instance.transform.position.x) * StellaMove.forwardVector.x > 0)
+            {
+                targetX = StellaMove.instance.transform.position.x;
+            }
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
         }
     }
