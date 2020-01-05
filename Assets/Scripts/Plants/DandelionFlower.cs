@@ -36,7 +36,7 @@ namespace GreeningEx2019
                 {
                     GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
                     lastTime = Time.time;
-                    Go.GetComponent<Fluff>().init(direction, FluffLifeTime);
+                    Go.GetComponent<FluffActable>().Init(direction, FluffLifeTime);
                 }
             }
         }
