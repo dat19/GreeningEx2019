@@ -11,6 +11,8 @@ namespace GreeningEx2019
         float upDownSpeed = 2.5f;
         [Tooltip("左右方向移動速度"), SerializeField]
         float sideSpeed = 2f;
+        [Tooltip("ツタ飛び降り時のY速度"), SerializeField]
+        float putDownSpeedY = 2f;
 
         public override void Init()
         {
@@ -44,7 +46,7 @@ namespace GreeningEx2019
             if (Mathf.Approximately(h, 0f)) return false;
 
             StellaMove.myVelocity.x = h * StellaMove.MiniJumpSpeedMax;
-            StellaMove.myVelocity.y = StellaMove.MiniJumpMargin;
+            StellaMove.myVelocity.y = putDownSpeedY;
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
