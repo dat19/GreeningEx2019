@@ -73,13 +73,11 @@ namespace GreeningEx2019
                         StellaMove.myVelocity.x = rockSpeed[0]*Mathf.Sign(dist);
                     }
                     StellaMove.chrController.enabled = false;
-                    Debug.Log($"dist={dist} / velx={StellaMove.myVelocity.x}");
                     rockActable.PushAction();
 
                     // ステラの座標を修正する
                     Vector3 stellaMove = Vector3.zero;
                     float moved = lastRockObject.transform.position.x - lastPos.x;
-                    Debug.Log($"  moved={moved} / rockrad={rockCollider.radius}");
                     float rad = moved / rockCollider.radius;
                     stellaMove.Set(
                         moved + Mathf.Sin(rad) * rockCollider.radius,
