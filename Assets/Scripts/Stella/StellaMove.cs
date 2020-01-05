@@ -62,7 +62,7 @@ namespace GreeningEx2019
             NaeWalk,  // 6苗運び
             PutDown,  // 7苗を置く
             Ivy,      // 8ツタにつかまる
-            Watage,   // 9綿毛につかまる
+            Fluff,    // 9綿毛につかまる
             Tamanori, // 10岩にのる
             Obore,    // 11溺れ
             MushroomJump,   // 12マッシュルームジャンプ

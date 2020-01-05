@@ -29,7 +29,20 @@ namespace GreeningEx2019
             if (StellaMove.CheckIvyHold())
             {
                 return;
-            }            
+            }
+
+            // 行動ボタンチェック
+            if (Input.GetButton("Action"))
+            {
+                Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
+                if (act != null)
+                {
+                    if (act.Action())
+                    {
+                        return;
+                    }
+                }
+            }
 
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();

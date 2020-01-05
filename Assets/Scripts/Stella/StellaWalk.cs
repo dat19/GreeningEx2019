@@ -60,8 +60,10 @@ namespace GreeningEx2019
                     Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
                     if (act != null)
                     {
-                        act.Action();
-                        return;
+                        if (act.Action())
+                        {
+                            return;
+                        }
                     }
                 }
 

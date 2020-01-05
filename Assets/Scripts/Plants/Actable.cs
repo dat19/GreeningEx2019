@@ -29,7 +29,8 @@ namespace GreeningEx2019
         /// <summary>
         /// 行動を実行します。
         /// </summary>
-        public abstract void Action();
+        /// <returns>アクションが有効だった時、true</returns>
+        public abstract bool Action();
 
         /// <summary>
         /// 押す時に発動する動作があればこれを上書きします。

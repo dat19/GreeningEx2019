@@ -87,13 +87,14 @@ namespace GreeningEx2019
         static NaeType selectedType;
 
         /// <summary>
-        /// 動作フラグ。苗の時のみ有効
+        /// 動作フラグ。苗の時で着地のみ有効
         /// </summary>
         public override bool CanAction
         {
             get
             {
-                return GrowInstance.state == Grow.StateType.Nae;
+                return (GrowInstance.state == Grow.StateType.Nae)
+                    && (StellaMove.chrController.isGrounded);
             }
             protected set => base.CanAction = value;
         }
@@ -178,13 +179,16 @@ namespace GreeningEx2019
             return Physics.CapsuleCastNonAlloc(center + Vector3.up * offsetY, center + Vector3.down * offsetY, capsuleCollider.radius, Vector3.down, hits, 0f, layer);
         }
 
-        public override void Action()
+        public override bool Action()
         {
+            if (!CanAction) return false;
+
             StellaMove.naePutPosition = transform.position;
             anim.enabled = false;
             myCollider.enabled = false;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.LiftUp);
             selectedType = type;
+            return true;
         }
 
         /// <summary>

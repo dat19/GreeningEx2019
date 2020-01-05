@@ -24,19 +24,21 @@ namespace GreeningEx2019 {
         public override bool CanAction { 
             get
             {
-                return GrowInstance.state == Grow.StateType.Growed;
+                return (GrowInstance.state == Grow.StateType.Growed)
+                    &&  StellaMove.chrController.isGrounded;
             }
             protected set => base.CanAction = value; 
         }
 
-        public override void Action()
+        public override bool Action()
         {
-            if (!CanAction) return;
+            if (!CanAction) return false;
 
             StellaMove.targetJumpGround = transform.position;
             StellaMove.targetJumpGround.y = CapsuleColliderInstance.bounds.max.y;
             StellaMove.myVelocity.x = 0f;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Jump);
+            return true;
         }
 
         public override bool PushAction()
