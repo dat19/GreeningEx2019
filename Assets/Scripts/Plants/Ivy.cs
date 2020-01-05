@@ -9,11 +9,14 @@ namespace GreeningEx2019
     /// </summary>
     public class Ivy : MonoBehaviour
     {
+        public BoxCollider BoxColliderInstance { get; private set; }
+
         Grow grow;
 
         private void Awake()
         {
             grow = GetComponent<Grow>();
+            BoxColliderInstance = GetComponent<BoxCollider>();
         }
 
         /// <summary>

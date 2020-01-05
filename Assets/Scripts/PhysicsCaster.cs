@@ -21,6 +21,10 @@ namespace GreeningEx2019
         /// MapCollider, MapTrigger, NaeのGetMaskの値
         /// </summary>
         public static int MapLayer { get; private set; }
+        /// <summary>
+        /// 苗レイヤーのGetMaskの値
+        /// </summary>
+        public static int NaeLayer { get; private set; }
         public const string GroundTag = "Ground";
         public const string DeadZoneTag = "DeadZone";
 
@@ -28,6 +32,7 @@ namespace GreeningEx2019
         {
             MapCollisionLayer = LayerMask.GetMask("MapCollision");
             MapLayer = LayerMask.GetMask("MapCollision", "MapTrigger", "Nae");
+            NaeLayer = LayerMask.GetMask("Nae");
         }
 
         /// <summary>
@@ -81,6 +86,20 @@ namespace GreeningEx2019
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// レイキャストを実施します。
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="dir"></param>
+        /// <param name="maxDistance"></param>
+        /// <param name="layerMask"></param>
+        /// <param name="queryTriggerInteraction"></param>
+        /// <returns></returns>
+        public static int Raycast(Vector3 origin, Vector3 dir, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        {
+            return Physics.RaycastNonAlloc(origin, dir, hits, maxDistance, layerMask, queryTriggerInteraction);
         }
 
         /// <summary>

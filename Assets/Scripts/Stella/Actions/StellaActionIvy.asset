@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canStepDown: 0
   upDownSpeed: 2.5
+  sideSpeed: 2
+  putDownSpeedY: 6

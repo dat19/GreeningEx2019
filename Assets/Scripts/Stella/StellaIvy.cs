@@ -12,7 +12,7 @@ namespace GreeningEx2019
         [Tooltip("左右方向移動速度"), SerializeField]
         float sideSpeed = 2f;
         [Tooltip("ツタ飛び降り時のY速度"), SerializeField]
-        float putDownSpeedY = 2f;
+        float putDownSpeedY = 6f;
 
         public override void Init()
         {
@@ -30,6 +30,9 @@ namespace GreeningEx2019
         {
             // 左右が押されていたら飛び降りる
             if (SideMove()) return;
+
+            // 左右補正
+            AdjustSide();
 
             // 上下移動設定
             VerticalMove();
@@ -54,13 +57,10 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 上下移動
+        /// ツタとの左右位置の補正
         /// </summary>
-        void VerticalMove()
+        void AdjustSide()
         {
-            float v = Input.GetAxisRaw("Vertical");
-            StellaMove.myVelocity.y = v * upDownSpeed;
-
             // 左右補正設定
             float ivyx = StellaMove.IvyInstance.transform.position.x;
             float stx = ivyx - (StellaMove.HoldPosition.x - StellaMove.instance.transform.position.x);
@@ -69,6 +69,45 @@ namespace GreeningEx2019
             float sign = Mathf.Sign(movex);
             movex = Mathf.Min(Mathf.Abs(movex), step);
             StellaMove.myVelocity.x = movex * sign / Time.fixedDeltaTime;
+        }
+
+        /// <summary>
+        /// 上下移動
+        /// </summary>
+        void VerticalMove()
+        {
+            float v = Input.GetAxisRaw("Vertical");
+            StellaMove.myVelocity.y = v * upDownSpeed;
+
+            // 登り切ったチェック
+            if (v > 0.5f)
+            {
+                // 上にツタがあるか？
+                Vector3 origin = StellaMove.HoldPosition;
+                origin.x = StellaMove.IvyInstance.BoxColliderInstance.bounds.min.x-0.05f;
+                origin.z = StellaMove.IvyInstance.transform.position.z;
+                int hitCount = PhysicsCaster.Raycast(origin, Vector3.right, 0.1f, PhysicsCaster.NaeLayer, QueryTriggerInteraction.Collide);
+                bool isIvy = false;
+                for (int i=0; i<hitCount;i++)
+                {
+                    if (PhysicsCaster.hits[i].collider.GetComponent<Ivy>() != null)
+                    {
+                        isIvy = true;
+                        break;
+                    }
+                }
+
+                if (!isIvy)
+                {
+                    // 前方に飛び降り
+                    StellaMove.myVelocity.x = StellaMove.MiniJumpSpeedMax * StellaMove.forwardVector.x;
+                    StellaMove.myVelocity.y = putDownSpeedY;
+                    StellaMove.instance.Gravity();
+                    StellaMove.instance.Move();
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+                    return;
+                }
+            }
 
             // 移動
             float lastY = StellaMove.instance.transform.position.y;
