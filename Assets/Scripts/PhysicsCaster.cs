@@ -13,13 +13,21 @@ namespace GreeningEx2019
         /// </summary>
         public static readonly RaycastHit[] hits = new RaycastHit[HitMax];
 
-        public static int GroundLayer { get; private set; }
+        /// <summary>
+        /// MapCollisionのGetMaskの値
+        /// </summary>
+        public static int MapCollisionLayer { get; private set; }
+        /// <summary>
+        /// MapCollider, MapTrigger, NaeのGetMaskの値
+        /// </summary>
+        public static int MapLayer { get; private set; }
         public const string GroundTag = "Ground";
         public const string DeadZoneTag = "DeadZone";
 
         public static void Init()
         {
-            GroundLayer = LayerMask.GetMask("MapCollision");
+            MapCollisionLayer = LayerMask.GetMask("MapCollision");
+            MapLayer = LayerMask.GetMask("MapCollision", "MapTrigger", "Nae");
         }
 
         /// <summary>
@@ -30,7 +38,7 @@ namespace GreeningEx2019
         /// <returns>地面のオブジェクト。何もなければnull</returns>
         public static GameObject GetGround(Vector3 origin, float distance)
         {
-            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, distance, GroundLayer);
+            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, distance, MapCollisionLayer);
             for (int i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.CompareTag(GroundTag))
@@ -62,7 +70,7 @@ namespace GreeningEx2019
         /// <returns></returns>
         public static GameObject GetGroundWater(Vector3 origin, Vector3 dir, float distance)
         {
-            int hitCount = Physics.RaycastNonAlloc(origin, dir, hits, distance, GroundLayer);
+            int hitCount = Physics.RaycastNonAlloc(origin, dir, hits, distance, MapCollisionLayer);
             for (int i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.CompareTag(GroundTag)
@@ -73,6 +81,25 @@ namespace GreeningEx2019
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// キャラクターコントローラーのキャストをします。
+        /// </summary>
+        /// <param name="chr"></param>
+        /// <param name="direction"></param>
+        /// <param name="maxDistance"></param>
+        /// <param name="layerMask"></param>
+        /// <param name="queryTriggerInteraction"></param>
+        /// <returns></returns>
+        public static int CharacterControllerCast(CharacterController chr, Vector3 direction, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction= QueryTriggerInteraction.UseGlobal)
+        {
+            float h = chr.height * 0.5f - chr.radius;
+            return Physics.CapsuleCastNonAlloc(
+                chr.bounds.center + Vector3.up * h,
+                chr.bounds.center + Vector3.down * h,
+                chr.radius,
+                direction, hits, maxDistance, layerMask, queryTriggerInteraction);
         }
     }
 }

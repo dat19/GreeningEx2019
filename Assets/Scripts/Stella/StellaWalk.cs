@@ -48,6 +48,11 @@ namespace GreeningEx2019
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Water);
                 return;
             }
+            else if (StellaMove.CheckIvyHold())
+            {
+                //StellaMove.instance.ChangeAction(StellaMove.ActionType.Ivy);
+                return;
+            }
             else
             {
                 // 行動ボタンチェック

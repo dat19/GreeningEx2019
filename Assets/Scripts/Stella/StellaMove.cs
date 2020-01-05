@@ -148,6 +148,11 @@ namespace GreeningEx2019
         public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
 
         /// <summary>
+        /// 現在つかんでいるツタのインスタンス
+        /// </summary>
+        public static Ivy IvyInstance { get; private set; }
+
+        /// <summary>
         /// 苗を保持する座標
         /// </summary>
         public static Vector3 HoldPosition
@@ -582,6 +587,50 @@ namespace GreeningEx2019
                     so.StepOn();
                 }
             }
+        }
+
+        /// <summary>
+        /// 上下キーが押されていて、ツタと重なっていたら、そのツタのインスタンスを返します。
+        /// </summary>
+        /// <returns></returns>
+        public static bool CheckIvyHold()
+        {
+            float v = Input.GetAxisRaw("Vertical");
+
+            // 上下キーが押されていなければなし
+            if (Mathf.Approximately(v, 0f)) return false;
+
+            if (v < -0.5f)
+            {
+                // 下キーの時は、着地していたら移行無し
+                Vector3 foot = chrController.bounds.center;
+                foot.y = chrController.bounds.min.y;
+                GameObject go = PhysicsCaster.GetGround(foot, 0.1f);
+                if (go != null)
+                {
+                    return false;
+                }
+            }
+
+            IvyInstance = CheckIvyOverlap();
+            if (IvyInstance == null) return false;
+            return IvyInstance.Hold();
+        }
+
+        /// <summary>
+        /// ツタと重なっているかを確認します。重なっていたら、ツタのインスタンスを返します。
+        /// </summary>
+        /// <returns>見つけたツタのインスタンス。なければnull</returns>
+        public static Ivy CheckIvyOverlap()
+        {
+            int hitCount = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, 0f, PhysicsCaster.MapLayer, QueryTriggerInteraction.Collide);
+            for (int i=0;i<hitCount;i++)
+            {
+                Ivy ivy = PhysicsCaster.hits[i].collider.GetComponent<Ivy>();
+                if (ivy != null) return ivy;
+            }
+
+            return null;
         }
     }
 }
