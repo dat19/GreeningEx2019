@@ -51,11 +51,6 @@ namespace GreeningEx2019
         /// </summary>
         public FetchObjects FetchOverlapObjects;
 
-        /// <summary>
-        /// オブジェクトをくっつける基準のトランスフォーム
-        /// </summary>
-        Transform parentPivot;
-
         Collider myCollider = null;
         Animator anim = null;
 
@@ -185,10 +180,9 @@ namespace GreeningEx2019
         /// <summary>
         /// ステラが掴んだ時に呼び出します。
         /// </summary>
-        public void Hold(Transform pivot)
+        public void Hold()
         {
             isHolding = true;
-            parentPivot = pivot;
             SetCollider(false);
         }
 
@@ -221,7 +215,9 @@ namespace GreeningEx2019
         {
             if (isHolding)
             {
-                transform.position = parentPivot.position + offset;
+                Vector3 forwardOffset = offset;
+                forwardOffset.x *= StellaMove.forwardVector.x;
+                transform.position = StellaMove.HoldPosition + forwardOffset;
                 transform.forward = Vector3.forward;
                 transform.up = Vector3.up;
             }

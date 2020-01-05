@@ -34,6 +34,8 @@ namespace GreeningEx2019
         Transform zyouroEmitterPosition = null;
         [Tooltip("じょうろの水のエミッター"), SerializeField]
         Transform zyouroEmitter = null;
+        [Tooltip("左手Transform"), SerializeField]
+        Transform leftTransform = null;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
@@ -126,6 +128,18 @@ namespace GreeningEx2019
         public static Transform ZyouroPivot { get { return instance.zyouroPivot; } }
         public static Transform ZyouroEmitterPosition { get { return instance.zyouroEmitterPosition; } }
         public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
+
+        /// <summary>
+        /// 苗を保持する座標
+        /// </summary>
+        public static Vector3 HoldPosition
+        {
+            get
+            {
+                return (instance.zyouroPivot.position+instance.leftTransform.position) * 0.5f;
+            }
+        }
+
         /// <summary>
         /// ピボットのTransform
         /// </summary>

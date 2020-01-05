@@ -60,7 +60,7 @@ namespace GreeningEx2019
         void HoldNae()
         {
             StellaMove.RegisterAnimEvent(ToHold);
-            ((NaeActable)ActionBox.SelectedActable).Hold(StellaMove.ZyouroPivot);
+            ((NaeActable)ActionBox.SelectedActable).Hold();
         }
 
         void ToHold()
