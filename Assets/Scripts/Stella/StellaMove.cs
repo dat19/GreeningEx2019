@@ -28,6 +28,8 @@ namespace GreeningEx2019
         float miniJumpCheckX = 0.5f;
         [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
         float miniJumpHeight = 1.2f;
+        [Tooltip("ミニジャンプ(飛び降り)最高速度"), SerializeField]
+        float miniJumpSpeedMax = 1.5f;
         [Tooltip("じょうろピボットオブジェクト"), SerializeField]
         Transform zyouroPivot = null;
         [Tooltip("じょうろの水のエミッターの位置"), SerializeField]
@@ -135,6 +137,17 @@ namespace GreeningEx2019
         /// 地面のレイヤーマスク
         /// </summary>
         public static LayerMask MapCollisionLayerMask { get; private set; }
+
+        /// <summary>
+        /// ミニジャンプの最高速。ミニジャンプで飛び乗る時の最高速度
+        /// </summary>
+        public static float MiniJumpSpeedMax
+        {
+            get
+            {
+                return instance.miniJumpSpeedMax;
+            }
+        }
 
         /// <summary>
         /// 移動先を判定する厚さの半分

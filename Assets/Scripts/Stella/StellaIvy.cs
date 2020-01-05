@@ -20,18 +20,48 @@ namespace GreeningEx2019
             StellaMove.SetAnimState(StellaMove.AnimType.Ivy);
         }
 
+
         /// <summary>
         /// ツタの昇り降り処理
         /// </summary>
         public override void UpdateAction()
         {
+            // 左右が押されていたら飛び降りる
+            if (SideMove()) return;
+
             // 上下移動設定
+            VerticalMove();
+        }
+
+        /// <summary>
+        /// 横方向の移動を制御します。
+        /// </summary>
+        /// <returns>これ以降の処理が不要な場合、trueを返します。</returns>
+        bool SideMove()
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            // 操作なし
+            if (Mathf.Approximately(h, 0f)) return false;
+
+            StellaMove.myVelocity.x = h * StellaMove.MiniJumpSpeedMax;
+            StellaMove.myVelocity.y = StellaMove.MiniJumpMargin;
+            StellaMove.instance.Gravity();
+            StellaMove.instance.Move();
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+            return true;
+        }
+
+        /// <summary>
+        /// 上下移動
+        /// </summary>
+        void VerticalMove()
+        {
             float v = Input.GetAxisRaw("Vertical");
             StellaMove.myVelocity.y = v * upDownSpeed;
 
             // 左右補正設定
             float ivyx = StellaMove.IvyInstance.transform.position.x;
-            float stx = ivyx - (StellaMove.HoldPosition.x- StellaMove.instance.transform.position.x);
+            float stx = ivyx - (StellaMove.HoldPosition.x - StellaMove.instance.transform.position.x);
             float movex = (stx - StellaMove.instance.transform.position.x);
             float step = sideSpeed * Time.fixedDeltaTime;
             float sign = Mathf.Sign(movex);
@@ -56,5 +86,6 @@ namespace GreeningEx2019
             }
             StellaMove.SetAnimFloat("VelY", vely);
         }
+
     }
 }
