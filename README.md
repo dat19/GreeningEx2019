@@ -1,4 +1,9 @@
 # GreeningEx2019
+Greeningの2019年度EXプロジェクト開発用のリポジトリーです。
+
+- [ステージの作り方](Documents/HowToEditStage.md)
+
+## 開発資料
  Greeningの2019年度生の改良プロジェクト用リポジトリー
 
 - [プロジェクトの準備](Documents/Setup.md)
