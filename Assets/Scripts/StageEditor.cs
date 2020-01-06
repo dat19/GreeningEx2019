@@ -29,11 +29,13 @@ public class StageEditor : MonoBehaviour
         MushroomLittle,
         RockBefore,
         //
+        /*
         Flower,
         Ivy,
         Dandelion,
         Mushroom,
         RockAfter,
+        */
     }
 
     /// <summary>
