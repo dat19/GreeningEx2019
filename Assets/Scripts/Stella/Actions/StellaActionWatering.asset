@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6de8d4a8debd54cb67d132157b1392, type: 3}
   m_Name: StellaActionWatering
   m_EditorClassIdentifier: 
+  canStepDown: 0
   zyouroEular:
-  - {x: 20, y: -55, z: 0}
-  - {x: 15, y: -150, z: 0}
+  - {x: 40, y: -55, z: 0}
+  - {x: 35, y: -150, z: 0}
   zyouroPivotPosition:
   - {x: 0.25, y: 0.15, z: -0.05}
   - {x: 0, y: 0, z: 0}

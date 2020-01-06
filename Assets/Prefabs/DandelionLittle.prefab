@@ -171,9 +171,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e79501a608422343ad756085cf27d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitGrowDone: 0
   state: 0
   fluffOffset: {x: 0, y: 0.5, z: 0}
   Fluff: {fileID: 8356661317230378195, guid: ac4890ffd9183f043843f4f5fa3ea07d, type: 3}
+  firstFluffTime: 1
   insTime: 2
   direction: {x: 1, y: 1}
   FluffLifeTime: 5
@@ -204,7 +206,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.45
   m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &7702757606659715458
 GameObject:

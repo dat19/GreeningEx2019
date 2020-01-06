@@ -11,6 +11,8 @@ namespace GreeningEx2019
         float naeUnit = 1f;
         [Tooltip("苗を置ける下方向の高さ"), SerializeField]
         float naePutHeight = 0.5f;
+        [Tooltip("移動チェックの時の足元からの高さ"), SerializeField]
+        float naeWalkCollideHeight = 1f;
 
         NaeActable naeActable = null;
 
@@ -84,12 +86,15 @@ namespace GreeningEx2019
             Vector3 nextNaePos = GetPutPosition(StellaMove.instance.transform.position + StellaMove.myVelocity * Time.fixedDeltaTime);
             if (!Mathf.Approximately(Vector3.Distance(naepos, nextNaePos), 0f)) {
                 // 苗の候補場所が変わるので、移動キャンセル調査
+                // 苗の高さは、地面より1マス分上を確認
+                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight + naeActable.HeightFromGround;
                 int hitCount = naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
                 for (int i=0; i<hitCount;i++)
                 {
                     if (hits[i].collider.CompareTag(GroundTag))
                     {
                         // ぶつかるので移動をキャンセル
+                        Debug.Log($"ぶつかるのでキャンセル {naeActable.name} nextPos={nextNaePos} : {hits[i].collider.name} / {hits[i].collider.transform.position}");
                         StellaMove.myVelocity.x = 0f;
                         break;
                     }

@@ -58,9 +58,6 @@ namespace GreeningEx2019
         /// </summary>
         public static void SetNewGame()
         {
-            Instance.clearedStageCount = 0;
-            SaveClearedStageCount();
-
             SelectedStage = 0;
         }
 
