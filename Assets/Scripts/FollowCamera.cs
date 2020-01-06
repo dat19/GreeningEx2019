@@ -6,6 +6,8 @@ namespace GreeningEx2019
 {
     public class FollowCamera : MonoBehaviour
     {
+        #pragma warning disable 0414
+
         [Tooltip("プレイヤーの画面左端"), SerializeField]
         float viewPointMin = 0.2f;
         [Tooltip("プレイヤーの画面右端"), SerializeField]

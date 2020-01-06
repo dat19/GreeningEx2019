@@ -8,7 +8,6 @@ namespace GreeningEx2019
     {
         Animator flowerAnim = null;
         FlowerBridge flowerBridge = null;
-        float dir = 1;
 
         protected new void Awake()
         {
