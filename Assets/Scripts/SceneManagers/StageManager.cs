@@ -39,7 +39,8 @@ namespace GreeningEx2019
         {
             get
             {
-                return !Fade.IsFading && !IsClearPlaying;
+                return !Fade.IsFading
+                    && !IsClearPlaying;
             }
         }
 

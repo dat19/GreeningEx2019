@@ -62,15 +62,5 @@ namespace GreeningEx2019
             StellaMove.instance.ChangeAction(
                 StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
         }
-
-        public override void OnTriggerEnter(Collider other)
-        {
-            if (!StageManager.CanMove) return;
-
-            if (other.CompareTag("DeadZone"))
-            {
-                StellaMove.instance.ChangeAction(StellaMove.ActionType.Obore);
-            }
-        }
     }
 }

@@ -483,8 +483,15 @@ namespace GreeningEx2019
         {
             if (ClearCheck(other)) return;
 
+            if ((NowAction != ActionType.Obore) && other.CompareTag("DeadZone"))
+            {
+                ChangeAction(ActionType.Obore);
+                return;
+            }
+
             stellaActionScriptableObjects[(int)NowAction]?.OnTriggerEnter(other);
         }
+
         private void OnTriggerStay(Collider other)
         {
             if (ClearCheck(other)) return;
