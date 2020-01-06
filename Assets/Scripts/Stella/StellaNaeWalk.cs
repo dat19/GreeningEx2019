@@ -14,13 +14,9 @@ namespace GreeningEx2019
         [Tooltip("移動チェックの時の足元からの高さ"), SerializeField]
         float naeWalkCollideHeight = 1f;
 
-        NaeActable naeActable = null;
-
         public override void Init()
         {
             base.Init();
-
-            naeActable = (NaeActable)ActionBox.SelectedActable;
         }
 
         /// <summary>
@@ -34,7 +30,7 @@ namespace GreeningEx2019
             if (pos.y < (StellaMove.chrController.bounds.min.y-naePutHeight)) return false;
 
             // 重なっているオブジェクトを探査
-            int hitCount = naeActable.FetchOverlapObjects(pos, hits, overlapLayer);
+            int hitCount = StellaMove.naeActable.FetchOverlapObjects(pos, hits, overlapLayer);
             return (hitCount == 0);
         }
 
@@ -63,7 +59,7 @@ namespace GreeningEx2019
 
                 // 今置いたらここという場所に苗マーカーを表示
                 NaeActable.MarkerObject.SetActive(true);
-                naepos.y += naeActable.HeightFromGround;
+                naepos.y += StellaMove.naeActable.HeightFromGround;
                 NaeActable.MarkerObject.transform.position = naepos;
             }
             else
@@ -87,14 +83,14 @@ namespace GreeningEx2019
             if (!Mathf.Approximately(Vector3.Distance(naepos, nextNaePos), 0f)) {
                 // 苗の候補場所が変わるので、移動キャンセル調査
                 // 苗の高さは、地面より1マス分上を確認
-                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight + naeActable.HeightFromGround;
-                int hitCount = naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
+                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight + StellaMove.naeActable.HeightFromGround;
+                int hitCount = StellaMove.naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
                 for (int i=0; i<hitCount;i++)
                 {
                     if (hits[i].collider.CompareTag(GroundTag))
                     {
                         // ぶつかるので移動をキャンセル
-                        Debug.Log($"ぶつかるのでキャンセル {naeActable.name} nextPos={nextNaePos} : {hits[i].collider.name} / {hits[i].collider.transform.position}");
+                        Debug.Log($"ぶつかるのでキャンセル {StellaMove.naeActable.name} nextPos={nextNaePos} : {hits[i].collider.name} / {hits[i].collider.transform.position}");
                         StellaMove.myVelocity.x = 0f;
                         break;
                     }
@@ -131,7 +127,7 @@ namespace GreeningEx2019
             Vector3 naepos = stellaPosition;
             float absOffset = StellaMove.ActionBoxInstance.colliderCenter.x
                 + StellaMove.ActionBoxInstance.halfExtents.x
-                + naeActable.ColliderExtentsX;
+                + StellaMove.naeActable.ColliderExtentsX;
             float baseX = naepos.x + absOffset * StellaMove.forwardVector.x;
 
             // 単位変換
