@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitGrowDone: 1
+  growSe: 15
   state: 0
 --- !u!114 &2027260246612639766
 MonoBehaviour:

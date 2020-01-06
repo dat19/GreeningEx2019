@@ -373,6 +373,8 @@ namespace GreeningEx2019
             t = Mathf.Sqrt(2f * total / gravityAdd);
             myVelocity.x = (targetJumpGround.x - transform.position.x) / (t + Time.fixedDeltaTime);
 
+            SoundController.Play(SoundController.SeType.MiniJump);
+
             ChangeAction(ActionType.Air);
 
             Move();

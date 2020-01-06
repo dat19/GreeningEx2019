@@ -31,6 +31,7 @@ namespace GreeningEx2019
 
         void HoldNae()
         {
+            SoundController.Play(SoundController.SeType.LiftUp);
             StellaMove.RegisterAnimEvent(ToHold);
             StellaMove.naeActable.Hold();
         }

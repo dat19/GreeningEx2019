@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitGrowDone: 0
+  growSe: 6
   state: 0
   fluffOffset: {x: 0, y: 0.5, z: 0}
   Fluff: {fileID: 8356661317230378195, guid: ac4890ffd9183f043843f4f5fa3ea07d, type: 3}

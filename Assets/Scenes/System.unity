@@ -392,6 +392,25 @@ MonoBehaviour:
   audioSE: {fileID: 190469381}
   audioBGM: {fileID: 190469380}
   seList:
+  - {fileID: 8300000, guid: 81bf22c9242919e4ebe211672d74882f, type: 3}
+  - {fileID: 8300000, guid: c30e8bfb5b4f5cb499e0ca8257bfe079, type: 3}
+  - {fileID: 8300000, guid: bca36bbe55db1cc48a464ab90276b3e4, type: 3}
+  - {fileID: 8300000, guid: 37a67c0a69249b546a78cbd8f7481bda, type: 3}
+  - {fileID: 8300000, guid: 4fdffca6f070b5c47bfe47008115542a, type: 3}
+  - {fileID: 8300000, guid: 5faab51e3afe84d46b91f2924a4bcf15, type: 3}
+  - {fileID: 8300000, guid: f9f063a9c196acd4796f920d12da8a55, type: 3}
+  - {fileID: 8300000, guid: 04ca96ea4c8326f47b4a75a953bd60e3, type: 3}
+  - {fileID: 8300000, guid: f5515b22d1ddad44ba8245f6e8c1abfc, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
+  - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
   - {fileID: 8300000, guid: 5e4100f1392fd4742a6c85de3c173a14, type: 3}
   bgmList:
   - {fileID: 8300000, guid: 3c943ac4cc7d2364996aa30217169a6d, type: 3}

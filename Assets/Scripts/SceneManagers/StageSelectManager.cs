@@ -99,16 +99,19 @@ namespace GreeningEx2019
             float cursor = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Vertical");
             if ((cursor < -0.5f) && (lastCursor > -0.5f))
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.PrevSelectStage();
             }
             else if ((cursor > 0.5f) && (lastCursor < 0.5f))
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.NextSelectStage();
             }
             lastCursor = cursor;
 
             if (GameParams.IsActionAndWaterButtonDown)
             {
+                SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
         }

@@ -21,6 +21,8 @@ namespace GreeningEx2019
         };
         [Tooltip("当たり判定用のオブジェクト"), SerializeField]
         GameObject waterTrigger = null;
+        [Tooltip("水まき効果音のループ秒数"), SerializeField]
+        float waterSeSeconds = 0.5f;
 
         enum StateType
         {
@@ -47,6 +49,7 @@ namespace GreeningEx2019
         int triggerIndex;
         float lastTriggerTime;
         float triggerEmitSeconds;
+        float lastSeTime;
 
         public override void Init()
         {
@@ -93,6 +96,7 @@ namespace GreeningEx2019
             state = StateType.Action;
             zyouroParticle.Play();
             lastTriggerTime = Time.time;
+            lastSeTime = Time.time - waterSeSeconds;
         }
 
         public override void UpdateAction()
@@ -123,8 +127,15 @@ namespace GreeningEx2019
                     return;
                 }
 
+                // 効果音
+                if ((Time.time - lastSeTime) >= waterSeSeconds)
+                {
+                    lastSeTime = Time.time;
+                    SoundController.Play(SoundController.SeType.Water);
+                }
+
                 // 後ずさりチェック
-                float ofsy = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
+                float ofsy = StellaMove.chrController.height * 0.49f - StellaMove.chrController.radius;
                 int hitCount = Physics.CapsuleCastNonAlloc(
                     StellaMove.chrController.bounds.center + Vector3.up * ofsy,
                     StellaMove.chrController.bounds.center + Vector3.down * ofsy,

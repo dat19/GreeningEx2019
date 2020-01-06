@@ -11,7 +11,7 @@ namespace GreeningEx2019
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SoundController.Play(SoundController.SeType.Click);
+                SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
             }
         }

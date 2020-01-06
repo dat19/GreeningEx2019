@@ -41,6 +41,7 @@ namespace GreeningEx2019
                 if (fluffTime <= 0f)
                 {
                     fluffTime = insTime;
+                    SoundController.Play(SoundController.SeType.SpawnFluff);
                     GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
                     Go.GetComponent<FluffActable>().Init(direction, FluffLifeTime);
                 }

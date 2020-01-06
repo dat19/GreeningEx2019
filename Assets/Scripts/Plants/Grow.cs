@@ -13,6 +13,8 @@ namespace GreeningEx2019
     {
         [Tooltip("苗が成長しきるまで、水まきを続ける植物にはチェックを入れる"), SerializeField]
         bool waitGrowDone = false;
+        [Tooltip("生長する時の効果音"), SerializeField]
+        SoundController.SeType growSe = SoundController.SeType.GrowFlowers;
 
         /// <summary>
         /// 汎用の状態
@@ -67,6 +69,7 @@ namespace GreeningEx2019
             {
                 state = StateType.Growing;
                 anim.SetTrigger("Grow");
+                SoundController.Play(growSe);
                 NaeGrowedCount++;
                 Goal.IncrementNaeCount();
                 if (waitGrowDone)

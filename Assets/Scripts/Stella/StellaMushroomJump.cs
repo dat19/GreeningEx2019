@@ -44,15 +44,16 @@ namespace GreeningEx2019
 
             if (Mathf.Approximately(h, 0f))
             {
-                // 入力がない場合、standardJump、前に進める
+                // 入力がない場合、前にstandardJump
                 StellaMove.myVelocity.x = standardJump * StellaMove.forwardVector.x / t;
             }
             else
             {
-                // 入力がある場合は、歩き速度
+                // 入力がある場合は、horizontalJump
                 StellaMove.myVelocity.x = horizontalJump * h / t;
             }
 
+            SoundController.Play(SoundController.SeType.MushroomJump);
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
         }
     }

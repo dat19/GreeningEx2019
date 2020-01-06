@@ -7,6 +7,8 @@ namespace GreeningEx2019 {
     {
         [Tooltip("真下に地面がない時の移動速度"), SerializeField]
         float rollSpeed = 0.75f;
+        [Tooltip("効果音を鳴らす秒間隔"), SerializeField]
+        float seSpanSeconds = 1f;
 
         /// <summary>
         /// ステラの速度より少し速く押して、ひっかかりをなくす
@@ -51,6 +53,11 @@ namespace GreeningEx2019 {
         /// 水しぶきを上げた
         /// </summary>
         bool isSplashed = false;
+
+        /// <summary>
+        /// 前回効果音を鳴らした時の時間
+        /// </summary>
+        float lastSeTime = 0;
 
         public override bool Action()
         {
@@ -157,6 +164,7 @@ namespace GreeningEx2019 {
             // 水しぶき
             if (!isSplashed && other.CompareTag("DeadZone"))
             {
+                SoundController.Play(SoundController.SeType.RockWater);
                 isSplashed = true;
                 Vector3 pos = chrController.bounds.center;
                 pos.y = chrController.bounds.min.y;
@@ -171,8 +179,12 @@ namespace GreeningEx2019 {
         void setRotate(float lastPosX)
         {
             float zrot = (transform.position.x - lastPosX) / ChrController.radius;
+            if (!Mathf.Approximately(zrot, 0f) && ((Time.time-lastSeTime) > seSpanSeconds))
+            {
+                lastSeTime = Time.time;
+                SoundController.Play(SoundController.SeType.RollingStone);
+            }
             transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
         }
-
     }
 }

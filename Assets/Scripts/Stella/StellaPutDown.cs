@@ -51,6 +51,7 @@ namespace GreeningEx2019
 
         void PutDownNae()
         {
+            SoundController.Play(SoundController.SeType.PutDown);
             StellaMove.RegisterAnimEvent(BackOff);
             StellaMove.naeActable.PutDown();
         }

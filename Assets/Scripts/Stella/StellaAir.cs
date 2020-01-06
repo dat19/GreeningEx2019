@@ -49,6 +49,8 @@ namespace GreeningEx2019
 
             if (!isLanding && StellaMove.chrController.isGrounded && StellaMove.myVelocity.y < 0f)
             {
+                SoundController.Play(SoundController.SeType.Landing);
+
                 StellaMove.myVelocity.x = 0;
                 StellaMove.RegisterAnimEvent(Grounded);
                 isLanding = true;

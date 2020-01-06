@@ -19,7 +19,7 @@ namespace GreeningEx2019 {
         {
             // 完成していない時は動作しない
             if (grow.state != Grow.StateType.Growed) return;
-            
+
             StellaMove.instance.ChangeAction(StellaMove.ActionType.MushroomJump);
             GetComponent<Animator>().SetTrigger("Jump");
         }

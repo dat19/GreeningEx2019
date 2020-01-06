@@ -107,6 +107,7 @@ namespace GreeningEx2019
             }
             else
             {
+                SoundController.Play(SoundController.SeType.CanClear);
                 targetMaterial = new Material(instance.materials[(int)MaterialIndex.Completed]);
                 myCollider.enabled = true;
             }
