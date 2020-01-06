@@ -38,8 +38,6 @@ namespace GreeningEx2019
         Transform zyouroEmitter = null;
         [Tooltip("左手Transform"), SerializeField]
         Transform leftTransform = null;
-        [Tooltip("苗を置く時のオフセットX座標"), SerializeField]
-        float naePutDownOffsetX = 0.4f;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
@@ -103,15 +101,9 @@ namespace GreeningEx2019
         const int CollisionMax = 8;
 
         /// <summary>
-        /// 苗を置く場所の距離への絶対値
+        /// 苗を置く時のオフセットX座標
         /// </summary>
-        public static float NaePutDownOffsetX
-        {
-            get
-            {
-                return instance.naePutDownOffsetX + ((NaeActable)ActionBox.SelectedActable).NaeOffsetX;
-            }
-        }
+        public const float NaePutDownOffsetX = 0.4f;
 
         /// <summary>
         /// 当たり判定を補正する際に間に入れるすきま

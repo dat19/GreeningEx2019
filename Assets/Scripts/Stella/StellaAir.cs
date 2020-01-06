@@ -58,8 +58,9 @@ namespace GreeningEx2019
 
         void Grounded()
         {
-            StellaMove.instance.ChangeAction(StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
             isLanding = false;
+            StellaMove.instance.ChangeAction(
+                StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
         }
 
         public override void OnTriggerEnter(Collider other)

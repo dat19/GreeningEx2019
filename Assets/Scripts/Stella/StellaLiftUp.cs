@@ -5,19 +5,8 @@ using UnityEngine;
 namespace GreeningEx2019
 {
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create LiftUp", fileName = "StellaActionLiftUp")]
-    public class StellaLiftUp : StellaActionScriptableObject
+    public class StellaLiftUp : StellaLiftUpPutDownBase
     {
-        protected enum StateType
-        {
-            TargetWalk,
-            Action,
-            BackOff,
-        }
-
-        protected StateType state;
-        protected float targetX;
-        NaeActable naeActable = null;
-
         /// <summary>
         /// 目的地を設定
         /// </summary>
@@ -27,42 +16,14 @@ namespace GreeningEx2019
 
             state = StateType.TargetWalk;
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
-            targetX = StellaMove.naePutPosition.x - StellaMove.NaePutDownOffsetX * StellaMove.forwardVector.x;
-            naeActable = ((NaeActable)ActionBox.SelectedActable);
-        }
-
-        public override void UpdateAction()
-        {
-            switch (state)
-            {
-                case StateType.TargetWalk:
-                    StellaMove.AdjustWalkResult res = StellaMove.AdjustWalk(targetX, StellaWalk.MoveSpeed);
-                    if (res == StellaMove.AdjustWalkResult.Reach)
-                    {
-                        state = StateType.Action;
-                        StellaMove.myVelocity = Vector3.zero;
-                        ToAction();
-                    }
-                    else if (res == StellaMove.AdjustWalkResult.Abort)
-                    {
-                        // 移動できなければ歩きに戻します
-                        StellaMove.myVelocity = Vector3.zero;
-                        StellaMove.instance.ChangeAction(
-                            StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk:
-                            StellaMove.ActionType.Walk);
-                    }
-                    break;
-                case StateType.Action:
-                    StellaMove.myVelocity.x = 0f;
-                    StellaMove.instance.Move();
-                    break;
-            }
+            StellaMove.naeActable = ((NaeActable)ActionBox.SelectedActable);
+            targetX = StellaMove.naePutPosition.x - (StellaMove.NaePutDownOffsetX + StellaMove.naeActable.NaeOffsetX) * StellaMove.forwardVector.x;
         }
 
         /// <summary>
         /// 行動へ
         /// </summary>
-        protected virtual void ToAction()
+        protected override void ToAction()
         {
             StellaMove.RegisterAnimEvent(HoldNae);
             StellaMove.SetAnimState(StellaMove.AnimType.LiftUp);
@@ -71,12 +32,11 @@ namespace GreeningEx2019
         void HoldNae()
         {
             StellaMove.RegisterAnimEvent(ToHold);
-            ((NaeActable)ActionBox.SelectedActable).Hold();
+            StellaMove.naeActable.Hold();
         }
 
         void ToHold()
         {
-            StellaMove.naeActable = naeActable;
             StellaMove.SetAnimBool("Nae", true);
             StellaMove.RegisterAnimEvent(ToHoldWalk);
         }
