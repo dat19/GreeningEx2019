@@ -90,7 +90,6 @@ namespace GreeningEx2019
                     if (hits[i].collider.CompareTag(GroundTag))
                     {
                         // ぶつかるので移動をキャンセル
-                        Debug.Log($"ぶつかるのでキャンセル {StellaMove.naeActable.name} nextPos={nextNaePos} : {hits[i].collider.name} / {hits[i].collider.transform.position}");
                         StellaMove.myVelocity.x = 0f;
                         break;
                     }

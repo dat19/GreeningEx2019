@@ -31,8 +31,8 @@ namespace GreeningEx2019
                 return;
             }
 
-            // 行動ボタンチェック
-            if (Input.GetButton("Action"))
+            // 行動ボタンチェック。着地時は何もしない
+            if (Input.GetButton("Action") && !isLanding)
             {
                 Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
                 if (act != null)

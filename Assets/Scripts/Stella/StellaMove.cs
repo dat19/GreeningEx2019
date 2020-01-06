@@ -592,7 +592,7 @@ namespace GreeningEx2019
         /// </summary>
         public static void CheckStepOn()
         {
-            int hcnt = StellaMove.GetUnderMap(raycastHits);
+            int hcnt = GetUnderMap(raycastHits);
             for (int i = 0; i < hcnt; i++)
             {
                 IStepOn so = raycastHits[i].collider.GetComponent<IStepOn>();
