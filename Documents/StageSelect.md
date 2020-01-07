@@ -19,3 +19,9 @@
 - 現在選択中のステージとステージ名。上方に中央揃え
 - 左右キーでステージ変更が可能と分かるように、左右矢印か、<>をアニメ表示
 - キーを押したらゲームが開始するという表示
+
+## シーン開始
+どのようにシーンを開始したかは、GameParamsのtoStageSelect変数で指定されているので、この値を読み取って初期化を実行する。開始の種類は、StageSelectManagerのToStageSelectType列挙子で宣言されている。
+
+
+StageSelectManager.ToStageSelectType toStageSelect

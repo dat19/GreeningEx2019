@@ -1,59 +1,101 @@
-﻿using System.Collections;
+﻿// #define AUTO_START
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StarClean : MonoBehaviour
+namespace GreeningEx2019
 {
-    [Tooltip("cleanの直下の島の設定用"),SerializeField]
-    GameObject[] islands = null;
-
-    //スタート前に設定 → 設定したステージまでの全ステージを緑化
-    //スタート後に設定 → 設定したステージを緑化
-    [Tooltip("クリアしたステージ"), SerializeField]
-    int cleardStageNum = 0;
-    [Tooltip("アニメーション速度"), SerializeField]
-    float albedoChangeSpeed = 0.025f;
-
-    Renderer[][] islandsRenderer = null;
-
-    float albedoChange = 0f;
-    int hozonCleardStageNum;
-
-    void Start()
+    public class StarClean : MonoBehaviour
     {
-        hozonCleardStageNum = cleardStageNum;
+        public static StarClean instance = null;
 
-        islandsRenderer = new Renderer[islands.Length][];
-        Color color;
+        [Tooltip("cleanの直下の島の設定用"), SerializeField]
+        GameObject[] islands = null;
 
-        for(int i = cleardStageNum; i < islands.Length; i++)
+        //スタート前に設定 → 設定したステージまでの全ステージを緑化
+        //スタート後に設定 → 設定したステージを緑化
+        [Tooltip("クリアしたステージ"), SerializeField]
+        int clearedStageNum = 0;
+        [Tooltip("アニメーション速度"), SerializeField]
+        float albedoChangeSpeed = 1.5f;
+
+        static Renderer[][] islandsRenderer = null;
+
+        static float albedoChange = 0f;
+        static int hozonCleardStageNum = 0;
+        static bool isStarted = false;
+
+        private void Awake()
         {
-            islandsRenderer[i] = islands[i].GetComponentsInChildren<Renderer>();
-            for(int j = 0; j<islandsRenderer[i].Length;j++)
-            {
-                color = islandsRenderer[i][j].material.color;
-                color.a = 0f;
-                islandsRenderer[i][j].material.color = color;
-            }
+            instance = this;
+            isStarted = false;
+            hozonCleardStageNum = 0;
         }
+
+#if AUTO_START
+    private void Start()
+    {
+        StartClearedStage(clearedStageNum);
     }
+#endif
 
-    void Update()
-    {
-        if (cleardStageNum != hozonCleardStageNum && albedoChange < 1) 
+        void Update()
         {
-            Color color;
-            albedoChange += albedoChangeSpeed;
-            for (int j = 0; j < islandsRenderer[cleardStageNum - 1].Length; j++) 
+            if (!isStarted) return;
+
+            if (clearedStageNum != hozonCleardStageNum && albedoChange < 1)
             {
-                color = islandsRenderer[cleardStageNum - 1][j].material.color;
-                color.a = albedoChange;
-                islandsRenderer[cleardStageNum - 1][j].material.color = color;
+                Color color;
+                albedoChange += albedoChangeSpeed * Time.deltaTime;
+                for (int j = 0; j < islandsRenderer[clearedStageNum - 1].Length; j++)
+                {
+                    color = islandsRenderer[clearedStageNum - 1][j].material.color;
+                    color.a = albedoChange;
+                    islandsRenderer[clearedStageNum - 1][j].material.color = color;
+                }
             }
-        }else if (cleardStageNum != hozonCleardStageNum && albedoChange >= 1)
-        {
-            hozonCleardStageNum = cleardStageNum;
-            albedoChange = 0f;
+            else if (clearedStageNum != hozonCleardStageNum && albedoChange >= 1)
+            {
+                hozonCleardStageNum = clearedStageNum;
+                albedoChange = 0f;
+            }
         }
+
+        /// <summary>
+        /// 指定のステージ
+        /// </summary>
+        /// <param name="num"></param>
+        public static void StartClearedStage(int num)
+        {
+            instance.clearedStageNum = num;
+            hozonCleardStageNum = instance.clearedStageNum;
+
+            islandsRenderer = new Renderer[instance.islands.Length][];
+            Color color;
+
+            for (int i = instance.clearedStageNum; i < instance.islands.Length; i++)
+            {
+                islandsRenderer[i] = instance.islands[i].GetComponentsInChildren<Renderer>();
+                for (int j = 0; j < islandsRenderer[i].Length; j++)
+                {
+                    color = islandsRenderer[i][j].material.color;
+                    color.a = 0f;
+                    islandsRenderer[i][j].material.color = color;
+                }
+            }
+
+            isStarted = true;
+        }
+
+        /// <summary>
+        /// クリアしたステージ数を設定します。
+        /// </summary>
+        /// <param name="num"></param>
+        public static void SetClearedStageNum(int num)
+        {
+            instance.clearedStageNum = num;
+        }
+
     }
 }

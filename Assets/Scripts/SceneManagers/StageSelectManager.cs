@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace GreeningEx2019
 {
@@ -12,6 +13,25 @@ namespace GreeningEx2019
         Transform[] islands = null;
         [Tooltip("ステージの星を表示する高さ"), SerializeField]
         float stageStarHeight = 4.5f;
+        [Tooltip("ステージテキスト"), SerializeField]
+        TextMeshProUGUI stageText = null;
+        [Tooltip("ステージ名"), SerializeField]
+        string[] stageNames =
+        {
+            "First Island",
+            "Second Island",
+            "All Test Island",
+            "No Name",
+            "No Name",
+            "No Name",
+            "No Name",
+            "No Name",
+            "No Name",
+            "No Name",
+        };
+
+        // ステージ名の色指定
+        const string StageNameColor = "\n<color=#afc>";
 
         /// <summary>
         /// 操作が可能になったら、trueを返します。
@@ -30,8 +50,8 @@ namespace GreeningEx2019
         public enum ToStageSelectType
         {
             NewGame,    // 新規にゲームを開始
-            Clear,
-            Back,
+            Clear,      // ステージクリア
+            Back,       // ユーザー操作で戻った時、或いはコンティニューで開始
         }
 
         enum StateType
@@ -52,25 +72,6 @@ namespace GreeningEx2019
         // リピートを防ぐための前のカーソル
         static float lastCursor = 0;
 
-        private new void Awake()
-        {
-            switch (GameParams.Instance.toStageSelect)
-            {
-                case ToStageSelectType.NewGame:
-                    state = StateType.OpeningMovie;
-                    break;
-                case ToStageSelectType.Clear:
-                    // 途中の動画チェック
-                    state = StateType.Clear;
-                    break;
-                case ToStageSelectType.Back:
-                    state = StateType.Back;
-                    break;
-            }
-
-            base.Awake();
-        }
-
         private void Update()
         {
             switch (state)
@@ -89,6 +90,23 @@ namespace GreeningEx2019
 
         public override void OnFadeOutDone()
         {
+            StarClean.StartClearedStage(GameParams.ClearedStageCount);
+
+            switch (GameParams.Instance.toStageSelect)
+            {
+                case ToStageSelectType.NewGame:
+                    state = StateType.OpeningMovie;
+                    break;
+                case ToStageSelectType.Clear:
+                    // 途中の動画チェック
+                    state = StateType.Clear;
+                    break;
+                case ToStageSelectType.Back:
+                    state = StateType.Back;
+                    break;
+            }
+
+            UpdateStageName();
             SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
@@ -102,11 +120,13 @@ namespace GreeningEx2019
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.PrevSelectStage();
+                UpdateStageName();
             }
             else if ((cursor > 0.5f) && (lastCursor < 0.5f))
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.NextSelectStage();
+                UpdateStageName();
             }
             lastCursor = cursor;
 
@@ -115,6 +135,19 @@ namespace GreeningEx2019
                 SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
+            else if (Input.GetButtonDown("Esc"))
+            {
+                SoundController.Play(SoundController.SeType.Decision);
+                SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
+            }
+        }
+
+        /// <summary>
+        /// ステージ名を更新したものに変更します
+        /// </summary>
+        void UpdateStageName()
+        {
+            stageText.text = $"Stage {GameParams.SelectedStage+1}{StageNameColor}{stageNames[GameParams.SelectedStage]}</color>";
         }
     }
 }
