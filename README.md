@@ -18,6 +18,7 @@ Greeningの2019年度EXプロジェクト開発用のリポジトリーです。
 - [クリア](Documents/Clear.md)
 - [苗を持ち上げる](Documents/NaeLift.md)
 - [ミニジャンプの改良](Documents/MiniJump2.md)
+- [ステージ選択シーン](Documents/StageSelect.md)
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/
