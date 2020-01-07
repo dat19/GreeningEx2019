@@ -23,5 +23,5 @@
 ## シーン開始
 どのようにシーンを開始したかは、GameParamsのtoStageSelect変数で指定されているので、この値を読み取って初期化を実行する。開始の種類は、StageSelectManagerのToStageSelectType列挙子で宣言されている。
 
-
-StageSelectManager.ToStageSelectType toStageSelect
+## 選択している島を手前に表示(WIP)
+BaseStarオブジェクトにBaseStarスクリプトをアタッチして制御する。現在のステージをGameParamsから読み取って、常時、選択されたステージを手前に表示するように動作する。

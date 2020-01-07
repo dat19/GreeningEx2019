@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GreeningEx2019
 {
@@ -13,6 +14,13 @@ namespace GreeningEx2019
         GameObject newGameObject = null;
         [Tooltip("Continueテキストのオブジェクト"), SerializeField]
         GameObject continueObject = null;
+        [Tooltip("ミュートトグル"), SerializeField]
+        Toggle seMuteToggle = null;
+
+        /// <summary>
+        /// ミュート前の効果音ボリューム
+        /// </summary>
+        float lastSeVolume = 0;
 
         /// <summary>
         /// コンティニューかどうかのフラグ
@@ -82,6 +90,20 @@ namespace GreeningEx2019
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = false;
             }
+        }
+
+        /// <summary>
+        /// SEの消音を設定します。
+        /// </summary>
+        public void SeMute()
+        {
+            if (SoundController.SeVolume > 0f)
+            {
+                lastSeVolume = SoundController.SeVolume;
+            }
+
+            SoundController.SeVolume = !seMuteToggle.isOn ? 0f : lastSeVolume;
+            SoundController.Play(SoundController.SeType.MoveCursor);
         }
     }
 }
