@@ -43,6 +43,8 @@ namespace GreeningEx2019
                 continueObject.SetActive(true);
                 IsContinue = true;
             }
+
+            SeMute();
         }
 
         private void Update()
