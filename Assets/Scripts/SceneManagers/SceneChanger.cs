@@ -183,6 +183,24 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 存在するステージ名を返します。存在しない場合、ループで調査します。
+        /// </summary>
+        /// <returns></returns>
+        string GetStageName()
+        {
+            int buildStageCount = SceneManager.sceneCountInBuildSettings;
+            int stageMax = 0;
+            for (; stageMax < buildStageCount; stageMax++)
+            {
+                Scene sc = SceneManager.GetSceneByName($"Stage{stageMax + 1}");
+                if (sc == null) break;
+            }
+
+            int snum = GameParams.SelectedStage % (stageMax+1);
+            return $"Stage{snum+1}";
+        }
+
+        /// <summary>
         /// シーン切り替え処理
         /// </summary>
         /// <returns></returns>
@@ -228,7 +246,7 @@ namespace GreeningEx2019
 
             if (NowScene == SceneType.Game)
             {
-                sceneName = $"Stage{GameParams.SelectedStage + 1}";
+                sceneName = GetStageName();
                 loadingSceneOperations[loadingSceneOperationCount] = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
                 loadingSceneOperationCount++;
             }

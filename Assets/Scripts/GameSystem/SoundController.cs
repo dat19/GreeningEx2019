@@ -79,7 +79,7 @@ namespace GreeningEx2019
         /// </summary>
         static bool useFade = false;
 
-        static float _seVolume = 1f;
+        static float _seVolume = 0.5f;
         /// <summary>
         /// SEのボリューム
         /// </summary>
@@ -94,7 +94,7 @@ namespace GreeningEx2019
                 _seVolume = Mathf.Clamp01(value);
             }
         }
-        static float _bgmVolume = 1f;
+        static float _bgmVolume = 0.5f;
         /// <summary>
         /// BGMのボリューム
         /// </summary>

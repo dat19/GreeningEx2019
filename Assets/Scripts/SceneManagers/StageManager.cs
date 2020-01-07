@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define USE_DEBUG_KEY
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -71,6 +73,17 @@ namespace GreeningEx2019
 
             Grow.Init();
         }
+
+#if USE_DEBUG_KEY
+        private void FixedUpdate()
+        {
+            if (Input.GetButtonDown("Esc"))
+            {
+                // ステージ選択へ
+                SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
+            }
+        }
+#endif
 
         /// <summary>
         /// クリア処理を開始
