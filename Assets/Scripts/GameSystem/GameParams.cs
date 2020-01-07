@@ -44,6 +44,7 @@ namespace GreeningEx2019
         private void Awake()
         {
             LoadClearedStageCount();
+            PhysicsCaster.Init();
 
             SelectedStage = Mathf.Min(clearedStageCount, StageCount-1);
             if (SelectedStage == StageCount - 1)
@@ -57,9 +58,6 @@ namespace GreeningEx2019
         /// </summary>
         public static void SetNewGame()
         {
-            Instance.clearedStageCount = 0;
-            SaveClearedStageCount();
-
             SelectedStage = 0;
         }
 

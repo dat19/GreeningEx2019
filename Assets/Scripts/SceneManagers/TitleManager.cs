@@ -45,7 +45,7 @@ namespace GreeningEx2019
 
             if (GameParams.IsActionAndWaterButtonDown)
             {
-                SoundController.Play(SoundController.SeType.Click);
+                SoundController.Play(SoundController.SeType.Decision);
 
                 if (!IsContinue)
                 {
@@ -74,10 +74,12 @@ namespace GreeningEx2019
 
             if(Input.GetAxisRaw("Horizontal")>0)
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = true;
             }
             else if(Input.GetAxisRaw("Horizontal")<0)
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = false;
             }
         }

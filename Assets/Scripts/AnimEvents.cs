@@ -10,7 +10,7 @@ using UnityEngine.Events;
 public class AnimEvents : MonoBehaviour
 {
     [Tooltip("呼び出した時に実行するイベント"), SerializeField]
-    UnityEvent onCallFromAnimation;
+    UnityEvent onCallFromAnimation = null;
 
     public void Proc()
     {

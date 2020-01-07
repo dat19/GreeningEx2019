@@ -135,6 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8794700047554911688}
   - component: {fileID: 7937882301023864054}
+  - component: {fileID: 3669179022348427913}
   - component: {fileID: 7105358289731606287}
   m_Layer: 9
   m_Name: DandelionLittle
@@ -170,11 +171,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e79501a608422343ad756085cf27d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitGrowDone: 0
+  growSe: 6
+  state: 0
   fluffOffset: {x: 0, y: 0.5, z: 0}
   Fluff: {fileID: 8356661317230378195, guid: ac4890ffd9183f043843f4f5fa3ea07d, type: 3}
+  firstFluffTime: 1
   insTime: 2
   direction: {x: 1, y: 1}
   FluffLifeTime: 5
+--- !u!114 &3669179022348427913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2336821513848830333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618f5638057b55643a28eb4c3bcc6ab4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
+  offset: {x: 0.08, y: 0.5, z: 0}
+  heightFromGround: 0.5
+  naeMarkerData: {fileID: 11400000, guid: cdeaf7da1b2e5d74ba695c20df85a483, type: 2}
 --- !u!135 &7105358289731606287
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -186,7 +207,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.45
   m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &7702757606659715458
 GameObject:
@@ -273,6 +294,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4446158811706576259}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: f4dc28a6552d3c74d963039301a52ba8,
+        type: 3}
+      propertyPath: m_Name
+      value: stella_tannpopo_kuki_model
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f4dc28a6552d3c74d963039301a52ba8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -343,11 +369,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 16.666664
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: f4dc28a6552d3c74d963039301a52ba8,
-        type: 3}
-      propertyPath: m_Name
-      value: stella_tannpopo_kuki_model
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4dc28a6552d3c74d963039301a52ba8, type: 3}
 --- !u!4 &1356252614331840689 stripped
@@ -363,6 +384,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6958156383487943662}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 0450e6b33e32d7940aa2f395e5950378,
+        type: 3}
+      propertyPath: m_Name
+      value: stella_tannpopo_model
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0450e6b33e32d7940aa2f395e5950378,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -432,11 +458,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.6666665
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0450e6b33e32d7940aa2f395e5950378,
-        type: 3}
-      propertyPath: m_Name
-      value: stella_tannpopo_model
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0450e6b33e32d7940aa2f395e5950378, type: 3}

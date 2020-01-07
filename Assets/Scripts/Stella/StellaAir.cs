@@ -18,37 +18,51 @@ namespace GreeningEx2019
 
         public override void Init()
         {
+            base.Init();
             isLanding = false;
-            StellaMove.instance.SetAnimState(StellaMove.AnimType.Air);
+            StellaMove.SetAnimState(StellaMove.AnimType.Air);
         }
 
         public override void UpdateAction()
         {
+            // つた掴みチェック
+            if (StellaMove.CheckIvyHold())
+            {
+                return;
+            }
+
+            // 行動ボタンチェック。着地時は何もしない
+            if (Input.GetButton("Action") && !isLanding)
+            {
+                Actable act = StellaMove.ActionBoxInstance.GetActableInstance();
+                if (act != null)
+                {
+                    if (act.Action())
+                    {
+                        return;
+                    }
+                }
+            }
+
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
-            if (!isLanding && StellaMove.chrController.isGrounded)
+            if (!isLanding && StellaMove.chrController.isGrounded && StellaMove.myVelocity.y < 0f)
             {
+                SoundController.Play(SoundController.SeType.Landing);
+
                 StellaMove.myVelocity.x = 0;
                 StellaMove.RegisterAnimEvent(Grounded);
                 isLanding = true;
+                StellaMove.CheckStepOn();
             }
         }
 
         void Grounded()
         {
-            StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
             isLanding = false;
-        }
-
-        public override void OnTriggerEnter(Collider other)
-        {
-            if (!StageManager.CanMove) return;
-
-            if (other.CompareTag("DeadZone"))
-            {
-                StellaMove.instance.ChangeAction(StellaMove.ActionType.Obore);
-            }
+            StellaMove.instance.ChangeAction(
+                StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
         }
     }
 }

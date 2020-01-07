@@ -8,7 +8,6 @@ namespace GreeningEx2019
     {
         Animator flowerAnim = null;
         FlowerBridge flowerBridge = null;
-        float dir = 1;
 
         protected new void Awake()
         {
@@ -19,11 +18,9 @@ namespace GreeningEx2019
 
         protected override void OnTriggerEnter(Collider other)
         {
-            if ((state == StateType.Nae) && other.CompareTag("Water"))
+            if (CanGrow(other))
             {
-                flowerBridge.PutFlower(StellaMove.ForwardVector.x);
-                state = StateType.Growing;
-                anim.SetTrigger("Grow");
+                flowerBridge.PutFlower(StellaMove.forwardVector.x);
                 flowerAnim.SetTrigger("Grow");
             }
         }

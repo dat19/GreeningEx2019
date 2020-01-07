@@ -21,6 +21,8 @@ namespace GreeningEx2019
         };
         [Tooltip("当たり判定用のオブジェクト"), SerializeField]
         GameObject waterTrigger = null;
+        [Tooltip("水まき効果音のループ秒数"), SerializeField]
+        float waterSeSeconds = 0.5f;
 
         enum StateType
         {
@@ -47,11 +49,14 @@ namespace GreeningEx2019
         int triggerIndex;
         float lastTriggerTime;
         float triggerEmitSeconds;
+        float lastSeTime;
 
         public override void Init()
         {
+            base.Init();
+
             state = StateType.Start;
-            StellaMove.instance.SetAnimState(StellaMove.AnimType.Water);
+            StellaMove.SetAnimState(StellaMove.AnimType.Water);
 
             // アニメからイベントが呼ばれた時に、StartAction()を実行するように登録する
             StellaMove.RegisterAnimEvent(StartAction);
@@ -76,10 +81,10 @@ namespace GreeningEx2019
 
             // じょうろの方向を設定
             // index: 左0 右1
-            int index = StellaMove.ForwardVector.x < 0 ? 0 : 1;
+            int index = StellaMove.forwardVector.x < 0 ? 0 : 1;
             StellaMove.ZyouroPivot.localEulerAngles = zyouroEular[index];
             StellaMove.ZyouroPivot.localPosition = zyouroPivotPosition[index];
-            StellaMove.ZyouroEmitter.forward = StellaMove.ForwardVector;
+            StellaMove.ZyouroEmitter.forward = StellaMove.forwardVector;
             StellaMove.ZyouroEmitter.parent = null;
         }
 
@@ -91,6 +96,7 @@ namespace GreeningEx2019
             state = StateType.Action;
             zyouroParticle.Play();
             lastTriggerTime = Time.time;
+            lastSeTime = Time.time - waterSeSeconds;
         }
 
         public override void UpdateAction()
@@ -99,6 +105,7 @@ namespace GreeningEx2019
             {
                 StellaMove.ZyouroEmitter.transform.position = StellaMove.ZyouroEmitterPosition.position;
 
+                // 水オブジェクトを生成
                 if (Time.time-lastTriggerTime >= triggerEmitSeconds)
                 {
                     lastTriggerTime = Time.time;
@@ -109,14 +116,58 @@ namespace GreeningEx2019
                     triggerIndex = (triggerIndex + 1) % triggerCount;
                 }
 
-                if (!Input.GetButton("Water"))
+                // 水まき終了チェック
+                if (!Input.GetButton("Water") && (Grow.WaitGrowCount <= 0))
                 {
                     // 水まき終了
                     state = StateType.End;
-                    StellaMove.instance.SetAnimState(StellaMove.AnimType.Walk);
+                    StellaMove.SetAnimState(StellaMove.AnimType.Walk);
                     StellaMove.RegisterAnimEvent(EndAction);
                     zyouroParticle.Stop();
+                    return;
                 }
+
+                // 効果音
+                if ((Time.time - lastSeTime) >= waterSeSeconds)
+                {
+                    lastSeTime = Time.time;
+                    SoundController.Play(SoundController.SeType.Water);
+                }
+
+                // 後ずさりチェック
+                float ofsy = StellaMove.chrController.height * 0.49f - StellaMove.chrController.radius;
+                int hitCount = Physics.CapsuleCastNonAlloc(
+                    StellaMove.chrController.bounds.center + Vector3.up * ofsy,
+                    StellaMove.chrController.bounds.center + Vector3.down * ofsy,
+                    StellaMove.chrController.radius,
+                    Vector3.down,
+                    hits,
+                    0,
+                    groundLayer);
+                for (int i=0;i<hitCount;i++)
+                {
+                    // 下げる
+                    float colx = hits[i].collider.bounds.extents.x;
+                    float dist = StellaMove.chrController.radius + colx + StellaMove.CollisionMargin;
+                    float target = hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
+                    float move = target - StellaMove.instance.transform.position.x;
+                    if (move * StellaMove.forwardVector.x >= 0f)
+                    {
+                        // 向いている方向には動かさない
+                        return;
+                    }
+                    StellaMove.myVelocity.x = move / Time.fixedDeltaTime;
+                    Vector3 lastPos = StellaMove.instance.transform.position;
+                    StellaMove.instance.Move();
+                    lastPos.x = StellaMove.instance.transform.position.x;
+                    StellaMove.instance.transform.position = lastPos;
+                    StellaMove.myVelocity.x = 0f;
+                }
+            }
+            else
+            {
+                StellaMove.instance.Gravity();
+                StellaMove.instance.Move();
             }
         }
 

@@ -8,6 +8,8 @@ TagManager:
   - Nae
   - Ground
   - DeadZone
+  - Action
+  - Grow
   layers:
   - Default
   - TransparentFX
@@ -23,8 +25,8 @@ TagManager:
   - MapCollision
   - MapTrigger
   - Jump
-  - 
-  - 
+  - Action
+  - WaterUnder
   - 
   - 
   - 

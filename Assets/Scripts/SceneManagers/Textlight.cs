@@ -7,7 +7,7 @@ namespace GreeningEx2019 {
     public class Textlight : MonoBehaviour
     {
         [SerializeField]
-        bool ison;
+        bool ison = false;
 
         private float num = Mathf.PI;
         Material myMaterial = null;

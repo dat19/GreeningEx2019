@@ -34,7 +34,27 @@ namespace GreeningEx2019
         [SerializeField]
         public enum SeType
         {
-            Click,
+            Decision,       // 0
+            MushroomJump,   // 1
+            Obore,          // 2
+            CanClear,       // 3
+            GrowIvy,        // 4
+            GrowMushroom,   // 5
+            GrowDandelion,  // 6
+            Landing,        // 7
+            OpenMenu,       // 8
+            //
+            MoveCursor,     // 9
+            GrowFlowers,    // 10
+            RollingStone,   // 11
+            WalkOnFlower,   // 12
+            SpawnFluff,     // 13
+            MiniJump,       // 14
+            GrowRock,       // 15
+            Water,          // 16
+            LiftUp,         // 17
+            PutDown,        // 18
+            RockWater,      // 19
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;
@@ -45,6 +65,11 @@ namespace GreeningEx2019
         public enum BgmType
         {
             Title,
+            StageSelect,
+            Game0,
+            Game1,
+            Game2,
+            Clear,
         }
         [Tooltip("BGMリスト"), SerializeField]
         private AudioClip[] bgmList = null;

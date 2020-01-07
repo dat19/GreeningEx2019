@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2597785368449157421}
+  - component: {fileID: 1435105969831904022}
   - component: {fileID: 2597785368449157420}
+  - component: {fileID: 3645634092403048399}
   m_Layer: 10
   m_Name: Goal
   m_TagString: Finish
@@ -32,6 +34,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1435105969831904022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2597785368449157422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b886abfb7d854f04186a06d2e97e5200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materials:
+  - {fileID: 2100000, guid: 197eb724c590e1c448787654649f8eb5, type: 2}
+  - {fileID: 2100000, guid: 715038f44246d0941ad43f0446e5daff, type: 2}
+  - {fileID: 2100000, guid: bfcd99bc3d024fd49be1884b0a2d1d32, type: 2}
+  changeColorSeconds: 1
 --- !u!135 &2597785368449157420
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -41,10 +60,29 @@ SphereCollider:
   m_GameObject: {fileID: 2597785368449157422}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &3645634092403048399
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2597785368449157422}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e170b032724ea894098921431c8c34cd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2597785367140928156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112,6 +150,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: e0da6d21be85723428304ec696f94ff2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ca41e3aceb52fc74080a3ae4dd69b845, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0da6d21be85723428304ec696f94ff2, type: 3}
 --- !u!4 &7023228145326956934 stripped

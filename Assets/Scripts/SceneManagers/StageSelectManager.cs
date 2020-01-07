@@ -7,6 +7,7 @@ namespace GreeningEx2019
 {
     public class StageSelectManager : SceneManagerBase
     {
+        #pragma warning disable 0414
         [Tooltip("島のオブジェクト"), SerializeField]
         Transform[] islands = null;
         [Tooltip("ステージの星を表示する高さ"), SerializeField]
@@ -88,6 +89,7 @@ namespace GreeningEx2019
 
         public override void OnFadeOutDone()
         {
+            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
         }
@@ -98,16 +100,19 @@ namespace GreeningEx2019
             float cursor = Input.GetAxisRaw("Horizontal") + Input.GetAxisRaw("Vertical");
             if ((cursor < -0.5f) && (lastCursor > -0.5f))
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.PrevSelectStage();
             }
             else if ((cursor > 0.5f) && (lastCursor < 0.5f))
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
                 GameParams.NextSelectStage();
             }
             lastCursor = cursor;
 
             if (GameParams.IsActionAndWaterButtonDown)
             {
+                SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
         }

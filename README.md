@@ -1,4 +1,9 @@
 # GreeningEx2019
+Greeningの2019年度EXプロジェクト開発用のリポジトリーです。
+
+- [ステージの作り方](Documents/HowToEditStage.md)
+
+## 開発資料
  Greeningの2019年度生の改良プロジェクト用リポジトリー
 
 - [プロジェクトの準備](Documents/Setup.md)
@@ -10,6 +15,9 @@
 - [プレイヤーの行動を開発する](Documents/PlayerAction.md)
 - [花の橋](Documents/FlowerBridge.md)
 - [溺れ](Documents/Obore.md)
+- [クリア](Documents/Clear.md)
+- [苗を持ち上げる](Documents/NaeLift.md)
+- [ミニジャンプの改良](Documents/MiniJump2.md)
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/

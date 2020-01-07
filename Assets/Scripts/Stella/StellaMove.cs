@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#define DEBUG_GUI
+
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace GreeningEx2019
@@ -16,12 +18,8 @@ namespace GreeningEx2019
     {
         public static StellaMove instance = null;
 
-        [Tooltip("移動速度(秒速)"), SerializeField]
-        float moveSpeed = 3.5f;
         [Tooltip("重力加速度(速度/秒)"), SerializeField]
         float gravityAdd = 20f;
-        [Tooltip("ステラの横向きの角度"), SerializeField]
-        float rotateY = 40f;
         [Tooltip("ステラの各状態を制御するためのStellaActionアセット。Create > Greening > StellaActionsから、必要なものを作成"), SerializeField]
         StellaActionScriptableObject[] stellaActionScriptableObjects = null;
         [Tooltip("歩く際のデフォルトの落下距離"), SerializeField]
@@ -30,18 +28,22 @@ namespace GreeningEx2019
         float miniJumpCheckX = 0.5f;
         [Tooltip("ミニジャンプで乗れる高さ"), SerializeField]
         float miniJumpHeight = 1.2f;
-        [Tooltip("ミニジャンプ時に、余分にジャンプする高さ"), SerializeField]
-        float miniJumpMargin = 0.25f;
+        [Tooltip("ミニジャンプ(飛び降り)最高速度"), SerializeField]
+        float miniJumpSpeedMax = 1.5f;
         [Tooltip("じょうろピボットオブジェクト"), SerializeField]
         Transform zyouroPivot = null;
         [Tooltip("じょうろの水のエミッターの位置"), SerializeField]
         Transform zyouroEmitterPosition = null;
         [Tooltip("じょうろの水のエミッター"), SerializeField]
         Transform zyouroEmitter = null;
+        [Tooltip("左手Transform"), SerializeField]
+        Transform leftTransform = null;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
         bool isDebugMovable = false;
+        [Tooltip("GUISkin"), SerializeField]
+        GUISkin guiSkin = null;
 
         /// <summary>
         /// ステラの行動定義
@@ -54,14 +56,15 @@ namespace GreeningEx2019
             Air,      // 2落下、着地
             Jump,     // 3ジャンプまでのアニメ
             Water,    // 4水まき
-            Pickup,   // 5苗を持ち上げる
-            NaeMove,  // 6苗運び
-            Putdown,  // 7苗を置く
+            LiftUp,   // 5苗を持ち上げる
+            NaeWalk,  // 6苗運び
+            PutDown,  // 7苗を置く
             Ivy,      // 8ツタにつかまる
-            Watage,   // 9綿毛につかまる
+            Fluff,    // 9綿毛につかまる
             Tamanori, // 10岩にのる
             Obore,    // 11溺れ
-            Clear     // 12ステージクリア
+            MushroomJump,   // 12マッシュルームジャンプ
+            Clear     // 13ステージクリア
         }
 
         /// <summary>
@@ -77,7 +80,19 @@ namespace GreeningEx2019
             Obore,      // 5溺れ
             Ivy,        // 6ツタ
             Dandelion,  // 7綿毛に捕まる
-            Clear,      // 8クリア
+            LiftUp,     // 8持ち上げる
+            PutDown,    // 9下す
+            Clear,      // 10クリア
+        }
+
+        /// <summary>
+        /// AdjustWalkの結果の列挙子
+        /// </summary>
+        public enum AdjustWalkResult
+        {
+            Continue,   // 継続
+            Reach,      // 到着
+            Abort       // 引っかかったので中断
         }
 
         /// <summary>
@@ -86,9 +101,24 @@ namespace GreeningEx2019
         const int CollisionMax = 8;
 
         /// <summary>
+        /// 苗を置く時のオフセットX座標
+        /// </summary>
+        public const float NaePutDownOffsetX = 0.4f;
+
+        /// <summary>
+        /// 当たり判定を補正する際に間に入れるすきま
+        /// </summary>
+        public const float CollisionMargin = 0.01f;
+
+        /// <summary>
+        /// ミニジャンプ時に、余分にジャンプする高さ
+        /// </summary>
+        public const float MiniJumpMargin = 0.25f;
+
+        /// <summary>
         /// 前方を表すベクトル
         /// </summary>
-        public static Vector3 ForwardVector { get; private set; }
+        public static Vector3 forwardVector;
 
         /// <summary>
         /// 
@@ -101,6 +131,17 @@ namespace GreeningEx2019
         public static LayerMask MapCollisionLayerMask { get; private set; }
 
         /// <summary>
+        /// ミニジャンプの最高速。ミニジャンプで飛び乗る時の最高速度
+        /// </summary>
+        public static float MiniJumpSpeedMax
+        {
+            get
+            {
+                return instance.miniJumpSpeedMax;
+            }
+        }
+
+        /// <summary>
         /// 移動先を判定する厚さの半分
         /// </summary>
         Vector3 boxColliderHalfExtents = new Vector3(0.05f, 0, 1);
@@ -111,12 +152,72 @@ namespace GreeningEx2019
         public static Transform ZyouroEmitterPosition { get { return instance.zyouroEmitterPosition; } }
         public static Transform ZyouroEmitter { get { return instance.zyouroEmitter; } }
 
+        /// <summary>
+        /// 現在つかんでいるツタのインスタンス
+        /// </summary>
+        public static Ivy IvyInstance { get; private set; }
+
+        /// <summary>
+        /// 苗を保持する座標
+        /// </summary>
+        public static Vector3 HoldPosition
+        {
+            get
+            {
+                return (instance.zyouroPivot.position+instance.leftTransform.position) * 0.5f;
+            }
+        }
+
+        /// <summary>
+        /// ピボットのTransform
+        /// </summary>
+        public static Transform Pivot { get; private set; }
+
+        /// <summary>
+        /// アクション用判定インスタンス
+        /// </summary>
+        public static ActionBox ActionBoxInstance { get; private set; }
+
+        /// <summary>
+        /// アニメの再生時間を返します。
+        /// </summary>
+        public static float AnimTime
+        {
+            get
+            {
+                return anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            }
+        }
+
+        /// <summary>
+        /// 苗を持っている時、インスタンスを設定します。離したらnullにします。
+        /// </summary>
+        public static NaeActable naeActable = null;
+
+        /// <summary>
+        /// 苗を置く座標
+        /// </summary>
+        public static Vector3 naePutPosition;
+
+        /// <summary>
+        /// ジャンプ時の目的地面座標
+        /// </summary>        
+        public static Vector3 targetJumpGround = Vector3.zero;
+
+        /// <summary>
+        /// 現在の行動
+        /// </summary>
+        public static ActionType NowAction { get; private set; }
+
+        /// <summary>
+        /// ステップオンを有効にしたオブジェクト
+        /// </summary>
+        public static GameObject stepOnObject;
+
         static Animator anim;
-        static ActionType nowAction = ActionType.None;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
-        static Vector3 targetJumpGround = Vector3.zero;
         static int defaultLayer = 0;
         static int jumpLayer = 0;
         static ParticleSystem splashParticle = null;
@@ -127,13 +228,18 @@ namespace GreeningEx2019
             chrController = GetComponent<CharacterController>();
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
-            nowAction = ActionType.Walk;
+            NowAction = ActionType.Walk;
             MapCollisionLayerMask = LayerMask.GetMask("MapCollision");
             boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
-            ForwardVector = Vector3.right;
+            forwardVector = Vector3.right;
             splashParticle = transform.Find("Splash").GetComponent<ParticleSystem>();
+            splashParticle.transform.SetParent(null);
+            Pivot = transform.Find("Pivot");
+            ActionBoxInstance = GetComponentInChildren<ActionBox>();
+            naeActable = null;
+            ActionBoxInstance.Init();
         }
 
         void FixedUpdate()
@@ -146,8 +252,8 @@ namespace GreeningEx2019
 #if UNITY_EDITOR
             }
 #endif
-            
-            stellaActionScriptableObjects[(int)nowAction]?.UpdateAction();
+
+            stellaActionScriptableObjects[(int)NowAction]?.UpdateAction();
         }
 
         /// <summary>
@@ -162,7 +268,8 @@ namespace GreeningEx2019
             Vector3 move = myVelocity * Time.fixedDeltaTime;
             chrController.Move(move);
 
-            if (!chrController.isGrounded && (nowAction == ActionType.Walk))
+            if (!chrController.isGrounded 
+                && stellaActionScriptableObjects[(int)NowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
@@ -173,40 +280,12 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 歩いたり止まったりします。
-        /// </summary>
-        public void Walk()
-        {
-            // キーの入力を調べる
-            float h = Input.GetAxisRaw("Horizontal");
-
-            // 左右の移動速度(秒速)を求める
-            float vx = h * moveSpeed;
-
-            // 動かす
-            myVelocity.x = vx;
-
-            Vector3 e = transform.eulerAngles;
-            if (h < -0.5f)
-            {
-                e.y = rotateY;
-                ForwardVector = Vector3.left;
-            }
-            else if (h > 0.5f)
-            {
-                e.y = -rotateY;
-                ForwardVector = Vector3.right;
-            }
-            transform.eulerAngles = e;
-        }
-
-        /// <summary>
         /// 重力加速を処理します。
         /// </summary>
         public void Gravity()
         {
             // 落下
-            if (chrController.isGrounded)
+            if (chrController.isGrounded && myVelocity.y <= 0f)
             {
                 myVelocity.y = 0f;
             }
@@ -219,18 +298,22 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 移動先の高さをチェックして、必要ならミニジャンプします。
+        /// 移動先の高さをボックスコライダーでチェックして、必要ならミニジャンプします。
+        /// 移動していない時は、チェックしません。
         /// </summary>
         public void CheckMiniJump()
         {
+            Vector3 move = Vector3.zero;
+            move.x = Mathf.Sign(myVelocity.x);
+            if (Mathf.Approximately(move.x, 0f)) return;
+
             // 移動先に段差がないかを確認
             float startOffset = chrController.radius + boxColliderHalfExtents.x;
-            checkCenter = transform.position
-                + chrController.center
-                + ForwardVector * startOffset;
+            checkCenter = chrController.bounds.center
+                + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
 
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, ForwardVector, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
+            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
@@ -247,12 +330,26 @@ namespace GreeningEx2019
                 }
             }
 
-            if (h <= miniJumpHeight)
+            if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
                 targetJumpGround = raycastHits[hitIndex].transform.position;
                 targetJumpGround.y = chrController.bounds.min.y + h;
                 ChangeAction(ActionType.Jump);
             }
+        }
+
+        /// <summary>
+        /// 静止状態から指定の高さを落下するのにかかる秒数を返します。
+        /// この値にgravityAddをかけるとジャンプの初速が得られる。
+        /// </summary>
+        /// <param name="h">高さ</param>
+        /// <returns>指定の高さ落下するのにかかる秒数</returns>
+        public static float GetFallTime(float h)
+        {
+            // Y方向の初速を決める
+            // h = (g*t*t)/2;
+            // 2h/g  = t*t
+            return Mathf.Sqrt(2f * h / GravityAdd);
         }
 
         /// <summary>
@@ -263,18 +360,20 @@ namespace GreeningEx2019
             gameObject.layer = jumpLayer;
 
             // 目的の高さと、目的高さからの段差分を求める
-            float top = targetJumpGround.y + miniJumpMargin - chrController.bounds.min.y;
+            float top = targetJumpGround.y + MiniJumpMargin - chrController.bounds.min.y;
 
             // Y方向の初速を決める
             // h = (g*t*t)/2;
             // 2h/g  = t*t
-            float t = Mathf.Sqrt(2f * top / gravityAdd);
+            float t = GetFallTime(top);
             myVelocity.y = gravityAdd * (t - Time.fixedDeltaTime);
 
             // X方向の速度を決める
-            float total = top + miniJumpMargin;
+            float total = top + MiniJumpMargin;
             t = Mathf.Sqrt(2f * total / gravityAdd);
             myVelocity.x = (targetJumpGround.x - transform.position.x) / (t + Time.fixedDeltaTime);
+
+            SoundController.Play(SoundController.SeType.MiniJump);
 
             ChangeAction(ActionType.Air);
 
@@ -285,9 +384,38 @@ namespace GreeningEx2019
         /// アニメーターのStateを指定の状態にします。
         /// </summary>
         /// <param name="type">StellaMove.AnimTypeで指定</param>
-        public void SetAnimState(AnimType type)
+        public static void SetAnimState(AnimType type)
         {
             anim.SetInteger("State", (int)type);
+        }
+
+        /// <summary>
+        /// アニメに状態を設定
+        /// </summary>
+        /// <param name="key">パラメーター</param>
+        /// <param name="value">設定する値</param>
+        public static void SetAnimFloat(string key, float value)
+        {
+            anim.SetFloat(key, value);
+        }
+
+        /// <summary>
+        /// 指定のアニメのパラメーターのbool値を設定します。
+        /// </summary>
+        /// <param name="param">パラメーター名</param>
+        /// <param name="flag">設定したいbool値</param>
+        public static void SetAnimBool(string param, bool flag)
+        {
+            anim.SetBool(param, flag);
+        }
+
+        /// <summary>
+        /// 指定のトリガーを設定します。
+        /// </summary>
+        /// <param name="param"></param>
+        public static void SetAnimTrigger(string param)
+        {
+            anim.SetTrigger(param);
         }
 
         /// <summary>
@@ -297,7 +425,7 @@ namespace GreeningEx2019
         public void ChangeAction(ActionType type)
         {
             EndAction();
-            nowAction = type;
+            NowAction = type;
             stellaActionScriptableObjects[(int)type].Init();
         }
 
@@ -306,9 +434,9 @@ namespace GreeningEx2019
         /// </summary>
         public void EndAction()
         {
-            if (nowAction != ActionType.None)
+            if (NowAction != ActionType.None)
             {
-                stellaActionScriptableObjects[(int)nowAction].End();
+                stellaActionScriptableObjects[(int)NowAction].End();
             }
         }
 
@@ -335,26 +463,216 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 現在の場所で水しぶきを上げる
+        /// 指定の座標に水しぶきを発生させます。
         /// </summary>
-        public void Splash()
+        /// <param name="pos"></param>
+        public static void Splash(Vector3 pos)
         {
-            splashParticle.transform.position = new Vector3(chrController.bounds.center.x, chrController.bounds.min.y);
+            splashParticle.transform.position = pos;
             splashParticle.transform.forward = Vector3.up;
             splashParticle.Play();
         }
 
+        /// <summary>
+        /// 現在の場所で水しぶきを上げる
+        /// </summary>
+        public void Splash()
+        {
+            Splash(new Vector3(chrController.bounds.center.x, chrController.bounds.min.y));
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerEnter(other);
+            if (ClearCheck(other)) return;
+
+            if ((NowAction != ActionType.Obore) && other.CompareTag("DeadZone"))
+            {
+                ChangeAction(ActionType.Obore);
+                return;
+            }
+
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerEnter(other);
         }
+
         private void OnTriggerStay(Collider other)
         {
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerStay(other);
+            if (ClearCheck(other)) return;
+
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerStay(other);
         }
         private void OnTriggerExit(Collider other)
         {
-            stellaActionScriptableObjects[(int)nowAction]?.OnTriggerExit(other);
+            stellaActionScriptableObjects[(int)NowAction]?.OnTriggerExit(other);
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            stellaActionScriptableObjects[(int)NowAction]?.OnControllerColliderHit(hit);
+        }
+
+#if DEBUG_GUI
+        private void OnGUI()
+        {
+            GUI.Label(new Rect(30, 30, 1000, 50), $"Act={NowAction}", guiSkin.GetStyle("Label"));
+        }
+#endif
+
+        /// <summary>
+        /// クリアチェック。これ以降の処理が不要な場合、trueを返します。
+        /// </summary>
+        /// <returns>以降の当たり判定が不要な時、true</returns>
+        bool ClearCheck(Collider other)
+        {
+            if (!StageManager.CanMove) return true;
+
+            // クリアチェック
+            if (other.CompareTag("Finish"))
+            {
+                StageManager.StartClear();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 指定の座標に、向きをそのままで歩きます。到着したらtrueを返します。
+        /// </summary>
+        /// <param name="targetX">目的地X座標</param>
+        /// <param name="walkSpeed">歩き速度</param>
+        /// <returns>結果をAdjustWalkResultで返します。</returns>
+        public static AdjustWalkResult AdjustWalk(float targetX, float walkSpeed)
+        {
+            float dist = targetX - instance.transform.position.x;
+            float sign = Mathf.Sign(dist);
+            dist = Mathf.Abs(dist);
+            AdjustWalkResult reached = AdjustWalkResult.Continue;
+            float step = walkSpeed * Time.fixedDeltaTime;
+
+            if (dist <= step)
+            {
+                reached = AdjustWalkResult.Reach;
+                walkSpeed = dist * Time.fixedDeltaTime;
+                anim.SetBool("Back", false);
+            }
+            else
+            {
+                // 向きと移動方向が逆ならアニメをバックにする
+                anim.SetBool("Back", (sign * forwardVector.x) < -0.5f);
+            }
+
+            anim.SetFloat("VelX", walkSpeed);
+
+            myVelocity.x = walkSpeed * sign;
+            instance.Gravity();
+            float lastx = instance.transform.position.x;
+            instance.Move();
+
+            // 移動していないのでアボート
+            if ((reached != AdjustWalkResult.Reach)
+                && Mathf.Approximately(lastx, instance.transform.position.x))
+            {
+                return AdjustWalkResult.Abort;
+            }
+
+            return reached;
+        }
+
+        /// <summary>
+        /// 下にあるMapCollisionレイヤーのオブジェクトを返します。
+        /// </summary>
+        /// <returns>見つけたオブジェクト。オブジェクトがなければnull</returns>
+        public static int GetUnderMap(RaycastHit[] hits)
+        {
+            Vector3 origin = chrController.bounds.center;
+            return Physics.RaycastNonAlloc(origin, Vector3.down, hits, chrController.height * 0.5f + 0.1f, MapCollisionLayerMask); ;
+        }
+
+        /// <summary>
+        /// 足元のチェックをして、StepOnを呼び出します。
+        /// </summary>
+        public static void CheckStepOn()
+        {
+            int hcnt = GetUnderMap(raycastHits);
+            for (int i = 0; i < hcnt; i++)
+            {
+                IStepOn so = raycastHits[i].collider.GetComponent<IStepOn>();
+                if (so != null)
+                {
+                    so.StepOn();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 上下キーが押されていて、ツタと重なっていたら、そのツタのインスタンスを返します。
+        /// </summary>
+        /// <returns></returns>
+        public static bool CheckIvyHold()
+        {
+            float v = Input.GetAxisRaw("Vertical");
+
+            // 上下キーが押されていなければなし
+            if (Mathf.Approximately(v, 0f)) return false;
+
+            if (v < -0.5f)
+            {
+                // 下キーの時は、着地していたら移行無し
+                Vector3 foot = chrController.bounds.center;
+                foot.y = chrController.bounds.min.y;
+                GameObject go = PhysicsCaster.GetGround(foot, 0.1f);
+                if (go != null)
+                {
+                    return false;
+                }
+            }
+
+            IvyInstance = CheckIvyOverlap();
+            if (IvyInstance == null) return false;
+            if (IsIvyUp())
+            {
+                return IvyInstance.Hold();
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// ツタと重なっているかを確認します。重なっていたら、ツタのインスタンスを返します。
+        /// </summary>
+        /// <returns>見つけたツタのインスタンス。なければnull</returns>
+        static Ivy CheckIvyOverlap()
+        {
+            int hitCount = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, 0f, PhysicsCaster.MapLayer, QueryTriggerInteraction.Collide);
+            for (int i=0;i<hitCount;i++)
+            {
+                Ivy ivy = PhysicsCaster.hits[i].collider.GetComponent<Ivy>();
+                if (ivy != null) return ivy;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// ツタが手の上にあればtrueを返します。
+        /// </summary>
+        /// <returns>ツタが手の上にある時、true</returns>
+        public static bool IsIvyUp()
+        {
+            // 上にツタがあるか？
+            Vector3 origin = HoldPosition;
+            origin.x = IvyInstance.BoxColliderInstance.bounds.min.x - 0.05f;
+            origin.z = IvyInstance.transform.position.z;
+            int hitCount = PhysicsCaster.Raycast(origin, Vector3.right, 0.1f, PhysicsCaster.NaeLayer, QueryTriggerInteraction.Collide);
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (PhysicsCaster.hits[i].collider.GetComponent<Ivy>() != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

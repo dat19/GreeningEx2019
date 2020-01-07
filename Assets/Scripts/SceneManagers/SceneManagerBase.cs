@@ -37,12 +37,5 @@ namespace GreeningEx2019
         {
         }
 
-#if DEBUG
-        private void OnGUI()
-        {
-            GUI.Label(new Rect(20, 20, 100, 30), SceneChanger.NowScene.ToString());
-        }
-#endif
-
     }
 }
