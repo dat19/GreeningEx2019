@@ -40,8 +40,6 @@ namespace GreeningEx2019
         /// </summary>
         static float changeColorTime;
 
-        static int frameCount = 0;
-
         /// <summary>
         /// 設定済みの苗の数。同じだった場合は初期化は省く
         /// </summary>
@@ -73,8 +71,7 @@ namespace GreeningEx2019
 
         private void FixedUpdate()
         {
-            if ((frameCount == Time.frameCount) || (counter >= Grow.NaeGrowedCount)) return;
-            frameCount = Time.frameCount;
+            if (counter >= Grow.NaeGrowedCount) return;
 
             // 星の色を段階的に変化させる
             changeColorTime += Time.fixedDeltaTime;
