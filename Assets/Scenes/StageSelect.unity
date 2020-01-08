@@ -1554,6 +1554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2015810825}
+  - component: {fileID: 2015810826}
   m_Layer: 0
   m_Name: BaseStar
   m_TagString: Untagged
@@ -1577,6 +1578,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2015810826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015810824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16fb951bacb26140a9bb1d9df73f18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lerpRate: 0.05
+  islands:
+  - {fileID: 1358025282}
+  - {fileID: 1358025281}
+  - {fileID: 154460857}
+  - {fileID: 2084325292}
+  - {fileID: 1667147278815973680}
+  - {fileID: 7170663212194902376}
+  - {fileID: 5330209237272543170}
+  - {fileID: 3617319980158643921}
+  - {fileID: 4916154354817768545}
+  - {fileID: 2421042122779380588}
 --- !u!1 &2084325291
 GameObject:
   m_ObjectHideFlags: 0
@@ -28963,7 +28988,7 @@ MonoBehaviour:
   - {fileID: 6210156117758907002}
   - {fileID: 9070346297957124785}
   - {fileID: 8449956396068725540}
-  cleardStageNum: 0
+  clearedStageNum: 0
   albedoChangeSpeed: 0.025
 --- !u!4 &8302931390890194614
 Transform:
