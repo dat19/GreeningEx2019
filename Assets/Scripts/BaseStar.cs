@@ -35,6 +35,7 @@ namespace GreeningEx2019
                 {
                     go.GetComponentInChildren<Renderer>().material = starMaterial;
                 }
+                go.GetComponent<StageStar>().myStage = i;
             }
         }
 

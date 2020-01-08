@@ -2,17 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageStar : MonoBehaviour
+namespace GreeningEx2019
 {
-    // Start is called before the first frame update
-    void Start()
+    public class StageStar : MonoBehaviour
     {
-        
-    }
+        [Tooltip("回転速度"), SerializeField]
+        float angularVelocity = 90f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        /// <summary>
+        /// 担当するステージ。Stage1が0
+        /// </summary>
+        public int myStage = 0;
+
+        /// <summary>
+        /// Y軸の現在の値
+        /// </summary>
+        float rotateY = 0;
+
+        Camera mainCamera = null;
+
+        void Update()
+        {
+            if (myStage == GameParams.SelectedStage)
+            {
+                rotateY += Mathf.Repeat(angularVelocity * Time.deltaTime, 360f);
+            }
+            else
+            {
+                rotateY = 0f;
+            }
+
+            if (mainCamera ==null)
+            {
+                mainCamera = Camera.main;
+            }
+
+            Vector3 forward = Quaternion.Euler(0, rotateY, 0) * mainCamera.transform.forward;
+            transform.rotation = Quaternion.LookRotation(forward);
+        }
     }
 }
