@@ -32,3 +32,14 @@ BaseStarオブジェクトにBaseStarスクリプトをアタッチして制御�
 1. 求めた方向ベクトルと手前向きのベクトルVector3.backが、2の法線を軸として為す角度をVector3.SignedAngle()で求める
 1. BaseStarを中心に、求めた法線を軸として、2で求めた角度に減衰率を掛けた角度で、`Transform.RotateAround()`で回転させる
   - https://docs.unity3d.com/ja/2017.4/ScriptReference/Transform.RotateAround.html
+
+## クリア済みのステージの上空に星を表示する
+ステージ選択シーンのStart()で、クリア済みのステージの数だけ星をInstantiateして、BaseStarから既定の半径の位置に配置する。配置したら、BaseStarの子にする。
+
+- 未クリアステージでは、初期状態の星を表示
+- クリアしている場合、星を回転させる
+
+## ステージの星の向きを調整
+- StageStarにスクリプトを設定
+- 常に、カメラに相対させる
+- 選択中のステージの星は、Vector3.up軸で回転させる
