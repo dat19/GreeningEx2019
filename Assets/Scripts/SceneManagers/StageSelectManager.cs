@@ -8,11 +8,6 @@ namespace GreeningEx2019
 {
     public class StageSelectManager : SceneManagerBase
     {
-        #pragma warning disable 0414
-        [Tooltip("島のオブジェクト"), SerializeField]
-        Transform[] islands = null;
-        [Tooltip("ステージの星を表示する高さ"), SerializeField]
-        float stageStarHeight = 4.5f;
         [Tooltip("ステージテキスト"), SerializeField]
         TextMeshProUGUI stageText = null;
         [Tooltip("ステージ名"), SerializeField]
