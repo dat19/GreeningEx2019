@@ -98,6 +98,7 @@ namespace GreeningEx2019
             LiftUp,     // 8持ち上げる
             PutDown,    // 9下す
             Clear,      // 10クリア
+            ClearFly,   // 11クリアで飛んで行くアニメ
         }
 
         /// <summary>

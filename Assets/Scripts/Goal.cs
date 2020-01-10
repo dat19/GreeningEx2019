@@ -11,8 +11,10 @@ namespace GreeningEx2019
         Material[] materials = new Material[3];
         [Tooltip("苗の段階が上がる秒数"), SerializeField]
         float changeColorSeconds = 1f;
-        [Tooltip("クリア時に、星が目指す相対座標"), SerializeField]
-        float clearFlyX = 15f;
+        [Tooltip("クリア時に、星が飛び去る時の最高速度。負なら左、正なら右"), SerializeField]
+        float clearFlyX = 10f;
+        [Tooltip("クリア時の横移動の倍率"), SerializeField]
+        float clearFlyXRate = 1.5f;
 
         /// <summary>
         /// ステラが飛び乗るのを待つ場所へ移動するまでの秒数
@@ -26,6 +28,14 @@ namespace GreeningEx2019
             Completed,
         }
 
+        enum StateType
+        {
+            Standby,        // 待機
+            FollowStella,   // ステラのHoldPositionを基準に移動
+            FlyWait,        // 飛ぶ前のため
+            FlyStart,       // 加速
+        }
+
         /// <summary>
         /// クリア時に星が飛ぶときに移動するX方向のオフセット
         /// </summary>
@@ -34,6 +44,17 @@ namespace GreeningEx2019
             get
             {
                 return instance.clearFlyX;
+            }
+        }
+
+        /// <summary>
+        /// 星も出るの座標を返します。
+        /// </summary>
+        public static Vector3 StarPosition
+        {
+            get
+            {
+                return instance.transform.GetChild(0).transform.position;
             }
         }
 
@@ -74,6 +95,15 @@ namespace GreeningEx2019
         /// </summary>
         static Animator anim = null;
 
+        /// <summary>
+        /// 状態
+        /// </summary>
+        static StateType state;
+
+        /// <summary>
+        /// 前回のY座標
+        /// </summary>
+        static float lastY;
 
         private void Awake()
         {
@@ -86,9 +116,37 @@ namespace GreeningEx2019
             myCollider = GetComponent<Collider>();
             myCollider.enabled = false;
             anim = GetComponent<Animator>();
+            state = StateType.Standby;
         }
 
         private void FixedUpdate()
+        {
+            switch (state)
+            {
+                case StateType.Standby:
+                    updateStandby();
+                    break;
+
+                // ステラに星を合わせて動かす
+                case StateType.FollowStella:
+                    transform.position = StellaMove.HoldPosition - StellaClear.OffsetFromStar;
+                    break;
+
+                // 期待の速度に加速する
+                case StateType.FlyStart:
+                    float animTime = Mathf.Min(StellaMove.AnimTime, 1f);
+                    float diff = StarPosition.y - lastY;
+                    lastY = StarPosition.y;
+                    float move = Mathf.Min(diff * clearFlyXRate * animTime, Mathf.Abs(clearFlyX * Time.fixedDeltaTime));
+                    transform.Translate(move * StellaMove.forwardVector.x, 0, 0);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// ゴールの色を変化させます。
+        /// </summary>
+        void updateStandby()
         {
             if (counter >= Grow.NaeGrowedCount) return;
 
@@ -162,14 +220,6 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 飛び立つアニメを開始します。
-        /// </summary>
-        public static void FlyAnim()
-        {
-            anim.SetTrigger("Fly");
-        }
-
-        /// <summary>
         /// クリア処理をして、ステージ選択シーンへ移行します。
         /// 飛び立つアニメから、完了時に呼び出します。
         /// </summary>
@@ -177,6 +227,32 @@ namespace GreeningEx2019
         {
             GameParams.StageClear();
             SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
+        }
+
+        /// <summary>
+        /// ステラにぶら下がる
+        /// </summary>
+        public static void FollowStella()
+        {
+            state = StateType.FollowStella;
+        }
+
+        /// <summary>
+        /// 飛ぶためを実行
+        /// </summary>
+        public static void FlyWait()
+        {
+            anim.SetTrigger("Fly");
+            state = StateType.FlyWait;
+        }
+
+        /// <summary>
+        /// X方向に移動開始
+        /// </summary>
+        public void FlyStart()
+        {
+            state = StateType.FlyStart;
+            lastY = StarPosition.y;
         }
     }
 }

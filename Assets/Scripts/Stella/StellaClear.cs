@@ -12,16 +12,25 @@ namespace GreeningEx2019
             Turn,
             ToTarget,
             Wait,
-            Jump,
             HoldStar,
         }
 
-        StateType state;
+        static StateType state;
 
-        // ターン後の状態
+        /// <summary>
+        /// ターン後の状態
+        /// </summary>
         StateType afterTurnState;
 
+        /// <summary>
+        /// 歩く目的地X
+        /// </summary>
         float targetX;
+
+        /// <summary>
+        /// 星に捕まった時のHoldPositionからのオフセット座標
+        /// </summary>
+        public static Vector3 OffsetFromStar { get; private set; }
 
         /// <summary>
         /// 目的地を設定
@@ -89,9 +98,47 @@ namespace GreeningEx2019
                     }
                     break;
 
-                case StateType.Wait:
+                case StateType.HoldStar:
+                    Vector3 ofs = StellaMove.instance.transform.position - StellaMove.HoldPosition;
+                    StellaMove.instance.transform.position = Goal.StarPosition + OffsetFromStar + ofs;
                     break;
             }
+        }
+
+        /// <summary>
+        /// 星に捕まる
+        /// </summary>
+        public static void HoldStar()
+        {
+            StellaMove.RegisterAnimEvent(AttachStar);
+            // 左向きの時、true
+            Vector3 sc = Vector3.one;
+            sc.x = StellaMove.forwardVector.x;
+            StellaMove.instance.transform.GetChild(0).localScale = sc;
+            //StellaMove.SetAnimBool("Back", (StellaMove.forwardVector.x < -0.5f));
+            StellaMove.SetAnimState(StellaMove.AnimType.Clear);
+        }
+
+        /// <summary>
+        /// 星にぶら下がる。このアニメが完了するまでは、ステラに星をくっつける
+        /// </summary>
+        static void AttachStar()
+        {
+            OffsetFromStar = StellaMove.HoldPosition - Goal.StarPosition;
+            Goal.FollowStella();
+            StellaMove.RegisterAnimEvent(FlyAway);
+            state = StateType.Wait;
+        }
+
+        /// <summary>
+        /// 飛び立つ。ステラを星にくっつける
+        /// </summary>
+        static void FlyAway()
+        {
+            // 星が飛び立つ
+            Goal.FlyWait();
+            StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
+            state = StateType.HoldStar;
         }
     }
 }

@@ -532,22 +532,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca35af0a3aeb7504a8bfec447490cee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  islands:
-  - {fileID: 1358025282}
-  - {fileID: 1358025281}
-  - {fileID: 154460857}
-  - {fileID: 2084325292}
-  - {fileID: 1667147278815973680}
-  - {fileID: 7170663212194902376}
-  - {fileID: 5330209237272543170}
-  - {fileID: 3617319980158643921}
-  - {fileID: 4916154354817768545}
-  - {fileID: 2421042122779380588}
-  stageStarHeight: 5
   stageText: {fileID: 296751325}
   stageNames:
   - First Island
   - Second Island
+  - All Test Island
+  - Star Test
+  - All Test Island
+  - All Test Island
+  - All Test Island
+  - All Test Island
+  - All Test Island
   - All Test Island
 --- !u!1 &676486616
 GameObject:

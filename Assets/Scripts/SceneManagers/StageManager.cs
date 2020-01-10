@@ -122,15 +122,8 @@ namespace GreeningEx2019
             yield return Fade.StartFade(Fade.FadeStateType.In, clearFadeColor, ClearFadeSeconds);
             Fade.SetFadeColor(lastColor);
 
-            // ステラが星の所定の位置に移動して捕まる
-
-            Vector3 stellaTarget = Goal.instance.transform.position - StellaMove.instance.transform.position;
-
-            // ステラを星の子供にする
-            // 星が飛び立つ
-            Goal.FlyAnim();
-
-            // これ以降は、Goal側に実装
+            // ステラが飛び乗る
+            StellaClear.HoldStar();
         }
     }
 }
