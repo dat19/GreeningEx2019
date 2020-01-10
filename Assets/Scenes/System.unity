@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44971073, g: 0.49977767, b: 0.57563335, a: 1}
+  m_IndirectSpecularColor: {r: 0.450745, g: 0.5006876, b: 0.5748195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toStageSelect: 0
-  clearedStageCount: 2
+  clearedStageCount: 3
 --- !u!82 &190469380
 AudioSource:
   m_ObjectHideFlags: 0
