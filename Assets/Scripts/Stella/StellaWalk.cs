@@ -7,16 +7,6 @@ namespace GreeningEx2019
     [CreateAssetMenu(menuName = "Greening/Stella Actions/Create Walk", fileName = "StellaActionWalk")]
     public class StellaWalk : StellaActionScriptableObject
     {
-        [Tooltip("ステラの横向きの角度"), SerializeField]
-        float rotateY = 40f;
-        [Tooltip("方向転換秒数"), SerializeField]
-        float turnSeconds = 0.15f;
-
-        /// <summary>
-        /// 移動速度(秒速)
-        /// </summary>
-        public const float MoveSpeed = 3.5f;
-
         protected enum StateType
         {
             Walk,
@@ -38,7 +28,10 @@ namespace GreeningEx2019
             // ターン中処理
             if (state == StateType.Turn)
             {
-                Turn();
+                if (StellaMove.instance.Turn())
+                {
+                    state = StateType.Walk;
+                }
                 return;
             }
 
@@ -106,43 +99,14 @@ namespace GreeningEx2019
             {
                 state = StateType.Turn;
                 stateStartTime = Time.time - Time.fixedDeltaTime;
-                StellaMove.myVelocity.x = 0f;
-                Turn();
+                StellaMove.instance.StartTurn(-StellaMove.forwardVector.x);
                 return false;
             }
 
             // 左右の移動速度(秒速)を求める
-            StellaMove.myVelocity.x = h * MoveSpeed;
+            StellaMove.myVelocity.x = h * StellaMove.MoveSpeed;
 
             return true;
-        }
-
-        /// <summary>
-        /// ターン処理
-        /// </summary>
-        protected void Turn()
-        {
-            Vector3 e = StellaMove.Pivot.eulerAngles;
-            if (StellaMove.forwardVector.x > -0.5f)
-            {
-                e.y = rotateY;
-            }
-            else
-            {
-                e.y = -rotateY;
-            }
-
-            float delta = (Time.time - stateStartTime) / turnSeconds;
-
-            if (delta >= 1f)
-            {
-                delta = 1f;
-                StellaMove.forwardVector.x = -Mathf.Sign(e.y);
-                state = StateType.Walk;
-            }
-
-            e.y = Mathf.LerpAngle(-e.y, e.y, delta);
-            StellaMove.Pivot.eulerAngles = e;
         }
 
         /// <summary>

@@ -33,7 +33,7 @@ namespace GreeningEx2019
             float h = Input.GetAxisRaw("Horizontal");
 
             // 左右の移動速度(秒速)を求める
-            StellaMove.myVelocity.x = h * MoveSpeed;
+            StellaMove.myVelocity.x = h * StellaMove.MoveSpeed;
 
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();

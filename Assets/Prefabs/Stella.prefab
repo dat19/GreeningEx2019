@@ -400,7 +400,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c89b0a788cc78a42a9ac3de54ebe42e, type: 2}
   - {fileID: 11400000, guid: 81b0eafa9bb5c124696288ae449dfde1, type: 2}
   - {fileID: 11400000, guid: b1dadb7149ec8164abe15cb8a0000f3f, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 03add94b7768c914bbeb25939bd54c3f, type: 2}
   walkDownY: 0.1
   miniJumpCheckX: 0.5
   miniJumpHeight: 1.2
@@ -411,6 +411,7 @@ MonoBehaviour:
   leftTransform: {fileID: 6988236172730180146}
   isDebugMovable: 0
   guiSkin: {fileID: 11400000, guid: 08a00d7c313c0ba4983821e0c3a26507, type: 2}
+  RotateY: 40
 --- !u!1 &2392662632966794372
 GameObject:
   m_ObjectHideFlags: 0

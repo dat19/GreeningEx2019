@@ -46,6 +46,21 @@ namespace GreeningEx2019
         GUISkin guiSkin = null;
 
         /// <summary>
+        /// 移動速度(秒速)
+        /// </summary>
+        public const float MoveSpeed = 3.5f;
+
+        /// <summary>
+        /// ステラの横向きの角度
+        /// </summary>
+        public float RotateY = 40f;
+
+        /// <summary>
+        /// 方向転換秒数
+        /// </summary>
+        public const float TurnSeconds = 0.15f;
+
+        /// <summary>
         /// ステラの行動定義
         /// </summary>
         public enum ActionType
@@ -221,6 +236,16 @@ namespace GreeningEx2019
         static int defaultLayer = 0;
         static int jumpLayer = 0;
         static ParticleSystem splashParticle = null;
+        /// <summary>
+        /// ターンを開始してからの経過秒数
+        /// </summary>
+        static float turnTime = 0;
+
+        /// <summary>
+        /// ターンする方向。-1=左 / 1=右
+        /// </summary>
+        static float turnDirecory = 0;
+
 
         void Awake()
         {
@@ -523,7 +548,7 @@ namespace GreeningEx2019
         /// <returns>以降の当たり判定が不要な時、true</returns>
         bool ClearCheck(Collider other)
         {
-            if (!StageManager.CanMove) return true;
+            if (!StageManager.CanMove || StageManager.IsClearPlaying) return true;
 
             // クリアチェック
             if (other.CompareTag("Finish"))
@@ -672,6 +697,51 @@ namespace GreeningEx2019
                 }
             }
 
+            return false;
+        }
+
+        /// <summary>
+        /// ターンを開始する
+        /// </summary>
+        public void StartTurn(float dir)
+        {
+            turnTime = 0f;
+            turnDirecory = dir;
+            myVelocity.x = 0f;
+            Turn();
+        }
+
+        /// <summary>
+        /// ターン処理
+        /// </summary>
+        /// <returns>ターンが完了したらtrue</returns>
+        public bool Turn()
+        {
+            Vector3 e = StellaMove.Pivot.eulerAngles;
+
+            if (turnDirecory < -0.5f)
+            {
+                // 左を向く
+                e.y = RotateY;
+            }
+            else
+            {
+                // 右を向く
+                e.y = -RotateY;
+            }
+
+            turnTime += Time.fixedDeltaTime;
+            float delta = turnTime / TurnSeconds;
+
+            if (delta >= 1f)
+            {
+                delta = 1f;
+                StellaMove.forwardVector.x = -Mathf.Sign(e.y);
+                return true;
+            }
+
+            e.y = Mathf.LerpAngle(-e.y, e.y, delta);
+            StellaMove.Pivot.eulerAngles = e;
             return false;
         }
     }

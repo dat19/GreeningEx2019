@@ -19,10 +19,17 @@ namespace GreeningEx2019
         [Tooltip("クリア用マテリアル"), SerializeField]
         Material[] clearBGMaterials = new Material[3];
         [Tooltip("クリアテキスト"), SerializeField]
-        Animator clearText = null;            
+        Animator clearText = null;
 
         const float RollingSeconds = 0.8f;
         const float ClearFadeSeconds = 0.24f;
+
+        /// <summary>
+        /// クリアアニメをする際の、ゴールからステラへの相対座標。
+        /// ステラのX座標を星からの相対座標で求め、
+        /// 星の高さはステラのY座標からの相対座標で求める
+        /// </summary>
+        public static readonly Vector3 GoalToStellaOffset = new Vector3(-0.25f, -1.95f);
 
         /// <summary>
         /// クリア処理中の時、true
@@ -41,8 +48,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return !Fade.IsFading
-                    && !IsClearPlaying;
+                return !Fade.IsFading;
             }
         }
 
@@ -99,6 +105,7 @@ namespace GreeningEx2019
         {
             // クリア表示
             clearText.SetTrigger("Show");
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Clear);
 
             // 星を回転させる
             Goal.ClearAnim();
@@ -116,6 +123,9 @@ namespace GreeningEx2019
             Fade.SetFadeColor(lastColor);
 
             // ステラが星の所定の位置に移動して捕まる
+
+            Vector3 stellaTarget = Goal.instance.transform.position - StellaMove.instance.transform.position;
+
             // ステラを星の子供にする
             // 星が飛び立つ
             Goal.FlyAnim();

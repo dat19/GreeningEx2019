@@ -10,12 +10,25 @@ namespace GreeningEx2019
         Material[] materials = new Material[3];
         [Tooltip("苗の段階が上がる秒数"), SerializeField]
         float changeColorSeconds = 1f;
+        [Tooltip("クリア時に、星が目指す相対座標"), SerializeField]
+        float clearFlyX = 15f;
 
         enum MaterialIndex
         {
             First,
             Last,
             Completed,
+        }
+
+        /// <summary>
+        /// クリア時に星が飛ぶときに移動するX方向のオフセット
+        /// </summary>
+        public static float ClearFlyX
+        {
+            get
+            {
+                return instance.clearFlyX;
+            }
         }
 
         static Material myMaterial = null;

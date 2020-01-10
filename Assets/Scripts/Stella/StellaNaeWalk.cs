@@ -39,7 +39,10 @@ namespace GreeningEx2019
             // ターン中処理
             if (state == StateType.Turn)
             {
-                Turn();
+                if (StellaMove.instance.Turn())
+                {
+                    state = StateType.Walk;
+                }
                 return;
             }
 
