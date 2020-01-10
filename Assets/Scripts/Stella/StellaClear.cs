@@ -17,6 +17,10 @@ namespace GreeningEx2019
         }
 
         StateType state;
+
+        // ターン後の状態
+        StateType afterTurnState;
+
         float targetX;
 
         /// <summary>
@@ -36,6 +40,7 @@ namespace GreeningEx2019
             if ((dir * StellaMove.forwardVector.x) < 0f)
             {
                 StellaMove.instance.StartTurn(dir);
+                afterTurnState = StateType.ToTarget;
                 state = StateType.Turn;
             }
             else
@@ -57,7 +62,7 @@ namespace GreeningEx2019
                         // 方向を確認
                         if (StellaMove.instance.Turn())
                         {
-                            state = StateType.ToTarget;
+                            state = afterTurnState;
                         }
                     }
                     else
@@ -73,7 +78,18 @@ namespace GreeningEx2019
                     // 移動
                     if (StellaMove.AdjustWalk(targetX, StellaMove.MoveSpeed) == StellaMove.AdjustWalkResult.Reach) {
                         state = StateType.Wait;
+
+                        // 星が飛び去る方向と向きが逆の時、方向転換
+                        if (StellaMove.forwardVector.x * Mathf.Sign(Goal.ClearFlyX) < 0f)
+                        {
+                            StellaMove.instance.StartTurn(-StellaMove.forwardVector.x);
+                            afterTurnState = StateType.Wait;
+                            state = StateType.Turn;
+                        }
                     }
+                    break;
+
+                case StateType.Wait:
                     break;
             }
         }
