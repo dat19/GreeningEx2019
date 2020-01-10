@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace GreeningEx2019
 {
@@ -12,6 +13,11 @@ namespace GreeningEx2019
         float changeColorSeconds = 1f;
         [Tooltip("クリア時に、星が目指す相対座標"), SerializeField]
         float clearFlyX = 15f;
+
+        /// <summary>
+        /// ステラが飛び乗るのを待つ場所へ移動するまでの秒数
+        /// </summary>
+        const float ToStandbyPositionTime = 0.5f;
 
         enum MaterialIndex
         {
@@ -129,6 +135,30 @@ namespace GreeningEx2019
         public static void ClearAnim()
         {
             anim.SetTrigger("Rolling");
+            instance.StartCoroutine(MoveRollingStandbyPosition());
+        }
+
+        static IEnumerator MoveRollingStandbyPosition()
+        {
+            float time = 0f;
+            WaitForFixedUpdate wait = new WaitForFixedUpdate();
+            Vector3 pos = instance.transform.position;
+
+            while (time < ToStandbyPositionTime)
+            {
+                time += Time.fixedDeltaTime;
+
+                float y = StellaMove.instance.transform.position.y - StageManager.GoalToStellaOffset.y;
+                pos = instance.transform.position;
+                pos.y = Mathf.Lerp(pos.y, y, time / ToStandbyPositionTime);
+                instance.transform.position = pos;
+
+                yield return wait;
+            }
+
+            pos = instance.transform.position;
+            pos.y = StellaMove.instance.transform.position.y - StageManager.GoalToStellaOffset.y;
+            instance.transform.position = pos;
         }
 
         /// <summary>
