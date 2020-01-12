@@ -343,11 +343,27 @@ namespace GreeningEx2019
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
-            int hitIndex = 0;
-            float h = raycastHits[hitIndex].collider.bounds.max.y - footh;
+            int hitIndex = -1;
+            float h = float.NegativeInfinity;
 
-            for (int i = 1; i < hitCount; i++)
+            for (int i = 0; i < hitCount; i++)
             {
+                // ミニジャンプできないものは対象から外す
+                Actable []act = raycastHits[i].collider.GetComponents<Actable>();
+                if (act != null)
+                {
+                    bool cantMiniJump = false;
+                    for (int j=0;j<act.Length;j++)
+                    {
+                        if (!act[j].CanMiniJump)
+                        {
+                            cantMiniJump = true;
+                            break;
+                        }
+                    }
+                    if (cantMiniJump) continue;
+                }
+
                 float temph = raycastHits[i].collider.bounds.max.y - footh;
                 if (temph > h)
                 {
@@ -355,6 +371,8 @@ namespace GreeningEx2019
                     hitIndex = i;
                 }
             }
+
+            if (hitIndex == -1) return;
 
             if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {

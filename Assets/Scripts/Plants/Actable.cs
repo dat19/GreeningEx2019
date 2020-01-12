@@ -27,6 +27,14 @@ namespace GreeningEx2019
         public virtual bool CanAction { get; protected set; }
 
         /// <summary>
+        /// ミニジャンプが可能なら、trueを返します。
+        /// </summary>
+        public virtual bool CanMiniJump {
+            get { return true; }
+            protected set { }
+        }
+
+        /// <summary>
         /// 行動を実行します。
         /// </summary>
         /// <returns>アクションが有効だった時、true</returns>
