@@ -330,7 +330,7 @@ namespace GreeningEx2019
         public void CheckMiniJump()
         {
             Vector3 move = Vector3.zero;
-            move.x = Mathf.Sign(myVelocity.x);
+            move.x = Input.GetAxisRaw("Horizontal");
             if (Mathf.Approximately(move.x, 0f)) return;
 
             // 移動先に段差がないかを確認
@@ -338,7 +338,7 @@ namespace GreeningEx2019
             checkCenter = chrController.bounds.center
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
-
+            Debug.Log($"  check Direct={move}");
             int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
