@@ -118,11 +118,16 @@ namespace GreeningEx2019
         public static void StageClear()
         {
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
-            if (SelectedStage == ClearedStageCount-1)
+            if (SelectedStage == ClearedStageCount)
             {
                 Instance.clearedStageCount++;
+                SaveClearedStageCount();
+            }
 
-                // TODO: PlayerPrefsで、ClearedStageCountを保存
+            SelectedStage++;
+            if (SelectedStage >= StageCount)
+            {
+                SelectedStage = StageCount-1;
             }
         }
     }
