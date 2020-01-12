@@ -357,6 +357,7 @@ namespace GreeningEx2019
                     {
                         if (!act[j].CanMiniJump)
                         {
+                            Debug.Log($"  cant MiniJump {raycastHits[i].collider.name}");
                             cantMiniJump = true;
                             break;
                         }
@@ -374,6 +375,7 @@ namespace GreeningEx2019
 
             if (hitIndex == -1) return;
 
+            Debug.Log($"  h={h} > {chrController.stepOffset} and <= {miniJumpHeight}");
             if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
                 targetJumpGround = raycastHits[hitIndex].transform.position;
@@ -471,6 +473,14 @@ namespace GreeningEx2019
             EndAction();
             NowAction = type;
             stellaActionScriptableObjects[(int)type].Init();
+        }
+
+        /// <summary>
+        /// 苗を持っているなら苗歩き、そうでないなら歩きへ
+        /// </summary>
+        public void ChangeToWalk()
+        {
+            ChangeAction(naeActable != null ? ActionType.NaeWalk : ActionType.Walk);
         }
 
         /// <summary>

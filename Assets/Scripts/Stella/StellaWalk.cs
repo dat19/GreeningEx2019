@@ -126,7 +126,7 @@ namespace GreeningEx2019
             {
 #if UNITY_EDITOR
                 // 本来ないはずだが念のため
-                Debug.Log($"地面無し");
+                Debug.Log($"地面無し {cnt}");
 #endif
                 StellaMove.myVelocity.x = 0;
                 return;
