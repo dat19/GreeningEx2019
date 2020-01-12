@@ -11,10 +11,8 @@ namespace GreeningEx2019
         Material[] materials = new Material[3];
         [Tooltip("苗の段階が上がる秒数"), SerializeField]
         float changeColorSeconds = 1f;
-        [Tooltip("クリア時に、星が飛び去る時の最高速度。負なら左、正なら右"), SerializeField]
-        float clearFlyX = 10f;
-        [Tooltip("クリア時の横移動の倍率"), SerializeField]
-        float clearFlyXRate = 1.5f;
+        [Tooltip("クリア時に、星が飛び去る方向。-1なら左、1なら右"), SerializeField]
+        float clearFlyX = 1f;
 
         /// <summary>
         /// ステラが飛び乗るのを待つ場所へ移動するまでの秒数
@@ -37,7 +35,7 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// クリア時に星が飛ぶときに移動するX方向のオフセット
+        /// クリア時に星が飛ぶときの方向
         /// </summary>
         public static float ClearFlyX
         {
@@ -100,11 +98,6 @@ namespace GreeningEx2019
         /// </summary>
         static StateType state;
 
-        /// <summary>
-        /// 前回のY座標
-        /// </summary>
-        static float lastY;
-
         private void Awake()
         {
             instance = this;
@@ -132,13 +125,8 @@ namespace GreeningEx2019
                     transform.position = StellaMove.HoldPosition - StellaClear.OffsetFromStar;
                     break;
 
-                // 期待の速度に加速する
+                // 期待の速度に加速する。アニメでやるので処理は不要
                 case StateType.FlyStart:
-                    float animTime = Mathf.Min(StellaMove.AnimTime, 1f);
-                    float diff = StarPosition.y - lastY;
-                    lastY = StarPosition.y;
-                    float move = Mathf.Min(diff * clearFlyXRate * animTime, Mathf.Abs(clearFlyX * Time.fixedDeltaTime));
-                    transform.Translate(move * StellaMove.forwardVector.x, 0, 0);
                     break;
             }
         }
@@ -243,6 +231,9 @@ namespace GreeningEx2019
         public static void FlyWait()
         {
             anim.SetTrigger("Fly");
+            Vector3 sc = Vector3.one;
+            sc.x = Mathf.Sign(ClearFlyX);
+            instance.transform.localScale = sc;
             state = StateType.FlyWait;
         }
 
@@ -252,7 +243,6 @@ namespace GreeningEx2019
         public void FlyStart()
         {
             state = StateType.FlyStart;
-            lastY = StarPosition.y;
         }
     }
 }

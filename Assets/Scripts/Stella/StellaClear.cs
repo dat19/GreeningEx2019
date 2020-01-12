@@ -111,11 +111,10 @@ namespace GreeningEx2019
         public static void HoldStar()
         {
             StellaMove.RegisterAnimEvent(AttachStar);
-            // 左向きの時、true
+            // 左向きの時、Xを逆にする
             Vector3 sc = Vector3.one;
             sc.x = StellaMove.forwardVector.x;
             StellaMove.instance.transform.GetChild(0).localScale = sc;
-            //StellaMove.SetAnimBool("Back", (StellaMove.forwardVector.x < -0.5f));
             StellaMove.SetAnimState(StellaMove.AnimType.Clear);
         }
 
@@ -126,16 +125,16 @@ namespace GreeningEx2019
         {
             OffsetFromStar = StellaMove.HoldPosition - Goal.StarPosition;
             Goal.FollowStella();
-            StellaMove.RegisterAnimEvent(FlyAway);
+            StellaMove.RegisterAnimEvent(FollowStar);
             state = StateType.Wait;
         }
 
         /// <summary>
         /// 飛び立つ。ステラを星にくっつける
         /// </summary>
-        static void FlyAway()
+        static void FollowStar()
         {
-            // 星が飛び立つ
+            // 星が飛び立つ前段階
             Goal.FlyWait();
             StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
             state = StateType.HoldStar;

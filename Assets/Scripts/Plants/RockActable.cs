@@ -11,6 +11,11 @@ namespace GreeningEx2019 {
         float seSpanSeconds = 1f;
 
         /// <summary>
+        /// 苗の時だけ、ミニジャンプ可
+        /// </summary>
+        public override bool CanMiniJump { get { return GrowInstance.state == Grow.StateType.Nae; }}
+
+        /// <summary>
         /// ステラの速度より少し速く押して、ひっかかりをなくす
         /// </summary>
         const float PushRate = 1.1f;
@@ -34,7 +39,7 @@ namespace GreeningEx2019 {
         }
 
         /// <summary>
-        /// 生長後に有効になる
+        /// 生長後、かつ、ステラが着地時に動かせる
         /// </summary>
         public override bool CanAction
         {
