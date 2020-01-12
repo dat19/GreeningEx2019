@@ -136,7 +136,6 @@ namespace GreeningEx2019
         {
             // 星が飛び立つ前段階
             Goal.FlyWait();
-            StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
             state = StateType.HoldStar;
         }
     }
