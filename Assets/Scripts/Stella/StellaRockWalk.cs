@@ -18,6 +18,11 @@ namespace GreeningEx2019
         RockActable rockActable;
         SphereCollider rockCollider;
 
+        /// <summary>
+        /// 岩が足元にないことを確認するためにチェックする高さ。降りてないのに落ちてしまうなら、この値を増やす
+        /// </summary>
+        const float CheckFallHeight = 1f;
+
         public override void Init()
         {
             base.Init();
@@ -44,11 +49,33 @@ namespace GreeningEx2019
 
             if (!StellaMove.chrController.isGrounded)
             {
-                StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
-                FallNextBlock();
+                /// 下に岩があればセーフ
+                int hitCount = PhysicsCaster.CharacterControllerCast(
+                    StellaMove.chrController, Vector3.down, CheckFallHeight, PhysicsCaster.MapCollisionLayer);
+                bool isRock = false;
+                for (int i = 0; i < hitCount; i++)
+                {
+                    if (PhysicsCaster.hits[i].collider.GetComponent<RockActable>())
+                    {
+                        isRock = true;
+                        break;
+                    }
+                }
+
+                if (!isRock)
+                {
+                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+                    FallNextBlock();
+                }
             }
             else
             {
+                // 真下が岩以外なら、他の行動へ
+                if (NotOnRock())
+                {
+                    StellaMove.instance.ChangeToWalk();
+                }
+
                 // 岩に力を加える
                 if (lastRockObject != StellaMove.stepOnObject)
                 {
@@ -72,28 +99,71 @@ namespace GreeningEx2019
                     {
                         StellaMove.myVelocity.x = rockSpeed[0]*Mathf.Sign(dist);
                     }
-                    StellaMove.chrController.enabled = false;
-                    rockActable.PushAction();
 
-                    // ステラの座標を修正する
-                    Vector3 stellaMove = Vector3.zero;
-                    float moved = lastRockObject.transform.position.x - lastPos.x;
-                    float rad = moved / rockCollider.radius;
-                    stellaMove.Set(
-                        moved + Mathf.Sin(rad) * rockCollider.radius,
-                        -StellaMove.chrController.stepOffset, 0);
-                    StellaMove.chrController.enabled = true;
-                    StellaMove.chrController.Move(stellaMove);
+                    // ステラが移動できるか確認
+                    int hitCount = PhysicsCaster.CharacterControllerCast(
+                        StellaMove.chrController,
+                        StellaMove.myVelocity.x < 0f ? Vector3.left : Vector3.right,
+                        Mathf.Abs(StellaMove.myVelocity.x)*Time.fixedDeltaTime,
+                        PhysicsCaster.MapCollisionLayer);
+                    bool blocked = false;
+                    for (int i=0; i<hitCount;i++)
+                    {
+                        if (PhysicsCaster.hits[i].collider.gameObject != lastRockObject)
+                        {
+                            // ぶつかるなら玉乗りキャンセル
+                            StellaMove.myVelocity.x = 0f;
+                            blocked = true;
+                            break;
+                        }
+                    }
 
-                    // 足元に岩が無ければ飛び降りる
-                    if (!CheckGetOff()) {
-                        return;
+                    if (!blocked)
+                    {
+                        StellaMove.chrController.enabled = false;
+                        rockActable.PushAction();
+
+                        // ステラの座標を修正する
+                        Vector3 stellaMove = Vector3.zero;
+                        float moved = lastRockObject.transform.position.x - lastPos.x;
+                        float rad = moved / rockCollider.radius;
+                        stellaMove.Set(
+                            moved + Mathf.Sin(rad) * rockCollider.radius,
+                            -StellaMove.chrController.stepOffset, 0);
+                        StellaMove.chrController.enabled = true;
+                        StellaMove.chrController.Move(stellaMove);
+
+                        // 足元に岩が無ければ飛び降りる
+                        if (!CheckGetOff())
+                        {
+                            return;
+                        }
                     }
                 }
 
-                // 移動しているなら、ジャンプチェック
-                StellaMove.instance.CheckMiniJump();
+                // 操作していればジャンプチェック
+                if (!Mathf.Approximately(h, 0f))
+                {
+                    StellaMove.instance.CheckMiniJump();
+                }
             }
+        }
+
+        /// <summary>
+        /// 真下が岩以外なら、trueを返します、
+        /// </summary>
+        bool NotOnRock()
+        {
+            int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.chrController, Vector3.down, getOffDistance, PhysicsCaster.MapCollisionLayer);
+            for (int i=0;i<hitCount;i++)
+            {
+                if (PhysicsCaster.hits[i].collider.GetComponent<RockActable>())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

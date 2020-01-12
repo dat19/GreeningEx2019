@@ -39,14 +39,14 @@ namespace GreeningEx2019 {
         }
 
         /// <summary>
-        /// 生長後、かつ、ステラが着地時に動かせる
+        /// 生長後、かつ、ステラが着地時、かつ、岩が着地時に動かせる
         /// </summary>
         public override bool CanAction
         {
             get
             {
                 return (GrowInstance.state == Grow.StateType.Growed)
-                    &&  StellaMove.chrController.isGrounded;
+                    && StellaMove.chrController.isGrounded;
             }
             protected set => base.CanAction = value;
         }
@@ -77,7 +77,7 @@ namespace GreeningEx2019 {
 
         public override bool PushAction()
         {
-            if (!CanAction)
+            if (!CanAction || !chrController.isGrounded)
             {
                 return false;
             }

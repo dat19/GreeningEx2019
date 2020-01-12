@@ -330,7 +330,7 @@ namespace GreeningEx2019
         public void CheckMiniJump()
         {
             Vector3 move = Vector3.zero;
-            move.x = Mathf.Sign(myVelocity.x);
+            move.x = Input.GetAxisRaw("Horizontal");
             if (Mathf.Approximately(move.x, 0f)) return;
 
             // 移動先に段差がないかを確認
@@ -338,7 +338,7 @@ namespace GreeningEx2019
             checkCenter = chrController.bounds.center
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
-
+            Debug.Log($"  check Direct={move}");
             int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
@@ -357,6 +357,7 @@ namespace GreeningEx2019
                     {
                         if (!act[j].CanMiniJump)
                         {
+                            Debug.Log($"  cant MiniJump {raycastHits[i].collider.name}");
                             cantMiniJump = true;
                             break;
                         }
@@ -374,6 +375,7 @@ namespace GreeningEx2019
 
             if (hitIndex == -1) return;
 
+            Debug.Log($"  h={h} > {chrController.stepOffset} and <= {miniJumpHeight}");
             if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
                 targetJumpGround = raycastHits[hitIndex].transform.position;
@@ -471,6 +473,14 @@ namespace GreeningEx2019
             EndAction();
             NowAction = type;
             stellaActionScriptableObjects[(int)type].Init();
+        }
+
+        /// <summary>
+        /// 苗を持っているなら苗歩き、そうでないなら歩きへ
+        /// </summary>
+        public void ChangeToWalk()
+        {
+            ChangeAction(naeActable != null ? ActionType.NaeWalk : ActionType.Walk);
         }
 
         /// <summary>

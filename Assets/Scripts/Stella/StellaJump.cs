@@ -31,8 +31,9 @@ namespace GreeningEx2019
             if (!jumpAbort)
             {
                 // 中断チェック
-                if (    (((StellaMove.forwardVector.x < -0.5f) && (Input.GetAxisRaw("Horizontal") >= 0f))
-                    ||  ((StellaMove.forwardVector.x > 0.5f) && (Input.GetAxisRaw("Horizontal") <= 0f)))
+                float to = StellaMove.targetJumpGround.x - StellaMove.instance.transform.position.x;
+                if (    (((to < 0f) && (Input.GetAxisRaw("Horizontal") >= 0f))
+                    ||  ((to > 0f) && (Input.GetAxisRaw("Horizontal") <= 0f)))
                     &&  !Input.GetButton("Action"))
                 {
                     jumpAbort = true;
@@ -47,7 +48,7 @@ namespace GreeningEx2019
                     StellaMove.SetAnimFloat("JumpRev", 1f);
                     jumpAbort = false;
                     StellaMove.SetAnimState(StellaMove.AnimType.Walk);
-                    StellaMove.instance.ChangeAction(StellaMove.naeActable != null ? StellaMove.ActionType.NaeWalk : StellaMove.ActionType.Walk);
+                    StellaMove.instance.ChangeToWalk();
                 }
             }
         }

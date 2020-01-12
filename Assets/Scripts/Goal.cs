@@ -243,6 +243,7 @@ namespace GreeningEx2019
         public void FlyStart()
         {
             state = StateType.FlyStart;
+            StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
         }
     }
 }
