@@ -283,6 +283,11 @@ namespace GreeningEx2019
             stellaActionScriptableObjects[(int)NowAction]?.UpdateAction();
         }
 
+        private void LateUpdate()
+        {
+            stellaActionScriptableObjects[(int)NowAction]?.LateUpdate();
+        }
+
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
         /// </summary>
