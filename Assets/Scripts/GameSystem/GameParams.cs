@@ -35,6 +35,11 @@ namespace GreeningEx2019
         /// </summary>
         public static int SelectedStage { get; private set; }
 
+        /// <summary>
+        /// 今クリアしたステージ。0=Stage1
+        /// </summary>
+        public static int NowClearStage { get; private set; }
+
         public static bool IsActionAndWaterButtonDown {
             get {
                 return Input.GetButtonDown("Action") || Input.GetButtonDown("Water");
@@ -59,6 +64,9 @@ namespace GreeningEx2019
         public static void SetNewGame()
         {
             SelectedStage = 0;
+            Instance.clearedStageCount = 0;
+            SaveClearedStageCount();
+            Instance.toStageSelect = StageSelectManager.ToStageSelectType.NewGame;
         }
 
         /// <summary>
@@ -82,6 +90,8 @@ namespace GreeningEx2019
         /// </summary>
         public static void SetContinue()
         {
+            Instance.toStageSelect = StageSelectManager.ToStageSelectType.Back;
+
             if (ClearedStageCount >= StageCount)
             {
                 // クリア済みの時は最初のステージ
@@ -118,6 +128,7 @@ namespace GreeningEx2019
         public static void StageClear()
         {
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
+            NowClearStage = SelectedStage;
             if (SelectedStage == ClearedStageCount)
             {
                 Instance.clearedStageCount++;

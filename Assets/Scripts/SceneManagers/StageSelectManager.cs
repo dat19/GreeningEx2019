@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Video;
+using UnityEngine.UI;
 
 namespace GreeningEx2019
 {
@@ -24,6 +26,14 @@ namespace GreeningEx2019
             "No Name",
             "No Name",
         };
+        [Tooltip("動画ファイル"), SerializeField]
+        VideoClip[] videoClips = new VideoClip[3];
+        [Tooltip("動画フェード秒数"), SerializeField]
+        float videoFadeSeconds = 0.5f;
+        [Tooltip("動画を描画するRawImage"), SerializeField]
+        RawImage movieImage = null;
+        [Tooltip("ストーリー動画が始まるまで画面を隠しておくためのイメージ"), SerializeField]
+        Image movieFadeImage = null;
 
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
@@ -52,49 +62,75 @@ namespace GreeningEx2019
         enum StateType
         {
             OpeningMovie,
-            NewGame,
             PlayerControl,
             Clear,
             Back,
             StoryMovie,
+            ToTitle,
+        }
+
+        /// <summary>
+        /// ビデオの種類
+        /// </summary>
+        enum VideoType
+        {
+            Opening,
+            Stage5,
+            Ending,
         }
 
         /// <summary>
         /// 現在の状態
         /// </summary>
         static StateType state = StateType.OpeningMovie;
+        /// <summary>
+        /// 動画後に切り替える状態
+        /// </summary>
+        static StateType nextState;
 
         // リピートを防ぐための前のカーソル
         static float lastCursor = 0;
 
-        private void Update()
-        {
-            switch (state)
-            {
-                case StateType.PlayerControl:
-                    UpdatePlayerControl();
-                    break;
+        static VideoPlayer videoPlayer = null;
 
-                default:
-                    // デバッグコード。未実装の状態は、すぐに操作に移行
-                    if (Fade.IsFading) return;
-                    state = StateType.PlayerControl;
-                    break;
-            }
-        }
+        /// <summary>
+        /// 処理開始
+        /// </summary>
+        static bool isStarted = false;
 
         public override void OnFadeOutDone()
         {
+            isStarted = true;
+
             StarClean.StartClearedStage(GameParams.ClearedStageCount);
+
+            if (videoPlayer == null)
+            {
+                videoPlayer = GetComponent<VideoPlayer>();
+            }
 
             switch (GameParams.Instance.toStageSelect)
             {
                 case ToStageSelectType.NewGame:
-                    state = StateType.OpeningMovie;
+                    PlayVideo(VideoType.Opening);
+                    nextState = StateType.PlayerControl;
                     break;
                 case ToStageSelectType.Clear:
                     // 途中の動画チェック
-                    state = StateType.Clear;
+                    if (GameParams.NowClearStage == 4)
+                    {
+                        PlayVideo(VideoType.Stage5);
+                        nextState = StateType.PlayerControl;
+                    }
+                    else if (GameParams.NowClearStage == 9)
+                    {
+                        PlayVideo(VideoType.Ending);
+                        nextState = StateType.ToTitle;
+                    }
+                    else
+                    {
+                        state = StateType.Clear;
+                    }
                     break;
                 case ToStageSelectType.Back:
                     state = StateType.Back;
@@ -102,9 +138,86 @@ namespace GreeningEx2019
             }
 
             UpdateStageName();
-            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
+        }
+
+
+        private void Update()
+        {
+            if (!isStarted) { return; }
+
+            switch (state)
+            {
+                case StateType.PlayerControl:
+                    UpdatePlayerControl();
+                    break;
+
+                case StateType.StoryMovie:
+                    break;
+
+                default:
+                    // デバッグコード。未実装の状態は、すぐに操作に移行
+                    if (Fade.IsFading) return;
+                    state = StateType.PlayerControl;
+                    SoundController.PlayBGM(SoundController.BgmType.StageSelect);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// ビデオの再生を開始します。
+        /// </summary>
+        /// <param name="vtype">再生するビデオの種類</param>
+        void PlayVideo(VideoType vtype)
+        {
+            videoPlayer.enabled = true;
+            videoPlayer.clip = videoClips[(int)vtype];
+            videoPlayer.Play();
+            state = StateType.StoryMovie;
+            movieImage.enabled = true;
+            movieFadeImage.enabled = true;
+            StartCoroutine(storyMovie());
+        }
+
+        IEnumerator storyMovie()
+        {
+            // 動画開始を待つ
+            while (videoPlayer.time <= 0.0001f)
+            {
+                yield return null;
+            }
+
+            movieFadeImage.enabled = false;
+
+            // 動画終了を待つ
+            while (videoPlayer.isPlaying)
+            {
+                yield return null;
+            }
+
+            // タイトルへ戻る？
+            if (nextState== StateType.ToTitle)
+            {
+                SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
+                yield break;
+            }
+
+            // ビデオプレイヤーをフェードアウトさせる
+            float fadeTime = 0;
+            Color col = movieImage.color;
+            while (fadeTime < videoFadeSeconds)
+            {
+                fadeTime += Time.deltaTime;
+                float alpha = (1f - fadeTime / videoFadeSeconds);
+                col.a = alpha;
+                movieImage.color = col;
+                yield return null;
+            }
+
+            movieImage.enabled = false;
+            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
+            state = nextState;
         }
 
 
