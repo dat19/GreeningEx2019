@@ -97,11 +97,15 @@ namespace GreeningEx2019
                         }
                     }
                     break;
+            }
+        }
 
-                case StateType.HoldStar:
-                    Vector3 ofs = StellaMove.instance.transform.position - StellaMove.HoldPosition;
-                    StellaMove.instance.transform.position = Goal.StarPosition + OffsetFromStar + ofs;
-                    break;
+        public override void LateUpdate()
+        {
+            if (state == StateType.HoldStar)
+            {
+                Vector3 ofs = StellaMove.instance.transform.position - StellaMove.HoldPosition;
+                StellaMove.instance.transform.position = Goal.StarPosition + OffsetFromStar + ofs;
             }
         }
 

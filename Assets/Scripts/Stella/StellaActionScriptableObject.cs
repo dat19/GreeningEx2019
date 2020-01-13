@@ -38,6 +38,11 @@ namespace GreeningEx2019
         public virtual void UpdateAction() { }
 
         /// <summary>
+        /// カメラ直前の動作を実行する場合、このメソッドを上書きします。
+        /// </summary>
+        public virtual void LateUpdate() { }
+
+        /// <summary>
         /// 終了時に必要な処理があったら、overrideして実装します。
         /// </summary>
         public virtual void End()

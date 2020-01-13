@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: StellaActionRockWalk
   m_EditorClassIdentifier: 
   canStepDown: 1
-  rotateY: 40
-  turnSeconds: 0.15
   changeDistance: 0.2
   rockSpeed:
   - 0.5
