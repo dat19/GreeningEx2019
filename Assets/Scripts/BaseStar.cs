@@ -27,7 +27,7 @@ namespace GreeningEx2019
             }
             for (int i = 0; i < count ; i++)
             {
-                Vector3 pos = islands[i].transform.localPosition.normalized * starRadius;
+                Vector3 pos = (islands[i].transform.position-transform.position).normalized * starRadius;
                 GameObject go = Instantiate<GameObject>(starPrefab, transform);
                 go.transform.localPosition = pos;
                 go.transform.up = pos.normalized;
