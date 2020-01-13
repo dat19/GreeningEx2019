@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define DEBUG_STELLA_POSITION
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,7 +43,9 @@ namespace GreeningEx2019
             StellaMove.myVelocity.x = h * StellaMove.MoveSpeed;
 
             StellaMove.instance.Gravity();
+            Log($"A: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} {StellaMove.myVelocity.x}, {StellaMove.myVelocity.y} rock={rockActable.transform.position.x}, {rockActable.transform.position.y}");
             StellaMove.instance.Move();
+            Log($"B: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} isGrounded={StellaMove.chrController.isGrounded}");
 
             // 逆再生設定
             bool back = h * StellaMove.forwardVector.x < -0.5f;
@@ -66,6 +70,7 @@ namespace GreeningEx2019
                 {
                     StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                     FallNextBlock();
+                    Log($"C: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                 }
             }
             else
@@ -74,15 +79,19 @@ namespace GreeningEx2019
                 if (NotOnRock())
                 {
                     StellaMove.instance.ChangeToWalk();
+                    Log($"D: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                 }
 
-                // 岩に力を加える
+                // 乗り換えチェック
                 if (lastRockObject != StellaMove.stepOnObject)
                 {
+                    Debug.Log($"  乗り換え");
                     lastRockObject = StellaMove.stepOnObject;
                     rockActable = lastRockObject.GetComponent<RockActable>();
                     rockCollider = lastRockObject.GetComponent<SphereCollider>();
                 }
+
+                // 岩に力を加える
                 if (rockActable != null)
                 {
                     Vector3 lastPos = lastRockObject.transform.position;
@@ -111,17 +120,19 @@ namespace GreeningEx2019
                     {
                         if (PhysicsCaster.hits[i].collider.gameObject != lastRockObject)
                         {
-                            // ぶつかるなら玉乗りキャンセル
+                            // ぶつかるなら移動キャンセル
                             StellaMove.myVelocity.x = 0f;
                             blocked = true;
                             break;
                         }
                     }
 
+                    // 岩を移動させる
                     if (!blocked)
                     {
                         StellaMove.chrController.enabled = false;
                         rockActable.PushAction();
+                        Log($"F: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
 
                         // ステラの座標を修正する
                         Vector3 stellaMove = Vector3.zero;
@@ -129,13 +140,21 @@ namespace GreeningEx2019
                         float rad = moved / rockCollider.radius;
                         stellaMove.Set(
                             moved + Mathf.Sin(rad) * rockCollider.radius,
-                            -StellaMove.chrController.stepOffset, 0);
+                            StellaMove.chrController.skinWidth * 1.5f,
+                            0f);
+                        Debug.Log($"  moved={moved}={lastRockObject.transform.position.x}-{lastPos.x} / rad={rad} / sin={Mathf.Sin(rad)} / rockrad={rockCollider.radius} / Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                         StellaMove.chrController.enabled = true;
                         StellaMove.chrController.Move(stellaMove);
+                        Debug.Log($"  moved2 Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
+                        // 着地
+                        stellaMove.Set(0, -StellaMove.chrController.stepOffset, 0);
+                        StellaMove.chrController.Move(stellaMove);
+                        Log($"G: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} move={stellaMove.x}, {stellaMove.y} isGrounded={StellaMove.chrController.isGrounded} / rock={rockActable.transform.position.x}, {rockActable.transform.position.y}");
 
                         // 足元に岩が無ければ飛び降りる
                         if (!CheckGetOff())
                         {
+                            Log($"H: {StellaMove.instance.transform.position}");
                             return;
                         }
                     }
@@ -145,6 +164,7 @@ namespace GreeningEx2019
                 if (!Mathf.Approximately(h, 0f))
                 {
                     StellaMove.instance.CheckMiniJump();
+                    Log($"I: {StellaMove.instance.transform.position}");
                 }
             }
         }
@@ -232,6 +252,12 @@ namespace GreeningEx2019
             float jumpt = StellaMove.GetFallTime(StellaMove.MiniJumpMargin);
             StellaMove.myVelocity.Set(offset * Mathf.Sign(dir) / t, jumpt * StellaMove.GravityAdd, 0f);
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_STELLA_POSITION")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }

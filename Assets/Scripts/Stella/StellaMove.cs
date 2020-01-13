@@ -338,7 +338,6 @@ namespace GreeningEx2019
             checkCenter = chrController.bounds.center
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
-            Debug.Log($"  check Direct={move}");
             int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
             if (hitCount == 0) return;
 
