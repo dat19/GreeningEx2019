@@ -679,8 +679,8 @@ namespace GreeningEx2019
                 // 下キーの時は、着地していたら移行無し
                 Vector3 foot = chrController.bounds.center;
                 foot.y = chrController.bounds.min.y;
-                GameObject go = PhysicsCaster.GetGround(foot, 0.1f);
-                if (go != null)
+                int goidx = PhysicsCaster.GetGround(foot, 0.1f);
+                if (goidx != -1)
                 {
                     return false;
                 }

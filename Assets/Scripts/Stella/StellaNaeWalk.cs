@@ -10,7 +10,9 @@ namespace GreeningEx2019
         [Tooltip("苗を置ける場所の単位距離"), SerializeField]
         float naeUnit = 1f;
         [Tooltip("苗を置ける下方向の高さ"), SerializeField]
-        float naePutHeight = 0.5f;
+        float naePutUnderHeight = 0.5f;
+        [Tooltip("苗を置ける上方向の高さ"), SerializeField]
+        float naePutTopHeight = 0.5f;
         [Tooltip("移動チェックの時の足元からの高さ"), SerializeField]
         float naeWalkCollideHeight = 1f;
 
@@ -27,7 +29,10 @@ namespace GreeningEx2019
         bool CheckPut(Vector3 pos)
         {
             // 置く先が、ステラの足元より一定以上低い場合は置けない
-            if (pos.y < (StellaMove.chrController.bounds.min.y-naePutHeight)) return false;
+            if (pos.y < (StellaMove.chrController.bounds.min.y-naePutUnderHeight)) return false;
+
+            // 置く先が、ステラの足元より一定以上高い場所は置けない
+            if (pos.y > (StellaMove.chrController.bounds.min.y + naePutTopHeight)) return false;
 
             // 重なっているオブジェクトを探査
             int hitCount = StellaMove.naeActable.FetchOverlapObjects(pos, hits, overlapLayer);
@@ -141,27 +146,16 @@ namespace GreeningEx2019
             }
 
             // 床の位置を調べる
-            naepos.y = StellaMove.chrController.bounds.min.y;
-            int hitCount = Physics.RaycastNonAlloc(naepos, Vector3.down, hits, float.PositiveInfinity, groundLayer);
-            if (hitCount ==0)
+            naepos.y = StellaMove.chrController.bounds.center.y;
+            int grobj = PhysicsCaster.GetGround(naepos, float.PositiveInfinity);
+            if (grobj == -1)
             {
                 // 置けない高さを設定
-                naepos.y -= naePutHeight * 2f;
+                naepos.y = (StellaMove.chrController.bounds.min.y - naePutUnderHeight * 2f);
                 return naepos;
             }
 
-            naepos.y = hits[0].collider.bounds.max.y;
-            for (int i = 1; i < hitCount; i++)
-            {
-                if (hits[i].collider.CompareTag(GroundTag))
-                {
-                    if (hits[i].collider.bounds.max.y > naepos.y)
-                    {
-                        naepos.y = hits[i].collider.bounds.max.y;
-                    }
-                }
-            }
-
+            naepos.y = PhysicsCaster.hits[grobj].collider.bounds.max.y;
             return naepos;
         }
     }

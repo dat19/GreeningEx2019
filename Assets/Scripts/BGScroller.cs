@@ -79,6 +79,7 @@ namespace GreeningEx2019
         {
             for (int i = 0; i < mats.Length;i++)
             {
+                mats[i].mainTextureOffset = bgObjects[i].material.mainTextureOffset;
                 bgObjects[i].material = mats[i];
             }
         }

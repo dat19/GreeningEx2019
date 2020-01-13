@@ -10,6 +10,7 @@ TagManager:
   - DeadZone
   - Action
   - Grow
+  - Rock
   layers:
   - Default
   - TransparentFX
