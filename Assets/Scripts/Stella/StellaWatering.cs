@@ -176,5 +176,15 @@ namespace GreeningEx2019
         {
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
         }
+
+        /// <summary>
+        /// 水まきを停止
+        /// </summary>
+        public override void End()
+        {
+            base.End();
+            StellaMove.RegisterAnimEvent(null);
+            zyouroParticle.Stop();
+        }
     }
 }
