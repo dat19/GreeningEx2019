@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 6c6c73b907d5f814bafe36539eeac9e6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.450745, g: 0.5006876, b: 0.5748195, a: 1}
+  m_IndirectSpecularColor: {r: 0.81418085, g: 0.9525241, b: 0.961322, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1021,7 +1021,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1067,8 +1067,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 5.4266877e-14, y: 1.1693432e-19, z: 1.3563156e-19,
-    w: 1.3563156e-19}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1079,13 +1078,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.3023675, y: -0.09958015, z: 0.031780075, w: 0.9474427}
+  m_LocalRotation: {x: 0.16689032, y: 0.13547958, z: -0.023157949, w: 0.97634864}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 35.4, y: -12, z: 0}
+  m_LocalEulerAnglesHint: {x: 19.4, y: 15.8, z: 0}
 --- !u!1 &767365141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2382,6 +2381,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 86315e2e03497e4498e4d2678f93fa9d,
         type: 2}
+    - target: {fileID: 745748505673920946, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748505986347016, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3653e50c2e208934ba3e52457bcb811c, type: 3}
 --- !u!20 &1973425838 stripped
