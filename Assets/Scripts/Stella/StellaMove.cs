@@ -1,4 +1,5 @@
 ﻿#define DEBUG_GUI
+//#define DEBUG_MINIJUMP
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -356,7 +357,7 @@ namespace GreeningEx2019
                     {
                         if (!act[j].CanMiniJump)
                         {
-                            Debug.Log($"  cant MiniJump {raycastHits[i].collider.name}");
+                            Log($"  cant MiniJump {raycastHits[i].collider.name}");
                             cantMiniJump = true;
                             break;
                         }
@@ -374,7 +375,7 @@ namespace GreeningEx2019
 
             if (hitIndex == -1) return;
 
-            Debug.Log($"  h={h} > {chrController.stepOffset} and <= {miniJumpHeight}");
+            Log($"  h={h} > {chrController.stepOffset} and <= {miniJumpHeight}");
             if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
                 targetJumpGround = raycastHits[hitIndex].transform.position;
@@ -771,6 +772,12 @@ namespace GreeningEx2019
             e.y = Mathf.LerpAngle(-e.y, e.y, delta);
             StellaMove.Pivot.eulerAngles = e;
             return false;
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_MINIJUMP")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }

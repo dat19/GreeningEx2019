@@ -1,4 +1,4 @@
-﻿#define DEBUG_STELLA_POSITION
+﻿//#define DEBUG_STELLA_POSITION
 
 using System.Collections;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ namespace GreeningEx2019
                 // 乗り換えチェック
                 if (lastRockObject != StellaMove.stepOnObject)
                 {
-                    Debug.Log($"  乗り換え");
+                    Log($"  乗り換え");
                     lastRockObject = StellaMove.stepOnObject;
                     rockActable = lastRockObject.GetComponent<RockActable>();
                     rockCollider = lastRockObject.GetComponent<SphereCollider>();
@@ -142,10 +142,10 @@ namespace GreeningEx2019
                             moved + Mathf.Sin(rad) * rockCollider.radius,
                             StellaMove.chrController.skinWidth * 1.5f,
                             0f);
-                        Debug.Log($"  moved={moved}={lastRockObject.transform.position.x}-{lastPos.x} / rad={rad} / sin={Mathf.Sin(rad)} / rockrad={rockCollider.radius} / Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
+                        Log($"  moved={moved}={lastRockObject.transform.position.x}-{lastPos.x} / rad={rad} / sin={Mathf.Sin(rad)} / rockrad={rockCollider.radius} / Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                         StellaMove.chrController.enabled = true;
                         StellaMove.chrController.Move(stellaMove);
-                        Debug.Log($"  moved2 Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
+                        Log($"  moved2 Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                         // 着地
                         stellaMove.Set(0, -StellaMove.chrController.stepOffset, 0);
                         StellaMove.chrController.Move(stellaMove);
