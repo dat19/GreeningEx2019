@@ -308,16 +308,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38b750e846e8a749b1b8c892a4d3803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTop: 35
-  cameraBottom: 3.5
+  cameraTop: 15
+  cameraBottom: 5
   bgTops:
   - 0.04
   - 0.04
-  - 0.4
+  - 0.1
   bgBottoms:
-  - -0.04
-  - -0.04
-  - -0.2
+  - -0.1
+  - -0.1
+  - -0.1
   bgObjects:
   - {fileID: 745748505986347021}
   - {fileID: 745748505673920948}
@@ -350,7 +350,7 @@ Camera:
   field of view: 20
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

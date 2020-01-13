@@ -3283,6 +3283,31 @@ PrefabInstance:
       propertyPath: m_Depth
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraTop
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraBottom
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottoms.Array.data[2]
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottoms.Array.data[0]
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: bgBottoms.Array.data[1]
+      value: -0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3653e50c2e208934ba3e52457bcb811c, type: 3}
 --- !u!4 &746066866370384445
