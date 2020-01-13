@@ -115,10 +115,10 @@ namespace GreeningEx2019 {
             // 生長中、地面のめり込みを防ぐ
             if (GrowInstance.state == Grow.StateType.Growing)
             {
-                GameObject go = PhysicsCaster.GetGround(chrController.bounds.center, chrController.bounds.extents.y);
-                if (go != null)
+                int goidx = PhysicsCaster.GetGround(chrController.bounds.center, chrController.bounds.extents.y);
+                if (goidx != -1)
                 {
-                    float targetY = go.GetComponent<Collider>().bounds.max.y + chrController.bounds.extents.y;
+                    float targetY = PhysicsCaster.hits[goidx].collider.bounds.max.y + chrController.bounds.extents.y;
                     if (transform.position.y < targetY)
                     {
                         transform.Translate(0, targetY - transform.position.y, 0);

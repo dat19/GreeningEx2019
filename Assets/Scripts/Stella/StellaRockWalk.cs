@@ -59,7 +59,7 @@ namespace GreeningEx2019
                 bool isRock = false;
                 for (int i = 0; i < hitCount; i++)
                 {
-                    if (PhysicsCaster.hits[i].collider.GetComponent<RockActable>())
+                    if (PhysicsCaster.hits[i].collider.CompareTag("Rock"))
                     {
                         isRock = true;
                         break;
@@ -177,7 +177,7 @@ namespace GreeningEx2019
             int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.chrController, Vector3.down, getOffDistance, PhysicsCaster.MapCollisionLayer);
             for (int i=0;i<hitCount;i++)
             {
-                if (PhysicsCaster.hits[i].collider.GetComponent<RockActable>())
+                if (PhysicsCaster.hits[i].collider.CompareTag("Rock"))
                 {
                     return false;
                 }

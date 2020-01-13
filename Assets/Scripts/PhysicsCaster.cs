@@ -40,19 +40,27 @@ namespace GreeningEx2019
         /// </summary>
         /// <param name="origin">調査開始座標</param>
         /// <param name="distance">チェックする距離</param>
-        /// <returns>地面のオブジェクト。何もなければnull</returns>
-        public static GameObject GetGround(Vector3 origin, float distance)
+        /// <returns>地面オブジェクトのhitsのインデックス。何もなければ-1</returns>
+        public static int GetGround(Vector3 origin, float distance)
         {
             int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, distance, MapCollisionLayer);
+            float top = float.NegativeInfinity;
+            int index = -1;
+
             for (int i = 0; i < hitCount; i++)
             {
                 if (hits[i].collider.CompareTag(GroundTag))
                 {
-                    return hits[i].collider.gameObject;
+                    float y = hits[i].collider.bounds.max.y;
+                    if (y > top)
+                    {
+                        top = y;
+                        index = i;
+                    }
                 }
             }
 
-            return null;
+            return index;
         }
 
         /// <summary>
