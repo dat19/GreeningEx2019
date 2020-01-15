@@ -1,4 +1,5 @@
 ﻿#define DEBUG_SPHERE    // メッシュの位置をSphereで示すデバッグ
+#define DEBUG_LOG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 海用テクスチャーの大きさ
         /// </summary>
-        const int SeaTextureSize = 16;
+        const int SeaTextureSize = 64;
         /// <summary>
         /// 島からの影響距離
         /// </summary>
@@ -60,20 +61,20 @@ namespace GreeningEx2019
             seaColors = seaTexture.GetPixels32();
 
             // GetUVのチェック
-            for (int i=0;i<1;i++)
+            for (int i=1;i<2;i++)
             {
-                for (int j=0;j<8;j++)
+                for (int j=6;j<7;j++)
                 {
-                    Vector3 dir = Quaternion.Euler(360f * (float)j / 8.0f, 360f * (float)i / 8.0f, 0) * Vector3.forward;
+                    Vector3 dir = Quaternion.Euler(360f * (float)(j-6) / 12.0f, 360f * (float)i / 12.0f, 0) * Vector3.forward;
                     Instantiate(debugSphere, dir * debugSphereRadius, Quaternion.identity, transform);
                     Vector2 uv = GetUV(dir);
                     int x = (int)((float)SeaTextureSize * uv.x);
                     x = Mathf.Min(x, SeaTextureSize - 1);
                     int y = (int)((float)SeaTextureSize * uv.y);
                     y = Mathf.Min(y, SeaTextureSize - 1);
-                    Debug.Log($"  {x}, {y} = ({y*SeaTextureSize+x} / {seaColors.Length})");
+                    Log($"  {x}, {y} = ({y*SeaTextureSize+x} / {seaColors.Length})");
                     seaColors[y * SeaTextureSize + x] = new Color32((byte)(255*j/8),(byte)(255*(8-j)/8),0,255);
-                    Debug.Log($"[{i}, {j}] {dir.x}, {dir.y}, {dir.z} / uv={uv.x}, {uv.y}");
+                    Log($"[{i}, {j}] {dir.x}, {dir.y}, {dir.z} / uv={uv.x}, {uv.y}");
                 }
             }
 
@@ -144,10 +145,12 @@ namespace GreeningEx2019
 
         void FixedUpdate()
         {
+            /*
             Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
             Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
             float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
             transform.RotateAround(transform.position, axis, angle * rotateRate);
+            */
         }
 
         /// <summary>
@@ -175,7 +178,7 @@ namespace GreeningEx2019
                     if (i == 0)
                     {
                         Instantiate(debugSphere, pos, Quaternion.identity, transform);
-                        Debug.Log($"  [{j}] pos={pos.x}, {pos.y}, {pos.z} / uv={uvs[i][j].x}, {uvs[i][j].y}");
+                        Log($"  [{j}] pos={pos.x}, {pos.y}, {pos.z} / uv={uvs[i][j].x}, {uvs[i][j].y}");
                     }
 #endif
                 }
@@ -227,8 +230,8 @@ namespace GreeningEx2019
             Vector2 uv = Vector2.zero;
 
             // 角度を測るときの中心のベクトル
-            Vector2 baseDir = new Vector2(dir.x, dir.z);
-            if (Mathf.Approximately(baseDir.magnitude, 0f))
+            Vector3 baseDir = new Vector3(dir.x, 0f, dir.z);
+            if (baseDir.magnitude < 0.0001f)
             {
                 // 真上
                 if (dir.y > 0f)
@@ -236,18 +239,44 @@ namespace GreeningEx2019
                     return Vector2.zero;
                 }
                 // 真下
-                return Vector2.one;
+                return Vector2.one*0.999f;
             }
 
             baseDir.Normalize();
 
             // u値は、右ベクトルとのなす角
-            uv.x = (Vector2.SignedAngle(Vector2.right, baseDir))/360f + (7f/16f);
+            float angle = Vector3.SignedAngle(Vector3.forward, baseDir, Vector3.up);
+            uv.x = -angle / 360f + (11f / 16f);
+            if (uv.x > 1f)
+            {
+                uv.x -= 1f;
+            }
+            Log($"  angle={angle} / uv.x={uv.x}");
 
             // v値は、baseDirと、dirのなす角
-            uv.y = (Vector2.SignedAngle(baseDir, dir)+180f)/360f;
+            float dot = Vector3.Dot(baseDir, dir.normalized);
+            if (Mathf.Approximately(dot, 1f))
+            {
+                // ほぼ1の時はベクトル一致なので、なす角は0
+                Log($"  zero");
+                uv.y = 0.5f;
+            }
+            else
+            {
+                angle = Vector3.Angle(baseDir, dir);
+                if (dir.y > 0f) { angle = -angle; }
+                Log($"  angle y={angle}");
+                uv.y = (-angle+90f) / 180f;
+                Log($"  baseDir={baseDir} / dir={dir} / uv.y={uv.y}");
+            }
 
             return uv;
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_LOG")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }
