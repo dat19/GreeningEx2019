@@ -1,4 +1,4 @@
-﻿#define DEBUG_SPHERE    // メッシュの位置をSphereで示すデバッグ
+﻿//#define DEBUG_SPHERE    // メッシュの位置をSphereで示すデバッグ
 #define DEBUG_LOG
 
 using System.Collections;
@@ -38,11 +38,11 @@ namespace GreeningEx2019
         /// <summary>
         /// 海用テクスチャーの大きさ
         /// </summary>
-        const int SeaTextureSize = 64;
+        const int SeaTextureSize = 128;
         /// <summary>
         /// 島からの影響距離
         /// </summary>
-        const float IslandDistance = 1f / 16f;
+        const float IslandDistance = 4f / 128f;
 
         /// <summary>
         /// 実際に海に貼り付けるテクスチャー
@@ -60,6 +60,7 @@ namespace GreeningEx2019
             seaTexture = new Texture2D(SeaTextureSize, SeaTextureSize, dirtySeaTexture.format, false);
             seaColors = seaTexture.GetPixels32();
 
+            /*
             // GetUVのチェック
             for (int i=1;i<2;i++)
             {
@@ -77,22 +78,19 @@ namespace GreeningEx2019
                     Log($"[{i}, {j}] {dir.x}, {dir.y}, {dir.z} / uv={uv.x}, {uv.y}");
                 }
             }
+            */
 
             // 1面クリア状態で試す
-            /*
-            float [] beforeRates = CalcCleanRate(1);
-            */
+            float [] beforeRates = CalcCleanRate(2);
 
             dirtyColors = dirtySeaTexture.GetPixels32();
             cleanColors = cleanSeaTexture.GetPixels32();
             dirtyColors[0].a = 0;
 
-            /*
             for (int i = 0; i < seaColors.Length; i++)
             {
                 seaColors[i] = Color32.Lerp(dirtyColors[0], cleanColors[0], Mathf.Clamp01(beforeRates[i]));
             }
-            */
             seaTexture.SetPixels32(seaColors);
             seaTexture.Apply();
             seaRenderer.material.mainTexture = seaTexture;
@@ -145,12 +143,10 @@ namespace GreeningEx2019
 
         void FixedUpdate()
         {
-            /*
             Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
             Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
             float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
             transform.RotateAround(transform.position, axis, angle * rotateRate);
-            */
         }
 
         /// <summary>

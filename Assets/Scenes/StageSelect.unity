@@ -2633,7 +2633,6 @@ MonoBehaviour:
   dirtySeaTexture: {fileID: 2800000, guid: 89765972c51e600489e87f78229af265, type: 3}
   cleanSeaTexture: {fileID: 2800000, guid: d7c02b5986345ab48bd8fc0165125378, type: 3}
   seaRenderer: {fileID: 2144171957990396300}
-  debugSphere: {fileID: 474745983}
 --- !u!1 &2084325291
 GameObject:
   m_ObjectHideFlags: 0
@@ -31655,7 +31654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &8296172669472632824
 GameObject:
   m_ObjectHideFlags: 0
