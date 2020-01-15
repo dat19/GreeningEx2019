@@ -23,7 +23,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 全ステージ数
         /// </summary>
-        public const int StageCount = 10;
+        public const int StageMax = 10;
 
         /// <summary>
         /// クリア済みステージ数の保存用キー
@@ -51,8 +51,8 @@ namespace GreeningEx2019
             LoadClearedStageCount();
             PhysicsCaster.Init();
 
-            SelectedStage = Mathf.Min(clearedStageCount, StageCount-1);
-            if (SelectedStage == StageCount - 1)
+            SelectedStage = Mathf.Min(clearedStageCount, StageMax-1);
+            if (SelectedStage == StageMax - 1)
             {
                 SelectedStage = 0;
             }
@@ -92,7 +92,7 @@ namespace GreeningEx2019
         {
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Back;
 
-            if (ClearedStageCount >= StageCount)
+            if (ClearedStageCount >= StageMax)
             {
                 // クリア済みの時は最初のステージ
                 SelectedStage = 0;
@@ -109,7 +109,7 @@ namespace GreeningEx2019
         /// </summary>
         public static void NextSelectStage()
         {
-            int div = Mathf.Min(StageCount, ClearedStageCount + 1);
+            int div = Mathf.Min(StageMax, ClearedStageCount + 1);
             SelectedStage = (SelectedStage + 1) % div;
         }
 
@@ -119,7 +119,7 @@ namespace GreeningEx2019
         public static void PrevSelectStage()
         {
             SelectedStage = (SelectedStage == 0) ? ClearedStageCount : SelectedStage-1;
-            SelectedStage = Mathf.Min(SelectedStage, StageCount - 1);
+            SelectedStage = Mathf.Min(SelectedStage, StageMax - 1);
         }
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace GreeningEx2019
             }
 
             SelectedStage++;
-            if (SelectedStage >= StageCount)
+            if (SelectedStage >= StageMax)
             {
-                SelectedStage = StageCount-1;
+                SelectedStage = StageMax-1;
             }
         }
     }

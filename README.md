@@ -19,6 +19,7 @@ Greeningの2019年度EXプロジェクト開発用のリポジトリーです。
 - [苗を持ち上げる](Documents/NaeLift.md)
 - [ミニジャンプの改良](Documents/MiniJump2.md)
 - [ステージ選択シーン](Documents/StageSelect.md)
+- [ステージ選択シーンの星の海の色変化](Documents/StarSea.md)
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/

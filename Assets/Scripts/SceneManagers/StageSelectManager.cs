@@ -177,10 +177,10 @@ namespace GreeningEx2019
             state = StateType.StoryMovie;
             movieImage.enabled = true;
             movieFadeImage.enabled = true;
-            StartCoroutine(storyMovie());
+            StartCoroutine(StoryMovie());
         }
 
-        IEnumerator storyMovie()
+        IEnumerator StoryMovie()
         {
             // 動画開始を待つ
             while (videoPlayer.time <= 0.0001f)
