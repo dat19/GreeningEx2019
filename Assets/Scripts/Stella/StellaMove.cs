@@ -45,6 +45,8 @@ namespace GreeningEx2019
         bool isDebugMovable = false;
         [Tooltip("GUISkin"), SerializeField]
         GUISkin guiSkin = null;
+        [Tooltip("現在の状態を表示する時、チェック。Pキーで切り替え可能"), SerializeField]
+        bool isDebugDisp = false;
 
         /// <summary>
         /// 移動速度(秒速)
@@ -287,6 +289,16 @@ namespace GreeningEx2019
         {
             stellaActionScriptableObjects[(int)NowAction]?.LateUpdate();
         }
+
+#if DEBUG_GUI
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                isDebugDisp = !isDebugDisp;
+            }
+        }
+#endif
 
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
@@ -572,7 +584,10 @@ namespace GreeningEx2019
 #if DEBUG_GUI
         private void OnGUI()
         {
-            GUI.Label(new Rect(30, 30, 1000, 50), $"Act={NowAction}", guiSkin.GetStyle("Label"));
+            if (isDebugDisp)
+            {
+                GUI.Label(new Rect(30, 30, 1000, 50), $"Act={NowAction}", guiSkin.GetStyle("Label"));
+            }
         }
 #endif
 
