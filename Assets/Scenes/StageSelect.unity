@@ -307,7 +307,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 6625}
+  m_AnchoredPosition: {x: 0, y: 3669}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &278754299
@@ -346,7 +346,7 @@ MonoBehaviour:
     \u30D7\u30EC\u30A4\u30E4\u30FC\u30A2\u30CB\u30E1\u8A2D\u5B9A\u30FB\u30BF\u30A4\u30C8\u30EB\u753B\u9762\u30FB\u6587\u5B57\u6F14\u51FA
     -\n\n\u9234\u6728\u771F\u8F1D\u3000\u4E26\u6728\u7FD4\u6C70\u3000\u91CE\u6CA2\u9F8D\u751F\n\n\n\n-
     \u305F\u3093\u307D\u307D\u30A2\u30CB\u30E1\u30FB\u30D7\u30ED\u30B0\u30E9\u30E0
-    -\n\n\u9AD8\u5CF6\u60A0\u826F\n\n\n\n- \u30D0\u30B0\u4FEE\u6B63 -\n\n\u6771\u6D77\u6797\u9065\u54C9\u3000\u524D\u7530\u5065\u592A\n\n\n\n-
+    -\n\n\u3046\u308F\n\n\n\n- \u30D0\u30B0\u4FEE\u6B63 -\n\n\u6771\u6D77\u6797\u9065\u54C9\u3000\u524D\u7530\u5065\u592A\n\n\n\n-
     \u9078\u66F2 -\n\n\u6771\u6D77\u6797\u9065\u54C9\n\n\n\n- \u305D\u306E\u4ED6\u3082\u308D\u3082\u308D
     -\n\n\u305F\u306A\u304B\u3086\u3046\n\n\n\n\n--- \u4F7F\u7528\u30A2\u30BB\u30C3\u30C8
     ---\n\n-- BGM --\n\n\u30CE\u30B9\u30BF\u30EB\u30B8\u30A2(\u7518\u8336)\n\nHaruichi\n\nH/MIX
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 278754299}
-    characterCount: 813
+    characterCount: 811
     spriteCount: 0
     spaceCount: 231
     wordCount: 134
