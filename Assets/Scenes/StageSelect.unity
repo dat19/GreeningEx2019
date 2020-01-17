@@ -2567,6 +2567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2015810825}
+  - component: {fileID: 2015810827}
   - component: {fileID: 2015810826}
   m_Layer: 0
   m_Name: BaseStar
@@ -2633,6 +2634,32 @@ MonoBehaviour:
   dirtySeaTexture: {fileID: 2800000, guid: 89765972c51e600489e87f78229af265, type: 3}
   cleanSeaTexture: {fileID: 2800000, guid: d7c02b5986345ab48bd8fc0165125378, type: 3}
   seaRenderer: {fileID: 2144171957990396300}
+--- !u!114 &2015810827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015810824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb58901d0c990a428e4e193e50fb289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshIslands:
+  - {fileID: 4775378786335143228}
+  - {fileID: 1170377102689902764}
+  - {fileID: 6944102989784274698}
+  - {fileID: 4289387719793042628}
+  - {fileID: 176798413875861610}
+  - {fileID: 2256703276092688918}
+  - {fileID: 8394997779656011984}
+  - {fileID: 5066520690251940796}
+  - {fileID: 8340087432603959872}
+  - {fileID: 1806438415484913852}
+  isRun: 0
+  seaSize: 128
+  islandDistance: 0.03125
 --- !u!1 &2084325291
 GameObject:
   m_ObjectHideFlags: 0
