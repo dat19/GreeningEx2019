@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define DEBUG_ENDING
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,6 +36,10 @@ namespace GreeningEx2019
         RawImage movieImage = null;
         [Tooltip("ストーリー動画が始まるまで画面を隠しておくためのイメージ"), SerializeField]
         Image movieFadeImage = null;
+        [Tooltip("クレジットロールアニメ"), SerializeField]
+        Animator creditAnim = null;
+        [Tooltip("クレジットアニメの高速"), SerializeField]
+        float CreditSpeedUp = 4f;
 
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
@@ -66,7 +72,7 @@ namespace GreeningEx2019
             Clear,
             Back,
             StoryMovie,
-            ToTitle,
+            CreditRoll,
         }
 
         /// <summary>
@@ -98,6 +104,8 @@ namespace GreeningEx2019
         /// </summary>
         static bool isStarted = false;
 
+        static bool isCreditRollDone = false;
+        
         public override void OnFadeOutDone()
         {
             isStarted = true;
@@ -108,6 +116,10 @@ namespace GreeningEx2019
             {
                 videoPlayer = GetComponent<VideoPlayer>();
             }
+
+#if DEBUG_ENDING
+            GameParams.Instance.toStageSelect = ToStageSelectType.Clear;
+#endif
 
             switch (GameParams.Instance.toStageSelect)
             {
@@ -125,12 +137,18 @@ namespace GreeningEx2019
                     else if (GameParams.NowClearStage == 9)
                     {
                         PlayVideo(VideoType.Ending);
-                        nextState = StateType.ToTitle;
+                        nextState = StateType.CreditRoll;
                     }
                     else
                     {
                         state = StateType.Clear;
                     }
+
+#if DEBUG_ENDING
+                    PlayVideo(VideoType.Ending);
+                    nextState = StateType.CreditRoll;
+#endif
+
                     break;
                 case ToStageSelectType.Back:
                     state = StateType.Back;
@@ -196,9 +214,10 @@ namespace GreeningEx2019
                 yield return null;
             }
 
-            // タイトルへ戻る？
-            if (nextState== StateType.ToTitle)
+            // クレジット再生
+            if (nextState == StateType.CreditRoll)
             {
+                yield return CreditRoll();
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
                 yield break;
             }
@@ -248,6 +267,41 @@ namespace GreeningEx2019
                 SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
             }
+        }
+
+        IEnumerator CreditRoll()
+        {
+            SoundController.PlayBGM(SoundController.BgmType.Ending);
+            creditAnim.SetTrigger("Start");
+
+            isCreditRollDone = false;
+            while (!isCreditRollDone)
+            {
+                if (GameParams.IsActionAndWaterButton)
+                {
+                    creditAnim.SetFloat("Speed", CreditSpeedUp);
+                }
+                else
+                {
+                    creditAnim.SetFloat("Speed", 1);
+                }
+
+                yield return null;
+            }
+
+            // キー待ち
+            while (!GameParams.IsActionAndWaterButtonDown)
+            {
+                yield return null;
+            }
+        }
+
+        /// <summary>
+        /// クレジットロールアニメが終わったら、アニメから呼び出します。
+        /// </summary>
+        public void CreditRollDone()
+        {
+            isCreditRollDone = true;
         }
 
         /// <summary>

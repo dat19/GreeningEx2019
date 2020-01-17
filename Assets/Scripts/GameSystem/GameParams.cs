@@ -46,6 +46,14 @@ namespace GreeningEx2019
             }
         }
 
+        public static bool IsActionAndWaterButton
+        {
+            get
+            {
+                return Input.GetButton("Action") || Input.GetButton("Water");
+            }
+        }
+
         private void Awake()
         {
             LoadClearedStageCount();
