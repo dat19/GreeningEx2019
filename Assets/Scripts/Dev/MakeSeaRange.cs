@@ -20,7 +20,7 @@ namespace GreeningEx2019
         {
             // 1面クリア状態で試す
             byte[] beforeRates = CalcCleanRate(0);
-            File.WriteAllBytes($"Output/{BaseStar.SeaTextureRatesFileName}", beforeRates);
+            File.WriteAllBytes($"Assets/Resources/{BaseStar.SeaTextureRatesFileName}.bytes", beforeRates);
         }
 
         /// <summary>

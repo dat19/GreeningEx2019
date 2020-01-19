@@ -34,6 +34,8 @@ namespace GreeningEx2019
         RawImage movieImage = null;
         [Tooltip("ストーリー動画が始まるまで画面を隠しておくためのイメージ"), SerializeField]
         Image movieFadeImage = null;
+        [Tooltip("星のインスタンス"), SerializeField]
+        BaseStar baseStar = null;
 
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
@@ -103,6 +105,7 @@ namespace GreeningEx2019
             isStarted = true;
 
             StarClean.StartClearedStage(GameParams.ClearedStageCount);
+            baseStar.MakeSeaTexture();
 
             if (videoPlayer == null)
             {

@@ -764,6 +764,7 @@ MonoBehaviour:
   videoFadeSeconds: 0.5
   movieImage: {fileID: 1160975145}
   movieFadeImage: {fileID: 2011787977}
+  baseStar: {fileID: 2015810826}
 --- !u!328 &382449290
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -2658,7 +2659,6 @@ MonoBehaviour:
   - {fileID: 8340087432603959872}
   - {fileID: 1806438415484913852}
   isRun: 0
-  seaSize: 128
   islandDistance: 0.03125
 --- !u!1 &2084325291
 GameObject:
@@ -31681,7 +31681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &8296172669472632824
 GameObject:
   m_ObjectHideFlags: 0

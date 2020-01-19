@@ -41,7 +41,7 @@ namespace GreeningEx2019
         /// </summary>
         public const int SeaTextureSize = 128;
 
-        public const string SeaTextureRatesFileName = "SeaTextureRates.bin";
+        public const string SeaTextureRatesFileName = "SeaTextureRates";
 
         /// <summary>
         /// 実際に海に貼り付けるテクスチャー
@@ -57,11 +57,43 @@ namespace GreeningEx2019
 
         private void Start()
         {
+            // ステージ上に星を生成
+            int count = Mathf.Min(GameParams.ClearedStageCount+1, GameParams.StageMax);
+            int st = GameParams.ClearedStageCount;
+            if (GameParams.ClearedStageCount == GameParams.StageMax)
+            {
+                st++;
+            }
+
+            for (int i = 0; i < count ; i++)
+            {
+                Vector3 pos = (islands[i].transform.position-transform.position).normalized * starRadius;
+                GameObject go = Instantiate<GameObject>(starPrefab, transform);
+                go.transform.localPosition = pos;
+                go.transform.up = pos.normalized;
+                if (i < st)
+                {
+                    go.GetComponentInChildren<Renderer>().material = starMaterial;
+                }
+                go.GetComponent<StageStar>().myStage = i;
+            }
+        }
+
+        void FixedUpdate()
+        {
+            Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
+            Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
+            float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
+            transform.RotateAround(transform.position, axis, angle * rotateRate);
+        }
+
+        public void MakeSeaTexture()
+        {
             // 実際に貼り付けるテクスチャーの作成
             seaTexture = new Texture2D(SeaTextureSize, SeaTextureSize, dirtySeaTexture.format, false);
             seaColors = seaTexture.GetPixels32();
 
-            TextAsset asset = Resources.Load("SeaTextureRatesFileName") as TextAsset;
+            TextAsset asset = Resources.Load(SeaTextureRatesFileName) as TextAsset;
             Stream s = new MemoryStream(asset.bytes);
             BinaryReader br = new BinaryReader(s);
             byte[] rates = br.ReadBytes((int)s.Length);
@@ -92,12 +124,13 @@ namespace GreeningEx2019
             cleanColors = cleanSeaTexture.GetPixels32();
             dirtyColors[0].a = 0;
 
+            Debug.Log($"  {dirtyColors[0]} / {cleanColors[0]}");
+
             for (int i = 0; i < seaColors.Length; i++)
             {
-                seaColors[i] = Color32.Lerp(
-                    dirtyColors[0],
-                    cleanColors[0],
-                    Mathf.Clamp01(((float)rates[i]))/256f);
+                float t = Mathf.Clamp01(((float)rates[i]) / 256f);
+                seaColors[i] = Color32.Lerp(dirtyColors[0], cleanColors[0], t);
+                Debug.Log($"  {i} {rates[i]} / {t} / col={seaColors[i]}");
             }
             seaTexture.SetPixels32(seaColors);
             seaTexture.Apply();
@@ -129,32 +162,6 @@ namespace GreeningEx2019
                         }
             */
 
-            int count = Mathf.Min(GameParams.ClearedStageCount+1, GameParams.StageMax);
-            int st = GameParams.ClearedStageCount;
-            if (GameParams.ClearedStageCount == GameParams.StageMax)
-            {
-                st++;
-            }
-            for (int i = 0; i < count ; i++)
-            {
-                Vector3 pos = (islands[i].transform.position-transform.position).normalized * starRadius;
-                GameObject go = Instantiate<GameObject>(starPrefab, transform);
-                go.transform.localPosition = pos;
-                go.transform.up = pos.normalized;
-                if (i < st)
-                {
-                    go.GetComponentInChildren<Renderer>().material = starMaterial;
-                }
-                go.GetComponent<StageStar>().myStage = i;
-            }
-        }
-
-        void FixedUpdate()
-        {
-            Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
-            Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
-            float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
-            transform.RotateAround(transform.position, axis, angle * rotateRate);
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]
