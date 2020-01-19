@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.IO.Compression;
 
 namespace GreeningEx2019
 {
@@ -136,6 +137,20 @@ namespace GreeningEx2019
         }
 #endif
 
+        static public byte[] Decompress(byte[] bytes)
+        {
+            using (var compressed = new MemoryStream(bytes))
+            {
+                using (var deflateStream = new DeflateStream(compressed, CompressionMode.Decompress))
+                {
+                    using (var decompressed = new MemoryStream())
+                    {
+                        deflateStream.CopyTo(decompressed);
+                        return decompressed.ToArray();
+                    }
+                }
+            }
+        }
         public void MakeSeaTexture()
         {
 #if DEBUG_CALC_SPHERE_POS
@@ -149,7 +164,7 @@ namespace GreeningEx2019
             TextAsset asset = Resources.Load(SeaTextureRatesFileName+"1") as TextAsset;
             Stream s = new MemoryStream(asset.bytes);
             BinaryReader br = new BinaryReader(s);
-            byte[] rates = br.ReadBytes((int)s.Length);
+            byte[] rates = Decompress( br.ReadBytes((int)s.Length));
 
             Log($"---- readed {rates.Length}");
 

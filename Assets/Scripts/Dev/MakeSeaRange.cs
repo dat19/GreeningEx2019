@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.IO.Compression;
 
 #if UNITY_EDITOR
 namespace GreeningEx2019
@@ -38,7 +39,16 @@ namespace GreeningEx2019
                 }
 
                 byte[] beforeRates = CalcCleanRate(i);
-                File.WriteAllBytes($"Assets/Resources/{BaseStar.SeaTextureRatesFileName}{i}.bytes", beforeRates);
+
+                using (var compressed = new MemoryStream())
+                {
+                    using (var deflateStream = new DeflateStream(compressed, CompressionMode.Compress))
+                    {
+                        deflateStream.Write(beforeRates, 0, beforeRates.Length);
+                    }
+
+                    File.WriteAllBytes($"Assets/Resources/{BaseStar.SeaTextureRatesFileName}{i}.bytes", compressed.ToArray());
+                }
             }
         }
 
