@@ -2570,6 +2570,7 @@ GameObject:
   - component: {fileID: 2015810825}
   - component: {fileID: 2015810827}
   - component: {fileID: 2015810826}
+  - component: {fileID: 2015810828}
   m_Layer: 0
   m_Name: BaseStar
   m_TagString: Untagged
@@ -2620,7 +2621,7 @@ MonoBehaviour:
   starPrefab: {fileID: 3179564481240332324, guid: d6da2a2760379154087ede4f1806fc41,
     type: 3}
   starRadius: 4.5
-  meshIslands:
+  dirtyIslands:
   - {fileID: 4775378786335143228}
   - {fileID: 1170377102689902764}
   - {fileID: 6944102989784274698}
@@ -2632,11 +2633,13 @@ MonoBehaviour:
   - {fileID: 8340087432603959872}
   - {fileID: 1806438415484913852}
   starMaterial: {fileID: 2100000, guid: bfcd99bc3d024fd49be1884b0a2d1d32, type: 2}
+  dirtyIslandMaterial: {fileID: 3803673867817328309, guid: 6a04974c29b2ff048a72af26d650453f,
+    type: 3}
+  cleanIslandMaterial: {fileID: 2100000, guid: 0013ee40de4adc64abc0642591cef020, type: 2}
   dirtySeaTexture: {fileID: 2800000, guid: 89765972c51e600489e87f78229af265, type: 3}
   cleanSeaTexture: {fileID: 2800000, guid: d7c02b5986345ab48bd8fc0165125378, type: 3}
   seaRenderer: {fileID: 2144171957990396300}
-  debugSphereRadius: 3.2
-  debugSphere: {fileID: 0}
+  islandUp: 0
 --- !u!114 &2015810827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2661,7 +2664,26 @@ MonoBehaviour:
   - {fileID: 8340087432603959872}
   - {fileID: 1806438415484913852}
   isRun: 0
-  islandDistance: 0.2
+  islandDistance: 0.1
+--- !u!95 &2015810828
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015810824}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 01093bc0980b7784da0ef988d3ae3149, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2084325291
 GameObject:
   m_ObjectHideFlags: 0
@@ -6983,7 +7005,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6121942863027622715}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8163093149895158295}
@@ -20742,7 +20764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4862375222631873208}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7931686369535070731}
@@ -24340,7 +24362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3545229358046172536}
   m_LocalRotation: {x: -0.40038562, y: 0.11341703, z: 0.22049646, w: 0.88216174}
-  m_LocalPosition: {x: -1.7547497, y: 1.8166827, z: -2.2503197}
+  m_LocalPosition: {x: -1.935, y: 1.443, z: -2.246}
   m_LocalScale: {x: 1.2529, y: 1.2529, z: 1.2529}
   m_Children: []
   m_Father: {fileID: 8097091065122315945}
