@@ -1,5 +1,6 @@
-﻿//#define DEBUG_SPHERE    // メッシュの位置をSphereで示すデバッグ
-#define DEBUG_LOG
+﻿#define DEBUG_SPHERE    // メッシュの位置をSphereで示すデバッグ
+//#define DEBUG_LOG
+//#define DEBUG_CALC_SPHERE_POS   // 球体の座標の算出コードのテスト
 
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace GreeningEx2019
         [Tooltip("海のレンダラー"), SerializeField]
         MeshRenderer seaRenderer = null;
 
-#if DEBUG_SPHERE
+#if DEBUG_SPHERE || DEBUG_CALC_SPHERE_POS
         [Tooltip("デバッグ用のSphereを置く半径"), SerializeField]
         float debugSphereRadius = 3.2f;
         [Tooltip("デバッグ用のSphere"), SerializeField]
@@ -54,6 +55,11 @@ namespace GreeningEx2019
         Color32[] cleanColors;
 
         byte[] seaTextureRates = null;
+
+#if DEBUG_CALC_SPHERE_POS
+        int debugX = 0;
+        int debugY = 0;
+#endif
 
         private void Start()
         {
@@ -81,24 +87,71 @@ namespace GreeningEx2019
 
         void FixedUpdate()
         {
+#if DEBUG_CALC_SPHERE_POS
+            return;
+#endif
             Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
             Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
             float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
             transform.RotateAround(transform.position, axis, angle * rotateRate);
         }
 
+#if DEBUG_CALC_SPHERE_POS
+        private void Update()
+        {
+            bool ctrl = Input.GetKey(KeyCode.LeftControl);
+            bool up = Input.GetKeyDown(KeyCode.UpArrow)
+                || (Input.GetKey(KeyCode.UpArrow) && ctrl);
+            bool down = Input.GetKeyDown(KeyCode.DownArrow)
+                || (Input.GetKey(KeyCode.DownArrow) && ctrl);
+            bool right = Input.GetKeyDown(KeyCode.RightArrow)
+                || (Input.GetKey(KeyCode.RightArrow) && ctrl);
+            bool left = Input.GetKeyDown(KeyCode.LeftArrow)
+                || (Input.GetKey(KeyCode.LeftArrow) && ctrl);
+
+            if (up)
+            {
+                debugY = debugY < 0 ? SeaTextureSize - 1 : debugY-1;
+            }else if (down)
+            {
+                debugY = debugY >= SeaTextureSize ? 0 : debugY + 1;
+            }
+            if (left)
+            {
+                debugX = debugX < 0 ? SeaTextureSize - 1 : debugX - 1;
+            }
+            else if (right)
+            {
+                debugX = debugX >= SeaTextureSize ? 0 : debugX + 1;
+            }
+
+            Vector3 pos = MakeSeaRange.GetSphericalPoint(debugX, debugY);
+            debugSphere.transform.position = pos * debugSphereRadius;
+        }
+
+        private void OnGUI()
+        {
+            GUI.color = Color.red;
+            GUI.Label(new Rect(20, 20, 100, 50), $"{debugX}, {debugY}");
+        }
+#endif
+
         public void MakeSeaTexture()
         {
+#if DEBUG_CALC_SPHERE_POS
+            return;
+#endif
+
             // 実際に貼り付けるテクスチャーの作成
             seaTexture = new Texture2D(SeaTextureSize, SeaTextureSize, dirtySeaTexture.format, false);
             seaColors = seaTexture.GetPixels32();
 
-            TextAsset asset = Resources.Load(SeaTextureRatesFileName) as TextAsset;
+            TextAsset asset = Resources.Load(SeaTextureRatesFileName+"1") as TextAsset;
             Stream s = new MemoryStream(asset.bytes);
             BinaryReader br = new BinaryReader(s);
             byte[] rates = br.ReadBytes((int)s.Length);
 
-            Debug.Log($"---- readed {rates.Length}");
+            Log($"---- readed {rates.Length}");
 
             /*
             // GetUVのチェック
@@ -130,7 +183,7 @@ namespace GreeningEx2019
             {
                 float t = Mathf.Clamp01(((float)rates[i]) / 256f);
                 seaColors[i] = Color32.Lerp(dirtyColors[0], cleanColors[0], t);
-                Debug.Log($"  {i} {rates[i]} / {t} / col={seaColors[i]}");
+                Log($"  rates[{i%128}, {i/128} / {i} / {seaColors.Length}]={rates[i]} / t={t} / col={seaColors[i]}");
             }
             seaTexture.SetPixels32(seaColors);
             seaTexture.Apply();
