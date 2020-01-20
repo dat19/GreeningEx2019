@@ -87,19 +87,19 @@ namespace GreeningEx2019
         private void Start()
         {
             // ステージ上に星を生成
-            int count = Mathf.Min(GameParams.ClearedStageCount+1, GameParams.StageMax);
-            int st = GameParams.ClearedStageCount;
-            if (GameParams.ClearedStageCount == GameParams.StageMax)
+            int starCount = Mathf.Min(GameParams.ClearedStageCount+1, GameParams.StageMax);
+            int displayCount = GameParams.ClearedStageCount;
+            int cleanedCount = GameParams.ClearedStageCount - 1;
+
+            if (GameParams.Instance.toStageSelect != StageSelectManager.ToStageSelectType.Clear)
             {
-                st++;
-            }
-            if (GameParams.Instance.toStageSelect == StageSelectManager.ToStageSelectType.Clear)
-            {
-                st = GameParams.NowClearStage;
+                // 戻った時
+                displayCount = starCount;
+                cleanedCount++;
             }
 
-            stageStars = new StageStar[count];
-            for (int i = 0; i < count; i++)
+            stageStars = new StageStar[starCount];
+            for (int i = 0; i < starCount; i++)
             {
                 Vector3 pos = (islands[i].transform.position - transform.position).normalized * starRadius;
                 GameObject go = Instantiate<GameObject>(starPrefab, transform);
@@ -108,17 +108,17 @@ namespace GreeningEx2019
 
                 go.transform.localPosition = pos;
                 go.transform.up = pos.normalized;
-                if (i < st)
-                {
-                    stageStars[i].SetMaterialRate(1f);
-                }
 
-                // クリア以外の時は、全ての星を最初から表示
-                // クリアの時は、クリアしたステージまで表示
-                if (    (GameParams.Instance.toStageSelect != StageSelectManager.ToStageSelectType.Clear)
-                    ||  (i < GameParams.ClearedStageCount))
+                // 星を表示
+                if (i < displayCount)
                 {
                     stageStars[i].SetAnimState(StageStar.AnimType.ForceShow);
+                }
+
+                // 奇麗にする
+                if (i < cleanedCount)
+                {
+                    stageStars[i].SetMaterialRate(1f);
                 }
             }
 
@@ -215,15 +215,17 @@ namespace GreeningEx2019
             seaColors = seaTexture.GetPixels32();
 
             // 前の海を生成
-            beforeSeaColors = CalcSeaColors(GameParams.NowClearStage);
-            Log($"  make {GameParams.NowClearStage}");
+            int clearedIndex = GameParams.NowClearStage;
             if (GameParams.Instance.toStageSelect == StageSelectManager.ToStageSelectType.Clear)
             {
+                beforeSeaColors = CalcSeaColors(clearedIndex);
                 afterSeaColors = CalcSeaColors(GameParams.ClearedStageCount);
                 UpdateSeaTexture(0f);
             }
             else
             {
+                clearedIndex = GameParams.ClearedStageCount;
+                beforeSeaColors = CalcSeaColors(clearedIndex);
                 seaTexture.SetPixels32(beforeSeaColors);
                 seaTexture.Apply();
             }
@@ -233,7 +235,7 @@ namespace GreeningEx2019
 
             // 島の状態を設定
             islandCleanAnim.SetFloat("Speed", 100f);
-            islandCleanAnim.SetInteger("Cleared", GameParams.NowClearStage);
+            islandCleanAnim.SetInteger("Cleared", clearedIndex);
         }
 
         /// <summary>

@@ -43,3 +43,40 @@ BaseStarオブジェクトにBaseStarスクリプトをアタッチして制御�
 - StageStarにスクリプトを設定
 - 常に、カメラに相対させる
 - 選択中のステージの星は、Vector3.up軸で回転させる
+
+## 最初の準備
+
+### クリア
+- 2面をクリアした時(ClearedStageCount = 2)
+  - 奇麗な海、島、星: 1面まで
+  - 未クリア状態の星を表示: 2面の星
+  - 演出: 2面
+  - 演出後、星を表示: 3面 starCount
+- 10面をクリアした時(ClearedStageCount = 10)
+  - 奇麗な海、島、星: 9面まで
+  - 未クリア状態の星を表示: 10面の星
+  - 演出: 10面
+  - 演出後、星の表示はなし
+
+### 戻る
+- 2面までクリアで、3面から戻った時(ClearedStageCount = 2)
+  - 奇麗な海、島、星: 2面まで
+  - 未クリア状態の星を表示: 3面の星
+- 9面までクリアで、10面から戻った時(ClearedStageCount = 9)
+  - 奇麗な海、島、星: 9面まで
+  - 未クリア状態の星を表示: 10面の星
+- 10面クリアして、10面から戻った時(ClearedStageCount = 10)
+  - 奇麗な海、島、星: 10面まで
+  - 未クリア状態の星を表示: なし
+
+### 変数
+- 星の作成個数
+  - starCount = ClearedStageCount+1 or StageMax
+- 事前に表示しておく星の数
+  - displayCount = クリアの時、ClearedStageCount : starCountと一致
+- 奇麗にする海、島、星
+  - cleanedCount = クリアの時、ClearedStageCount-1 : 戻った時、ClearedStageCount
+- 奇麗にする前に表示しておく星
+  - nextTargetStar = クリアの時、ClearedStageCount : 戻った時、ClearedStageCount+1。Stagemaxを越えていたらなし
+- 表示する星
+  - クリアのみ、ClearedStageCount+1

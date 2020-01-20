@@ -72,8 +72,8 @@ namespace GreeningEx2019
         {
             if (rate >= 1f)
             {
-                myRenderer.material = materials[(int)Goal.MaterialIndex.Completed];
                 angularRate = 1f;
+                myRenderer.material = materials[(int)Goal.MaterialIndex.Completed];
             }
             else
             {

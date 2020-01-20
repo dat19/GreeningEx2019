@@ -140,9 +140,6 @@ namespace GreeningEx2019
                 case ToStageSelectType.NewGame:
                     PlayVideo(VideoType.Opening);
                     break;
-                case ToStageSelectType.Back:
-                    nextState = StateType.PlayerControl;
-                    break;
             }
 
             UpdateStageName();
@@ -161,6 +158,10 @@ namespace GreeningEx2019
             {
                 nextState = StateType.Clear;
             }
+            else if (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
+            {
+                nextState = StateType.PlayerControl;
+            }
         }
 
         private void Update()
@@ -178,6 +179,7 @@ namespace GreeningEx2019
                     case StateType.Clear:
                         StartCoroutine(clearSequence());
                         break;
+
                     case StateType.PlayerControl:
                         canvasAnim.SetInteger("State", (int)CanvasAnimStateType.UIDisplay);
                         SoundController.PlayBGM(SoundController.BgmType.StageSelect);
@@ -214,8 +216,7 @@ namespace GreeningEx2019
             else
             {
                 SelectNextStage();
-                state = StateType.PlayerControl;
-                SoundController.PlayBGM(SoundController.BgmType.StageSelect);
+                nextState = StateType.PlayerControl;
             }
         }
 
