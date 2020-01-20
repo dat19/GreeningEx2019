@@ -86,6 +86,7 @@ namespace GreeningEx2019
             if (Input.GetButtonDown("Esc"))
             {
                 // ステージ選択へ
+                GameParams.Instance.toStageSelect = StageSelectManager.ToStageSelectType.Back;
                 SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
             }
         }

@@ -19,7 +19,7 @@ namespace GreeningEx2019
         /// </summary>
         const float ToStandbyPositionTime = 0.5f;
 
-        enum MaterialIndex
+        public enum MaterialIndex
         {
             First,
             Last,

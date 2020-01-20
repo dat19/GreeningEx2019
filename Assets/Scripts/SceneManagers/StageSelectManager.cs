@@ -36,8 +36,10 @@ namespace GreeningEx2019
         RawImage movieImage = null;
         [Tooltip("ストーリー動画が始まるまで画面を隠しておくためのイメージ"), SerializeField]
         Image movieFadeImage = null;
-        [Tooltip("クレジットロールアニメ"), SerializeField]
-        Animator creditAnim = null;
+        [Tooltip("星のインスタンス"), SerializeField]
+        BaseStar baseStar = null;
+        [Tooltip("キャンバスアニメ"), SerializeField]
+        Animator canvasAnim = null;
         [Tooltip("クレジットアニメの高速"), SerializeField]
         float CreditSpeedUp = 4f;
 
@@ -67,10 +69,9 @@ namespace GreeningEx2019
 
         enum StateType
         {
-            OpeningMovie,
+            None = -1,
             PlayerControl,
             Clear,
-            Back,
             StoryMovie,
             CreditRoll,
         }
@@ -86,13 +87,26 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// キャンバスアニメーションのState定義
+        /// </summary>
+        enum CanvasAnimStateType
+        {
+            Standby,    // 0
+            FadeOut,    // 1
+            FadeIn,     // 2
+            UIDisplay,  // 3
+            WhiteOut,   // 4
+            Credit,     // 5
+        }
+
+        /// <summary>
         /// 現在の状態
         /// </summary>
-        static StateType state = StateType.OpeningMovie;
+        static StateType state = StateType.None;
         /// <summary>
         /// 動画後に切り替える状態
         /// </summary>
-        static StateType nextState;
+        static StateType nextState = StateType.None;
 
         // リピートを防ぐための前のカーソル
         static float lastCursor = 0;
@@ -104,13 +118,14 @@ namespace GreeningEx2019
         /// </summary>
         static bool isStarted = false;
 
-        static bool isCreditRollDone = false;
-        
+        bool isAnimDone = false;
+
         public override void OnFadeOutDone()
         {
             isStarted = true;
 
-            StarClean.StartClearedStage(GameParams.ClearedStageCount);
+            //StarClean.StartClearedStage(GameParams.ClearedStageCount);
+            baseStar.MakeSeaTexture();
 
             if (videoPlayer == null)
             {
@@ -125,61 +140,96 @@ namespace GreeningEx2019
             {
                 case ToStageSelectType.NewGame:
                     PlayVideo(VideoType.Opening);
-                    nextState = StateType.PlayerControl;
-                    break;
-                case ToStageSelectType.Clear:
-                    // 途中の動画チェック
-                    if (GameParams.NowClearStage == 4)
-                    {
-                        PlayVideo(VideoType.Stage5);
-                        nextState = StateType.PlayerControl;
-                    }
-                    else if (GameParams.NowClearStage == 9)
-                    {
-                        PlayVideo(VideoType.Ending);
-                        nextState = StateType.CreditRoll;
-                    }
-                    else
-                    {
-                        state = StateType.Clear;
-                    }
-
-#if DEBUG_ENDING
-                    PlayVideo(VideoType.Ending);
-                    nextState = StateType.CreditRoll;
-#endif
-
-                    break;
-                case ToStageSelectType.Back:
-                    state = StateType.Back;
                     break;
             }
 
             UpdateStageName();
-            base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
+            base.OnFadeOutDone();
         }
 
+        /// <summary>
+        /// フェードインが完了した時の処理
+        /// </summary>
+        public override void OnFadeInDone()
+        {
+            base.OnFadeInDone();
+
+            if (GameParams.Instance.toStageSelect == ToStageSelectType.Clear)
+            {
+                nextState = StateType.Clear;
+            }
+            else if (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
+            {
+                nextState = StateType.PlayerControl;
+            }
+        }
 
         private void Update()
         {
             if (!isStarted) { return; }
 
-            switch (state)
+            // 初期化処理
+            if (nextState != StateType.None)
             {
-                case StateType.PlayerControl:
-                    UpdatePlayerControl();
-                    break;
+                state = nextState;
+                nextState = StateType.None;
 
-                case StateType.StoryMovie:
-                    break;
+                switch (state)
+                {
+                    case StateType.Clear:
+                        StartCoroutine(clearSequence());
+                        break;
 
-                default:
-                    // デバッグコード。未実装の状態は、すぐに操作に移行
-                    if (Fade.IsFading) return;
-                    state = StateType.PlayerControl;
-                    SoundController.PlayBGM(SoundController.BgmType.StageSelect);
-                    break;
+                    case StateType.PlayerControl:
+                        canvasAnim.SetInteger("State", (int)CanvasAnimStateType.UIDisplay);
+                        SoundController.PlayBGM(SoundController.BgmType.StageSelect);
+                        break;
+                }
+            }
+
+            // 更新処理
+            if (state == StateType.PlayerControl)
+            {
+                UpdatePlayerControl();
+            }
+        }
+
+        /// <summary>
+        /// クリア演出を実行します
+        /// </summary>
+        IEnumerator clearSequence()
+        {
+            // 切り替え
+            yield return baseStar.UpdateClean();
+
+            // 差し込み動画チェック
+            if (GameParams.NowClearStage == 4)
+            {
+                PlayVideo(VideoType.Stage5);
+                nextState = StateType.PlayerControl;
+            }
+            else if (GameParams.NowClearStage == 9)
+            {
+                PlayVideo(VideoType.Ending);
+                nextState = StateType.CreditRoll;
+            }
+            else
+            {
+                SelectNextStage();
+                nextState = StateType.PlayerControl;
+            }
+        }
+
+        /// <summary>
+        /// 次のステージを自動的に更新
+        /// </summary>
+        void SelectNextStage()
+        {
+            if (GameParams.ClearedStageCount < GameParams.StageMax)
+            {
+                GameParams.NextSelectStage();
+                UpdateStageName();
             }
         }
 
@@ -189,33 +239,69 @@ namespace GreeningEx2019
         /// <param name="vtype">再生するビデオの種類</param>
         void PlayVideo(VideoType vtype)
         {
+            nextState = StateType.StoryMovie;
+            StartCoroutine(StoryMovie(vtype));
+        }
+
+        public void AnimDone()
+        {
+            isAnimDone = true;
+        }
+
+        IEnumerator AnimProc(CanvasAnimStateType type)
+        {
+            Debug.Log($"  AnimProc({type})");
+            canvasAnim.SetInteger("State", (int)type);
+            isAnimDone = false;
+            while (!isAnimDone)
+            {
+                yield return null;
+            }
+            Debug.Log($"  done");
+        }
+
+        IEnumerator StoryMovie(VideoType vtype)
+        {
+            Debug.Log($"  StoryMovie({vtype}) / state={canvasAnim.GetInteger("State")}");
+            if (vtype != VideoType.Opening)
+            {
+                // オープニング以外はフェードアウト
+                // オープニングはフェードアウト状態から始めるので不要
+                yield return AnimProc(CanvasAnimStateType.FadeOut);
+            }
+            else
+            {
+                canvasAnim.SetInteger("State", (int)CanvasAnimStateType.WhiteOut);
+            }
+
+            Debug.Log($"2");
+
             videoPlayer.enabled = true;
             videoPlayer.clip = videoClips[(int)vtype];
             videoPlayer.Play();
-            state = StateType.StoryMovie;
             movieImage.enabled = true;
-            movieFadeImage.enabled = true;
-            StartCoroutine(storyMovie());
-        }
 
-        IEnumerator storyMovie()
-        {
+            Debug.Log($"3");
             // 動画開始を待つ
             while (videoPlayer.time <= 0.0001f)
             {
                 yield return null;
             }
 
-            movieFadeImage.enabled = false;
+            // フェードイン
+            Debug.Log($"4");
+            yield return AnimProc(CanvasAnimStateType.FadeIn);
 
+            Debug.Log($"5");
             // 動画終了を待つ
             while (videoPlayer.isPlaying)
             {
                 yield return null;
             }
+            Debug.Log($"6");
 
-            // クレジット再生
-            if (nextState == StateType.CreditRoll)
+            // 最終ステージならクレジットロールへ
+            if (GameParams.NowClearStage == GameParams.StageMax-1)
             {
                 yield return CreditRoll();
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
@@ -235,8 +321,8 @@ namespace GreeningEx2019
             }
 
             movieImage.enabled = false;
-            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
-            state = nextState;
+            SelectNextStage();
+            nextState = StateType.PlayerControl;
         }
 
 
@@ -272,18 +358,18 @@ namespace GreeningEx2019
         IEnumerator CreditRoll()
         {
             SoundController.PlayBGM(SoundController.BgmType.Ending);
-            creditAnim.SetTrigger("Start");
+            canvasAnim.SetInteger("State", (int)CanvasAnimStateType.Credit);
 
-            isCreditRollDone = false;
-            while (!isCreditRollDone)
+            isAnimDone = false;
+            while (!isAnimDone)
             {
                 if (GameParams.IsActionAndWaterButton)
                 {
-                    creditAnim.SetFloat("Speed", CreditSpeedUp);
+                    canvasAnim.SetFloat("Speed", CreditSpeedUp);
                 }
                 else
                 {
-                    creditAnim.SetFloat("Speed", 1);
+                    canvasAnim.SetFloat("Speed", 1);
                 }
 
                 yield return null;
@@ -294,14 +380,6 @@ namespace GreeningEx2019
             {
                 yield return null;
             }
-        }
-
-        /// <summary>
-        /// クレジットロールアニメが終わったら、アニメから呼び出します。
-        /// </summary>
-        public void CreditRollDone()
-        {
-            isCreditRollDone = true;
         }
 
         /// <summary>
