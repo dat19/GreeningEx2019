@@ -33,7 +33,7 @@ namespace GreeningEx2019
         [Tooltip("海のレンダラー"), SerializeField]
         MeshRenderer seaRenderer = null;
         [Tooltip("緑化前の待ち秒数"), SerializeField]
-        float beforeCleanWait = 0.5f;
+        float beforeCleanWait = 0.2f;
         [Tooltip("緑化後の待ち秒数"), SerializeField]
         float afterCleanWait = 1f;
         [Tooltip("汚れ時の減衰レート"), SerializeField]
