@@ -62,7 +62,7 @@ BaseStarオブジェクトにBaseStarスクリプトをアタッチして制御�
 - 2面までクリアで、3面から戻った時(ClearedStageCount = 2)
   - 奇麗な海、島、星: 2面まで
   - 未クリア状態の星を表示: 3面の星
-- 9面までクリアで、10面から戻った時(ClearedStageCount = 9)
+- 9面までクリアで、10面から戻った時(ClearedStageCount = 9)  
   - 奇麗な海、島、星: 9面まで
   - 未クリア状態の星を表示: 10面の星
 - 10面クリアして、10面から戻った時(ClearedStageCount = 10)
