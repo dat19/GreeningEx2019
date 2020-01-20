@@ -22,8 +22,6 @@ namespace GreeningEx2019
         float starRadius = 4.5f;
         [Tooltip("汚れ島のオブジェクト"), SerializeField]
         GameObject[] dirtyIslands = new GameObject[GameParams.StageMax];
-        [Tooltip("星のマテリアル"), SerializeField]
-        Material starMaterial = null;
         [Tooltip("汚れ島のマテリアル"), SerializeField]
         Material dirtyIslandMaterial = null;
         [Tooltip("奇麗島のマテリアル"), SerializeField]
@@ -38,6 +36,8 @@ namespace GreeningEx2019
         float beforeCleanWait = 0.5f;
         [Tooltip("緑化後の待ち秒数"), SerializeField]
         float afterCleanWait = 1f;
+        [Tooltip("汚れ時の減衰レート"), SerializeField]
+        float dirtyRate = 0.8f;
 
 #if DEBUG_SPHERE || DEBUG_CALC_SPHERE_POS
         [Tooltip("デバッグ用のSphereを置く半径"), SerializeField]
@@ -59,13 +59,18 @@ namespace GreeningEx2019
         public const string SeaTextureRatesFileName = "SeaTextureRates";
 
         /// <summary>
+        /// 色を変更する汚れ島のマテリアルにアタッチするためのインスタンス
+        /// </summary>
+        Material workDirtyIslandMaterial;
+
+        /// <summary>
         /// 実際に海に貼り付けるテクスチャー
         /// </summary>
         Texture2D seaTexture;
         Color32[] seaColors;
         float[] prevRate;
-
         byte[] seaTextureRates = null;
+        StageStar[] stageStars;
 
 #if DEBUG_CALC_SPHERE_POS
         int debugX = 0;
@@ -88,18 +93,24 @@ namespace GreeningEx2019
             {
                 st++;
             }
+            if (GameParams.Instance.toStageSelect == StageSelectManager.ToStageSelectType.Clear)
+            {
+                st = GameParams.NowClearStage;
+            }
 
+            stageStars = new StageStar[count];
             for (int i = 0; i < count ; i++)
             {
                 Vector3 pos = (islands[i].transform.position-transform.position).normalized * starRadius;
                 GameObject go = Instantiate<GameObject>(starPrefab, transform);
+                stageStars[i] = go.GetComponent<StageStar>();
                 go.transform.localPosition = pos;
                 go.transform.up = pos.normalized;
                 if (i < st)
                 {
-                    go.GetComponentInChildren<Renderer>().material = starMaterial;
+                    stageStars[i].SetMaterialRate(1f);
                 }
-                go.GetComponent<StageStar>().myStage = i;
+                stageStars[i].myStage = i;
             }
         }
 
@@ -196,6 +207,10 @@ namespace GreeningEx2019
 
             // 最初の海の色を設定
             seaRenderer.material.mainTexture = seaTexture;
+
+            // 島の状態を設定
+            islandCleanAnim.SetFloat("Speed", 100f);
+            islandCleanAnim.SetInteger("Cleared", GameParams.NowClearStage);
         }
 
         /// <summary>
@@ -259,7 +274,7 @@ namespace GreeningEx2019
                     else
                     {
                         // 未クリアなら2乗してから引く
-                        t *= 0.8f;
+                        t *= dirtyRate;
                         tempRates[i] -= t * t;
                     }
                 }
@@ -279,11 +294,6 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 色を変更する汚れ島のマテリアルにアタッチするためのインスタンス
-        /// </summary>
-        Material workDirtyIslandMaterial;
-
-        /// <summary>
         /// 星をアニメに合わせて奇麗に変化させます。
         /// </summary>
         public IEnumerator UpdateClean()
@@ -291,6 +301,7 @@ namespace GreeningEx2019
             // 少し待ってから開始
             yield return new WaitForSeconds(beforeCleanWait);
 
+            islandCleanAnim.SetFloat("Speed", 1f);
             islandCleanAnim.SetInteger("Cleared", GameParams.ClearedStageCount);
             MeshRenderer rend = dirtyIslands[GameParams.NowClearStage].GetComponent<MeshRenderer>();
             workDirtyIslandMaterial = new Material(rend.material);
@@ -304,22 +315,19 @@ namespace GreeningEx2019
                 // 海の色を変化させます
                 UpdateSeaTexture(islandUp);
 
+                // 星
+                stageStars[GameParams.NowClearStage].SetMaterialRate(islandUp);
+
                 yield return null;
             }
 
-            // 島の色の変化を完了させます
+            // 変化を完了させます
             workDirtyIslandMaterial.color = cleanIslandMaterial.color;
-
-            // 海の色を変化させます
             UpdateSeaTexture(1f);
+            stageStars[GameParams.NowClearStage].SetMaterialRate(1f);
 
             // 奇麗にしたら少し待つ
             yield return new WaitForSeconds(afterCleanWait);
-        }
-
-        void UpdateIslandMaterial()
-        {
-
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

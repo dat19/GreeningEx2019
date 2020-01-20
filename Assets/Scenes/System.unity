@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0062ca14d202848bebabb7456a2c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: 2
+  startScene: 0
   fadeTime: 0.5
   subCamera: {fileID: 963194227}
 --- !u!114 &190469379

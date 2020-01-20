@@ -44,6 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314bcc2c741f7434782763554bc03e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angularVelocity: 90
+  clearAngularVelocityRate: 6
+  materials:
+  - {fileID: 2100000, guid: 197eb724c590e1c448787654649f8eb5, type: 2}
+  - {fileID: 2100000, guid: 0d3f505ff53682149850292bc5767d61, type: 2}
+  - {fileID: 2100000, guid: bfcd99bc3d024fd49be1884b0a2d1d32, type: 2}
+  myStage: 0
 --- !u!1001 &3179564481619243835
 PrefabInstance:
   m_ObjectHideFlags: 0

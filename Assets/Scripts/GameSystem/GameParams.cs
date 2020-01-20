@@ -120,6 +120,7 @@ namespace GreeningEx2019
             NowClearStage = 0;
             Instance.clearedStageCount = 1;
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
+            SelectedStage = 0;
 #endif
         }
 

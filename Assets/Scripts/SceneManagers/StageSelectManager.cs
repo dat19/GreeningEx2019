@@ -112,7 +112,7 @@ namespace GreeningEx2019
         {
             isStarted = true;
 
-            StarClean.StartClearedStage(GameParams.ClearedStageCount);
+            //StarClean.StartClearedStage(GameParams.ClearedStageCount);
             baseStar.MakeSeaTexture();
 
             if (videoPlayer == null)
