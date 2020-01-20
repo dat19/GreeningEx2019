@@ -67,25 +67,71 @@ namespace GreeningEx2019
             // 各頂点の影響値を算出する
             int idx = 0;
             Vector3 check = Vector3.zero;
+
+            // 島の中心点を求める
+            Vector3 islandCenter = Vector3.zero;
+            for (int i = 0; i < mesh.vertices.Length; i++)
+            {
+                islandCenter += islandTransform.TransformPoint(mesh.vertices[i]);
+            }
+            islandCenter /= mesh.vertices.Length;
+            islandCenter.Normalize();
+
             for (int y = 0; y < BaseStar.SeaTextureSize; y++)
             {
                 for (int x = 0; x < BaseStar.SeaTextureSize; x++, idx++)
                 {
                     rates[idx] = 0;
                     check = GetSphericalPoint(x,y);
-                    float temprate = 0f;
+
+                    float temp = Vector3.Dot(check, islandCenter);
+                    // 内積が1なら中心点なので算出不要
+                    if (Mathf.Approximately(temp, 1f))
+                    {
+                        rates[idx] = 255;
+                        continue;
+                    }
+                    Vector3 uvNormal = Vector3.Cross(check, islandCenter);
+
+                    bool isPlus = false;
+                    bool isMinus = false;
+                    float maxRate = 0f;
 
                     // 各島の頂点ごとのUV値
                     for (int vi = 0; vi < mesh.vertexCount ; vi++)
                     {
                         Vector3 meshpos = islandTransform.TransformPoint(mesh.vertices[vi]).normalized;
+                        Vector3 centerToMesh = (meshpos - islandCenter).normalized;
+                        Vector3 meshToCheck = (check - meshpos).normalized;
+
                         float dist = Vector3.Distance(check, meshpos);
 
                         // 影響範囲チェック
-                        if (dist < IslandDistance)
+                        float rate = 1f - (dist / IslandDistance);
+                        if (rate > maxRate)
                         {
-                            float rate = 1f - (dist / IslandDistance);
-                            temprate += rate;
+                            maxRate = rate;
+                        }
+                        else if (rate <= 0f)
+                        {
+                            // 距離が離れている場合は候補にしない
+                            continue;
+                        }
+
+                        // メッシュへの方向とメッシュからチェック頂点への内積算出
+                        float meshCheckDot = Vector3.Dot(centerToMesh, meshToCheck);
+                        // メッシュ頂点からチェックへの方向と法線の内積算出
+                        float side = Vector3.Dot(meshToCheck, uvNormal);
+
+                        // フラグ設定
+                        isPlus |= (side > 0f) && (meshCheckDot < 0f);
+                        isMinus |= (side < 0f) && (meshCheckDot < 0f);
+
+                        // 両方内側なので島の内側
+                        if (isPlus && isMinus)
+                        {
+                            maxRate = 1f;
+                            break;
                         }
 
 #if DEBUG_CALC_RATE
@@ -96,7 +142,7 @@ namespace GreeningEx2019
 #endif
                     }
 
-                    int dt = (int)(temprate * 256f);
+                    int dt = (int)(maxRate * 256f);
                     // オーバー調整
                     if (dt >= 256)
                     {
