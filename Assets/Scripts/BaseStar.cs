@@ -112,6 +112,11 @@ namespace GreeningEx2019
                 }
                 stageStars[i].myStage = i;
             }
+
+            float rotateBackup = rotateRate;
+            rotateRate = 1f;
+            UpdateRotate();
+            rotateRate = rotateBackup;
         }
 
         void FixedUpdate()
@@ -119,6 +124,15 @@ namespace GreeningEx2019
 #if DEBUG_CALC_SPHERE_POS
             return;
 #endif
+
+            UpdateRotate();
+        }
+
+        /// <summary>
+        /// 選択したステージを正面に向けるように回転させます。
+        /// </summary>
+        void UpdateRotate()
+        {
             Vector3 stageDir = (islands[GameParams.SelectedStage].transform.position - transform.position).normalized;
             Vector3 axis = Vector3.Cross(stageDir, Vector3.back);
             float angle = Vector3.SignedAngle(stageDir, Vector3.back, axis);
