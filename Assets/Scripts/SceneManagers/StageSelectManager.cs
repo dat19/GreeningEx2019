@@ -144,9 +144,6 @@ namespace GreeningEx2019
                 case ToStageSelectType.NewGame:
                     PlayVideo(VideoType.Opening);
                     break;
-                case ToStageSelectType.Clear:
-                    nextState = StateType.Clear;
-                    break;
                 case ToStageSelectType.Back:
                     nextState = StateType.PlayerControl;
                     break;
@@ -164,7 +161,7 @@ namespace GreeningEx2019
         {
             base.OnFadeInDone();
 
-            if (state == StateType.Clear)
+            if (GameParams.Instance.toStageSelect == ToStageSelectType.Clear)
             {
                 nextState = StateType.Clear;
             }
@@ -183,7 +180,7 @@ namespace GreeningEx2019
                 switch (state)
                 {
                     case StateType.Clear:
-                        StartCoroutine(clearSeauence());
+                        StartCoroutine(clearSequence());
                         break;
                     case StateType.PlayerControl:
                         canvasAnim.SetInteger("State", (int)CanvasAnimStateType.UIDisplay);
@@ -202,7 +199,7 @@ namespace GreeningEx2019
         /// <summary>
         /// クリア演出を実行します
         /// </summary>
-        IEnumerator clearSeauence()
+        IEnumerator clearSequence()
         {
             // 切り替え
             yield return baseStar.UpdateClean();
