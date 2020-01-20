@@ -65,6 +65,7 @@ namespace GreeningEx2019
         {
             SelectedStage = 0;
             Instance.clearedStageCount = 0;
+            NowClearStage = 0;
             SaveClearedStageCount();
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.NewGame;
         }
@@ -102,6 +103,8 @@ namespace GreeningEx2019
                 // プレイ中の時は最後のステージ
                 SelectedStage = ClearedStageCount;
             }
+
+            NowClearStage = ClearedStageCount;
         }
 
         /// <summary>

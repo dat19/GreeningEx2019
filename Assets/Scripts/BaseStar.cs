@@ -61,9 +61,6 @@ namespace GreeningEx2019
         Color32[] seaColors;
         float[] prevRate;
 
-        Color32[] dirtyColors;
-        Color32[] cleanColors;
-
         byte[] seaTextureRates = null;
 
 #if DEBUG_CALC_SPHERE_POS
@@ -160,65 +157,107 @@ namespace GreeningEx2019
                 }
             }
         }
+
+        Color32[] beforeSeaColors = null;
+        Color32[] afterSeaColors = null;
         public void MakeSeaTexture()
         {
 #if DEBUG_CALC_SPHERE_POS
             return;
 #endif
-
             // 実際に貼り付けるテクスチャーの作成
             seaTexture = new Texture2D(SeaTextureSize, SeaTextureSize, dirtySeaTexture.format, false);
             seaColors = seaTexture.GetPixels32();
 
-            TextAsset asset = Resources.Load(SeaTextureRatesFileName+"0") as TextAsset;
-            Stream s = new MemoryStream(asset.bytes);
-            BinaryReader br = new BinaryReader(s);
-            byte[] rates = Decompress( br.ReadBytes((int)s.Length));
+            // 前の海を生成
+            beforeSeaColors = CalcSeaColors(GameParams.NowClearStage);
+            Debug.Log($"  make {GameParams.NowClearStage}");
+            if (GameParams.Instance.toStageSelect == StageSelectManager.ToStageSelectType.Clear)
+            {
+                afterSeaColors = CalcSeaColors(GameParams.ClearedStageCount);
+                UpdateSeaTexture(0f);
+            }
+            else
+            {
+                seaTexture.SetPixels32(beforeSeaColors);
+                seaTexture.Apply();
+            }
 
-            Log($"---- readed {rates.Length}");
+            // 最初の海の色を設定
+            seaRenderer.material.mainTexture = seaTexture;
+        }
 
-            dirtyColors = dirtySeaTexture.GetPixels32();
-            cleanColors = cleanSeaTexture.GetPixels32();
-            dirtyColors[0].a = 0;
-
-            Debug.Log($"  {dirtyColors[0]} / {cleanColors[0]}");
-
+        /// <summary>
+        /// 指定の割合で海のテクスチャーを合成して、海テクスチャーに反映させます。
+        /// </summary>
+        /// <param name="rate">0～1</param>
+        void UpdateSeaTexture(float rate)
+        {
             for (int i = 0; i < seaColors.Length; i++)
             {
-                float t = Mathf.Clamp01(((float)rates[i]) / 256f);
-                seaColors[i] = Color32.Lerp(dirtyColors[0], cleanColors[0], t);
-                Log($"  rates[{i%128}, {i/128} / {i} / {seaColors.Length}]={rates[i]} / t={t} / col={seaColors[i]}");
+                seaColors[i] = Color32.Lerp(beforeSeaColors[i], afterSeaColors[i], rate);
             }
+
             seaTexture.SetPixels32(seaColors);
             seaTexture.Apply();
-            seaRenderer.material.mainTexture = seaTexture;
+        }
 
+        /// <summary>
+        /// 指定のステージまでクリアした状態の海の色を生成して返します。
+        /// </summary>
+        /// <param name="stnum">クリアしたステージ数</param>
+        /// <returns>Color32の配列</returns>
+        Color32 []CalcSeaColors(int stnum)
+        {
+            Color32[] cols = new Color32[SeaTextureSize * SeaTextureSize];
+            Color32 cleanColor = cleanSeaTexture.GetPixel(0, 0);
+            cleanColor.a = 255;
 
-            /*
-                        Vector2 ret = GetUV(Vector3.right);
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(Vector3.left);
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(Vector3.back);
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(Vector3.up);
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(Vector3.down);
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(new Vector3(1,1,0));
-                        Debug.Log($"  {ret.x}, {ret.y}");
-                        ret = GetUV(new Vector3(1, -1, 0));
-                        Debug.Log($"  {ret.x}, {ret.y}");
+            // 全クリなら100%奇麗な海
+            if (stnum >= GameParams.StageMax)
+            {
+                for (int i = 0; i < cols.Length; i++)
+                {
+                    cols[i] = cleanColor;
+                }
+                return cols;
+            }
 
-                        for (int i=0;i<islands.Length;i++)
-                        {
-                            Vector3 pos = islands[i].transform.position - transform.position;
-                            pos.Normalize();
-                            ret = GetUV(pos);
-                            Debug.Log($"{i} / {ret.x}, {ret.y} / {pos.x}, {pos.y}, {pos.z}");
-                        }
-            */
+            // クリア状態に応じて、ウェイトを算出
+            float[] tempRates = new float[SeaTextureSize * SeaTextureSize];
+            for (int i=0;i<tempRates.Length;i++)
+            {
+                tempRates[i] = 0f;
+            }
 
+            for (int st = 0; st < GameParams.StageMax; st++)
+            {
+                TextAsset asset = Resources.Load(SeaTextureRatesFileName + st) as TextAsset;
+                Stream s = new MemoryStream(asset.bytes);
+                BinaryReader br = new BinaryReader(s);
+                byte[] rates = Decompress(br.ReadBytes((int)s.Length));
+
+                // クリア済みなら加算、未クリアなら減算
+                float addsub = st < stnum ? 1f : -1f;
+
+                for (int i = 0; i < rates.Length; i++)
+                {
+                    float t = Mathf.Clamp01(((float)rates[i]) / 256f);
+                    tempRates[i] += t * addsub;
+                }
+            }
+
+            // 海の色を取得
+            Color32 dirtyColor = dirtySeaTexture.GetPixel(0, 0);
+            dirtyColor.a = 0;
+
+            // 色算出
+            for (int i = 0; i < tempRates.Length; i++)
+            {
+                cols[i] = Color32.Lerp(dirtyColor, cleanColor, Mathf.Clamp01(tempRates[i]));
+                Log($"  rates[{i % 128}, {i / 128} / {i} / {tempRates.Length}]={tempRates[i]} / col={cols[i]}");
+            }
+            return cols;
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

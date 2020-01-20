@@ -19,8 +19,9 @@ namespace GreeningEx2019
 
         [Tooltip("データ生成を実行"), SerializeField]
         bool isRun = false;
-        [Tooltip("頂点からの有効範囲。正規座標系"), SerializeField]
-        float islandDistance = 0.2f;
+
+        // 頂点からの有効範囲。正規座標系
+        const float IslandDistance = 0.15f;
 
         private void Awake()
         {
@@ -30,21 +31,21 @@ namespace GreeningEx2019
         void Start()
         {
             // 各ステージのクリア状態を生成
-            for (int i=0;i<GameParams.StageMax;i++)
+            for (int i = 0; i < GameParams.StageMax; i++)
             {
                 if (File.Exists($"Assets/Resources/{BaseStar.SeaTextureRatesFileName}{i}.bytes"))
                 {
                     Debug.Log($"Stage{i}のデータがあるので作成キャンセル");
-                    return;
+                    continue;
                 }
 
-                byte[] beforeRates = CalcCleanRate(i);
+                byte[] waits = CalcWaits(i);
 
                 using (var compressed = new MemoryStream())
                 {
                     using (var deflateStream = new DeflateStream(compressed, CompressionMode.Compress))
                     {
-                        deflateStream.Write(beforeRates, 0, beforeRates.Length);
+                        deflateStream.Write(waits, 0, waits.Length);
                     }
 
                     File.WriteAllBytes($"Assets/Resources/{BaseStar.SeaTextureRatesFileName}{i}.bytes", compressed.ToArray());
@@ -57,7 +58,7 @@ namespace GreeningEx2019
         /// </summary>
         /// <param name="取得したいステージ番号">0～GameParams.StageMax</param>
         /// <returns>算出した影響(0～255)</returns>
-        public static byte[] CalcCleanRate(int stg)
+        public static byte[] CalcWaits(int stg)
         {
             byte[] rates = new byte[BaseStar.SeaTextureSize * BaseStar.SeaTextureSize];
             Mesh mesh = instance.meshIslands[stg].GetComponent<MeshFilter>().mesh;
@@ -81,9 +82,9 @@ namespace GreeningEx2019
                         float dist = Vector3.Distance(check, meshpos);
 
                         // 影響範囲チェック
-                        if (dist < instance.islandDistance)
+                        if (dist < IslandDistance)
                         {
-                            float rate = 1f - (dist / instance.islandDistance);
+                            float rate = 1f - (dist / IslandDistance);
                             temprate += rate;
                         }
 
@@ -96,6 +97,7 @@ namespace GreeningEx2019
                     }
 
                     int dt = (int)(temprate * 256f);
+                    // オーバー調整
                     if (dt >= 256)
                     {
                         dt = 255;
