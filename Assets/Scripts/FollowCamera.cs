@@ -8,10 +8,12 @@ namespace GreeningEx2019
     {
         #pragma warning disable 0414
 
-        [Tooltip("プレイヤーの画面左端"), SerializeField]
-        float viewPointMin = 0.2f;
-        [Tooltip("プレイヤーの画面右端"), SerializeField]
-        float viewPointMax = 0.6f;
+        [Tooltip("カメラの画面左端"), SerializeField]
+        float cameraLeft = 0.5f;
+        [Tooltip("カメラの座標右端"), SerializeField]
+        float cameraRight = 20.5f;
+        [Tooltip("カメラの下端"), SerializeField]
+        float cameraBottom = 5f;
 
         Transform playerTransform = null;
         Vector3 camToPlayer;
@@ -40,7 +42,27 @@ namespace GreeningEx2019
         {
             if (!playerTransform || StageManager.IsClearPlaying) return;
 
+            float x = (playerTransform.position.z - transform.position.z);
+            float th = 5f;
+            float y = Mathf.Tan(th * Mathf.Deg2Rad) * x;
+
             Vector3 next = playerTransform.position - camToPlayer;
+            next.x = playerTransform.position.x;
+            if (next.x < cameraLeft )
+            {
+                next.x = cameraLeft;
+            }
+            else if (next.x > cameraRight)
+            {
+                next.x = cameraRight;
+            }
+
+            next.y = playerTransform.position.y + y;
+            if (next.y < cameraBottom)
+            {
+                next.y = cameraBottom;
+            }
+
             transform.position = next;
 
             BGScroller.instance.Scroll();

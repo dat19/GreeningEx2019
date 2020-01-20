@@ -70,6 +70,7 @@ namespace GreeningEx2019
             Game1,
             Game2,
             Clear,
+            Ending,
         }
         [Tooltip("BGMリスト"), SerializeField]
         private AudioClip[] bgmList = null;
