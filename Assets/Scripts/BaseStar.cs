@@ -248,13 +248,20 @@ namespace GreeningEx2019
                 BinaryReader br = new BinaryReader(s);
                 byte[] rates = Decompress(br.ReadBytes((int)s.Length));
 
-                // クリア済みなら加算、未クリアなら減算
-                float addsub = st < stnum ? 1f : -1f;
-
                 for (int i = 0; i < rates.Length; i++)
                 {
                     float t = Mathf.Clamp01(((float)rates[i]) / 256f);
-                    tempRates[i] += t * addsub;
+                    // クリア済みならそのまま加算
+                    if (st < stnum)
+                    {
+                        tempRates[i] += t;
+                    }
+                    else
+                    {
+                        // 未クリアなら2乗してから引く
+                        t *= 0.8f;
+                        tempRates[i] -= t * t;
+                    }
                 }
             }
 
