@@ -104,6 +104,8 @@ namespace GreeningEx2019
                 Vector3 pos = (islands[i].transform.position - transform.position).normalized * starRadius;
                 GameObject go = Instantiate<GameObject>(starPrefab, transform);
                 stageStars[i] = go.GetComponent<StageStar>();
+                stageStars[i].myStage = i;
+
                 go.transform.localPosition = pos;
                 go.transform.up = pos.normalized;
                 if (i < st)
@@ -111,13 +113,13 @@ namespace GreeningEx2019
                     stageStars[i].SetMaterialRate(1f);
                 }
 
-                // クリア済みなら星表示。最後の星は、クリア以外の時は表示
-                if ((i < count - 1)
-                    || (GameParams.Instance.toStageSelect != StageSelectManager.ToStageSelectType.Clear))
+                // クリア以外の時は、全ての星を最初から表示
+                // クリアの時は、クリアしたステージまで表示
+                if (    (GameParams.Instance.toStageSelect != StageSelectManager.ToStageSelectType.Clear)
+                    ||  (i < GameParams.ClearedStageCount))
                 {
                     stageStars[i].SetAnimState(StageStar.AnimType.ForceShow);
                 }
-                stageStars[i].myStage = i;
             }
 
             float rotateBackup = rotateRate;
@@ -352,7 +354,10 @@ namespace GreeningEx2019
             yield return new WaitForSeconds(afterCleanWait);
 
             // 新ステージの星を出現
-            stageStars[GameParams.ClearedStageCount].SetAnimState(StageStar.AnimType.Show);
+            if (GameParams.ClearedStageCount < GameParams.StageMax)
+            {
+                stageStars[GameParams.ClearedStageCount].SetAnimState(StageStar.AnimType.Show);
+            }
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

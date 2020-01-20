@@ -133,23 +133,7 @@ namespace GreeningEx2019
                 case ToStageSelectType.Clear:
                     // キャンバスを非表示にする
                     creditAnim.gameObject.SetActive(false);
-
-                    // エンディングチェック
-                    if (GameParams.NowClearStage == 9)
-                    {
-                        PlayVideo(VideoType.Ending);
-                        nextState = StateType.CreditRoll;
-                    }
-                    else
-                    {
-                        state = StateType.Clear;
-                    }
-
-#if DEBUG_ENDING
-                    PlayVideo(VideoType.Ending);
-                    nextState = StateType.CreditRoll;
-#endif
-
+                    state = StateType.Clear;
                     break;
                 case ToStageSelectType.Back:
                     state = StateType.Back;
@@ -185,14 +169,22 @@ namespace GreeningEx2019
             yield return baseStar.UpdateClean();
 
             // 次のステージを自動的に更新
-            GameParams.NextSelectStage();
-            UpdateStageName();
+            if (GameParams.ClearedStageCount < GameParams.StageMax)
+            {
+                GameParams.NextSelectStage();
+                UpdateStageName();
+            }
 
             // 差し込み動画チェック
             if (GameParams.NowClearStage == 4)
             {
                 PlayVideo(VideoType.Stage5);
                 nextState = StateType.PlayerControl;
+            }
+            else if (GameParams.NowClearStage == 9)
+            {
+                PlayVideo(VideoType.Ending);
+                nextState = StateType.CreditRoll;
             }
             else
             {
@@ -231,6 +223,8 @@ namespace GreeningEx2019
         /// <param name="vtype">再生するビデオの種類</param>
         void PlayVideo(VideoType vtype)
         {
+            creditAnim.gameObject.SetActive(true);
+
             videoPlayer.enabled = true;
             videoPlayer.clip = videoClips[(int)vtype];
             videoPlayer.Play();
@@ -279,7 +273,6 @@ namespace GreeningEx2019
             movieImage.enabled = false;
             SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             state = nextState;
-            creditAnim.gameObject.SetActive(true);
         }
 
 

@@ -352,8 +352,8 @@ MonoBehaviour:
     ---\n\n-- BGM --\n\n\u30CE\u30B9\u30BF\u30EB\u30B8\u30A2(\u7518\u8336)\n\nHaruichi\n\nH/MIX
     GALLERY\n\nMusMus\n\nPeriTune\n\nTeada\n\n\n\n\n-- \u52B9\u679C\u97F3 --\n\n\n\n--
     \u30D5\u30A9\u30F3\u30C8 --\n\n- AR CHRISTY -\n\nFontZone.net\n\n\n\n- LogoTypeGothicCondenced
-    -\n\nfontna.com\u3000Kato Masashi\u3000M+ FONTS PROJECT\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThanks
-    for playing!!\nSee you next...\n\nTeam GreeningEx2019\n"
+    -\n\nfontna.com\u3000Kato Masashi\u3000M+ FONTS PROJECT\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThank
+    you for playing!!\nSee you next...\n\nTeam GreeningEx2019\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b9b18ee746ab1004486f66414a41bab5, type: 2}
   m_sharedMaterial: {fileID: 3221456670452223741, guid: b9b18ee746ab1004486f66414a41bab5,
@@ -423,10 +423,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 278754299}
-    characterCount: 811
+    characterCount: 814
     spriteCount: 0
-    spaceCount: 231
-    wordCount: 134
+    spaceCount: 232
+    wordCount: 135
     linkCount: 0
     lineCount: 161
     pageCount: 1
