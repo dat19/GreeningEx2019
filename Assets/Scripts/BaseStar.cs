@@ -34,6 +34,10 @@ namespace GreeningEx2019
         Texture2D cleanSeaTexture = null;
         [Tooltip("海のレンダラー"), SerializeField]
         MeshRenderer seaRenderer = null;
+        [Tooltip("緑化前の待ち秒数"), SerializeField]
+        float beforeCleanWait = 0.5f;
+        [Tooltip("緑化後の待ち秒数"), SerializeField]
+        float afterCleanWait = 1f;
 
 #if DEBUG_SPHERE || DEBUG_CALC_SPHERE_POS
         [Tooltip("デバッグ用のSphereを置く半径"), SerializeField]
@@ -67,6 +71,13 @@ namespace GreeningEx2019
         int debugX = 0;
         int debugY = 0;
 #endif
+
+        Animator islandCleanAnim = null;
+
+        private void Awake()
+        {
+            islandCleanAnim = GetComponent<Animator>();
+        }
 
         private void Start()
         {
@@ -171,7 +182,7 @@ namespace GreeningEx2019
 
             // 前の海を生成
             beforeSeaColors = CalcSeaColors(GameParams.NowClearStage);
-            Debug.Log($"  make {GameParams.NowClearStage}");
+            Log($"  make {GameParams.NowClearStage}");
             if (GameParams.Instance.toStageSelect == StageSelectManager.ToStageSelectType.Clear)
             {
                 afterSeaColors = CalcSeaColors(GameParams.ClearedStageCount);
@@ -191,7 +202,7 @@ namespace GreeningEx2019
         /// 指定の割合で海のテクスチャーを合成して、海テクスチャーに反映させます。
         /// </summary>
         /// <param name="rate">0～1</param>
-        void UpdateSeaTexture(float rate)
+        public void UpdateSeaTexture(float rate)
         {
             for (int i = 0; i < seaColors.Length; i++)
             {
@@ -258,6 +269,50 @@ namespace GreeningEx2019
                 Log($"  rates[{i % 128}, {i / 128} / {i} / {tempRates.Length}]={tempRates[i]} / col={cols[i]}");
             }
             return cols;
+        }
+
+        /// <summary>
+        /// 色を変更する汚れ島のマテリアルにアタッチするためのインスタンス
+        /// </summary>
+        Material workDirtyIslandMaterial;
+
+        /// <summary>
+        /// 星をアニメに合わせて奇麗に変化させます。
+        /// </summary>
+        public IEnumerator UpdateClean()
+        {
+            // 少し待ってから開始
+            yield return new WaitForSeconds(beforeCleanWait);
+
+            islandCleanAnim.SetInteger("Cleared", GameParams.ClearedStageCount);
+            MeshRenderer rend = dirtyIslands[GameParams.NowClearStage].GetComponent<MeshRenderer>();
+            workDirtyIslandMaterial = new Material(rend.material);
+            rend.material = workDirtyIslandMaterial;
+
+            while (islandUp < 1f)
+            {
+                // 島の色を変化させます
+                workDirtyIslandMaterial.color = Color.Lerp(dirtyIslandMaterial.color, cleanIslandMaterial.color, islandUp);
+
+                // 海の色を変化させます
+                UpdateSeaTexture(islandUp);
+
+                yield return null;
+            }
+
+            // 島の色の変化を完了させます
+            workDirtyIslandMaterial.color = cleanIslandMaterial.color;
+
+            // 海の色を変化させます
+            UpdateSeaTexture(1f);
+
+            // 奇麗にしたら少し待つ
+            yield return new WaitForSeconds(afterCleanWait);
+        }
+
+        void UpdateIslandMaterial()
+        {
+
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

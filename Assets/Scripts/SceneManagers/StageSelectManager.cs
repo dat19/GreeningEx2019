@@ -119,13 +119,8 @@ namespace GreeningEx2019
                     nextState = StateType.PlayerControl;
                     break;
                 case ToStageSelectType.Clear:
-                    // 途中の動画チェック
-                    if (GameParams.NowClearStage == 4)
-                    {
-                        PlayVideo(VideoType.Stage5);
-                        nextState = StateType.PlayerControl;
-                    }
-                    else if (GameParams.NowClearStage == 9)
+                    // エンディングチェック
+                    if (GameParams.NowClearStage == 9)
                     {
                         PlayVideo(VideoType.Ending);
                         nextState = StateType.ToTitle;
@@ -145,7 +140,43 @@ namespace GreeningEx2019
             SceneManager.SetActiveScene(gameObject.scene);
         }
 
+        /// <summary>
+        /// フェードインが完了した時の処理
+        /// </summary>
+        public override void OnFadeInDone()
+        {
+            base.OnFadeInDone();
 
+            switch(state)
+            {
+                case StateType.Clear:
+                    StartCoroutine(clearSeauence());
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// クリア演出を実行します
+        /// </summary>
+        IEnumerator clearSeauence()
+        {
+            // 切り替え
+            yield return baseStar.UpdateClean();
+
+            // 次のステージを自動的に更新
+            GameParams.NextSelectStage();
+
+            // 差し込み動画チェック
+            if (GameParams.NowClearStage == 4)
+            {
+                PlayVideo(VideoType.Stage5);
+                nextState = StateType.PlayerControl;
+            }
+            else
+            {
+                state = StateType.PlayerControl;
+            }
+        }
         private void Update()
         {
             if (!isStarted) { return; }
@@ -156,6 +187,7 @@ namespace GreeningEx2019
                     UpdatePlayerControl();
                     break;
 
+                case StateType.Clear:
                 case StateType.StoryMovie:
                     break;
 

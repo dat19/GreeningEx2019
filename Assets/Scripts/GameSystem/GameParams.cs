@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define DEBUG_STAGE_CLEAR
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -105,6 +107,12 @@ namespace GreeningEx2019
             }
 
             NowClearStage = ClearedStageCount;
+
+#if DEBUG_STAGE_CLEAR
+            NowClearStage = 0;
+            Instance.clearedStageCount = 1;
+            Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
+#endif
         }
 
         /// <summary>
@@ -136,12 +144,6 @@ namespace GreeningEx2019
             {
                 Instance.clearedStageCount++;
                 SaveClearedStageCount();
-            }
-
-            SelectedStage++;
-            if (SelectedStage >= StageMax)
-            {
-                SelectedStage = StageMax-1;
             }
         }
     }
