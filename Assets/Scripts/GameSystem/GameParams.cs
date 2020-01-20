@@ -1,4 +1,4 @@
-﻿#define DEBUG_STAGE_CLEAR
+﻿//#define DEBUG_STAGE_CLEAR
 
 using System.Collections;
 using System.Collections.Generic;

@@ -38,8 +38,8 @@ namespace GreeningEx2019
         Image movieFadeImage = null;
         [Tooltip("星のインスタンス"), SerializeField]
         BaseStar baseStar = null;
-        [Tooltip("クレジットロールアニメ"), SerializeField]
-        Animator creditAnim = null;
+        [Tooltip("キャンバスアニメ"), SerializeField]
+        Animator canvasAnim = null;
         [Tooltip("クレジットアニメの高速"), SerializeField]
         float CreditSpeedUp = 4f;
 
@@ -69,10 +69,9 @@ namespace GreeningEx2019
 
         enum StateType
         {
-            OpeningMovie,
+            None = -1,
             PlayerControl,
             Clear,
-            Back,
             StoryMovie,
             CreditRoll,
         }
@@ -88,13 +87,25 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// キャンバスアニメーションのState定義
+        /// </summary>
+        enum CanvasAnimStateType
+        {
+            Standby,    // 0
+            FadeOut,    // 1
+            FadeIn,     // 2
+            UIDisplay,  // 3
+            WhiteOut,   // 4
+        }
+
+        /// <summary>
         /// 現在の状態
         /// </summary>
-        static StateType state = StateType.OpeningMovie;
+        static StateType state = StateType.None;
         /// <summary>
         /// 動画後に切り替える状態
         /// </summary>
-        static StateType nextState;
+        static StateType nextState = StateType.None;
 
         // リピートを防ぐための前のカーソル
         static float lastCursor = 0;
@@ -106,11 +117,15 @@ namespace GreeningEx2019
         /// </summary>
         static bool isStarted = false;
 
-        static bool isCreditRollDone = false;
+        AnimEvents animEvents = null;
+        Animator myAnimator = null;
+        bool isAnimDone = false;
 
         public override void OnFadeOutDone()
         {
             isStarted = true;
+            animEvents = GetComponent<AnimEvents>();
+            myAnimator = GetComponent<Animator>();
 
             //StarClean.StartClearedStage(GameParams.ClearedStageCount);
             baseStar.MakeSeaTexture();
@@ -128,21 +143,18 @@ namespace GreeningEx2019
             {
                 case ToStageSelectType.NewGame:
                     PlayVideo(VideoType.Opening);
-                    nextState = StateType.PlayerControl;
                     break;
                 case ToStageSelectType.Clear:
-                    // キャンバスを非表示にする
-                    creditAnim.gameObject.SetActive(false);
-                    state = StateType.Clear;
+                    nextState = StateType.Clear;
                     break;
                 case ToStageSelectType.Back:
-                    state = StateType.Back;
+                    nextState = StateType.PlayerControl;
                     break;
             }
 
             UpdateStageName();
-            base.OnFadeOutDone();
             SceneManager.SetActiveScene(gameObject.scene);
+            base.OnFadeOutDone();
         }
 
         /// <summary>
@@ -152,11 +164,38 @@ namespace GreeningEx2019
         {
             base.OnFadeInDone();
 
-            switch(state)
+            if (state == StateType.Clear)
             {
-                case StateType.Clear:
-                    StartCoroutine(clearSeauence());
-                    break;
+                nextState = StateType.Clear;
+            }
+        }
+
+        private void Update()
+        {
+            if (!isStarted) { return; }
+
+            // 初期化処理
+            if (nextState != StateType.None)
+            {
+                state = nextState;
+                nextState = StateType.None;
+
+                switch (state)
+                {
+                    case StateType.Clear:
+                        StartCoroutine(clearSeauence());
+                        break;
+                    case StateType.PlayerControl:
+                        canvasAnim.SetInteger("State", (int)CanvasAnimStateType.UIDisplay);
+                        SoundController.PlayBGM(SoundController.BgmType.StageSelect);
+                        break;
+                }
+            }
+
+            // 更新処理
+            if (state == StateType.PlayerControl)
+            {
+                UpdatePlayerControl();
             }
         }
 
@@ -189,31 +228,7 @@ namespace GreeningEx2019
             else
             {
                 state = StateType.PlayerControl;
-                creditAnim.gameObject.SetActive(true);
                 SoundController.PlayBGM(SoundController.BgmType.StageSelect);
-            }
-        }
-
-        private void Update()
-        {
-            if (!isStarted) { return; }
-
-            switch (state)
-            {
-                case StateType.PlayerControl:
-                    UpdatePlayerControl();
-                    break;
-
-                case StateType.Clear:
-                case StateType.StoryMovie:
-                    break;
-
-                default:
-                    // デバッグコード。未実装の状態は、すぐに操作に移行
-                    if (Fade.IsFading) return;
-                    state = StateType.PlayerControl;
-                    SoundController.PlayBGM(SoundController.BgmType.StageSelect);
-                    break;
             }
         }
 
@@ -223,26 +238,51 @@ namespace GreeningEx2019
         /// <param name="vtype">再生するビデオの種類</param>
         void PlayVideo(VideoType vtype)
         {
-            creditAnim.gameObject.SetActive(true);
+            nextState = StateType.StoryMovie;
+            StartCoroutine(StoryMovie(vtype));
+        }
+
+        public void AnimDone()
+        {
+            isAnimDone = true;
+        }
+
+        IEnumerator AnimProc(CanvasAnimStateType type)
+        {
+            canvasAnim.SetInteger("State", (int)type);
+            isAnimDone = false;
+            while (!isAnimDone)
+            {
+                yield return null;
+            }
+        }
+
+        IEnumerator StoryMovie(VideoType vtype)
+        {
+            if (vtype != VideoType.Opening)
+            {
+                // オープニング以外はフェードアウト
+                // オープニングはフェードアウト状態から始めるので不要
+                yield return AnimProc(CanvasAnimStateType.FadeOut);
+            }
+            else
+            {
+                canvasAnim.SetInteger("State", (int)CanvasAnimStateType.WhiteOut);
+            }
 
             videoPlayer.enabled = true;
             videoPlayer.clip = videoClips[(int)vtype];
             videoPlayer.Play();
-            state = StateType.StoryMovie;
             movieImage.enabled = true;
-            movieFadeImage.enabled = true;
-            StartCoroutine(StoryMovie());
-        }
 
-        IEnumerator StoryMovie()
-        {
             // 動画開始を待つ
             while (videoPlayer.time <= 0.0001f)
             {
                 yield return null;
             }
 
-            movieFadeImage.enabled = false;
+            // フェードイン
+            yield return AnimProc(CanvasAnimStateType.FadeIn);
 
             // 動画終了を待つ
             while (videoPlayer.isPlaying)
@@ -250,8 +290,8 @@ namespace GreeningEx2019
                 yield return null;
             }
 
-            // クレジット再生
-            if (nextState == StateType.CreditRoll)
+            // 最終ステージならクレジットロールへ
+            if (GameParams.NowClearStage == GameParams.StageMax-1)
             {
                 yield return CreditRoll();
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
@@ -271,8 +311,7 @@ namespace GreeningEx2019
             }
 
             movieImage.enabled = false;
-            SoundController.PlayBGM(SoundController.BgmType.StageSelect);
-            state = nextState;
+            nextState = StateType.PlayerControl;
         }
 
 
@@ -308,18 +347,18 @@ namespace GreeningEx2019
         IEnumerator CreditRoll()
         {
             SoundController.PlayBGM(SoundController.BgmType.Ending);
-            creditAnim.SetTrigger("Start");
+            canvasAnim.SetTrigger("Start");
 
-            isCreditRollDone = false;
-            while (!isCreditRollDone)
+            isAnimDone = false;
+            while (!isAnimDone)
             {
                 if (GameParams.IsActionAndWaterButton)
                 {
-                    creditAnim.SetFloat("Speed", CreditSpeedUp);
+                    canvasAnim.SetFloat("Speed", CreditSpeedUp);
                 }
                 else
                 {
-                    creditAnim.SetFloat("Speed", 1);
+                    canvasAnim.SetFloat("Speed", 1);
                 }
 
                 yield return null;
@@ -330,14 +369,6 @@ namespace GreeningEx2019
             {
                 yield return null;
             }
-        }
-
-        /// <summary>
-        /// クレジットロールアニメが終わったら、アニメから呼び出します。
-        /// </summary>
-        public void CreditRollDone()
-        {
-            isCreditRollDone = true;
         }
 
         /// <summary>

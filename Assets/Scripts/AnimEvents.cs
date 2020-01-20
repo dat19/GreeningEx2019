@@ -9,8 +9,8 @@ using UnityEngine.Events;
 /// </summary>
 public class AnimEvents : MonoBehaviour
 {
-    [Tooltip("呼び出した時に実行するイベント"), SerializeField]
-    UnityEvent onCallFromAnimation = null;
+    [Tooltip("呼び出した時に実行するイベント")]
+    public UnityEvent onCallFromAnimation = null;
 
     public void Proc()
     {

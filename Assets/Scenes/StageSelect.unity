@@ -1023,7 +1023,7 @@ MonoBehaviour:
   movieImage: {fileID: 1160975145}
   movieFadeImage: {fileID: 2011787977}
   baseStar: {fileID: 2015810826}
-  creditAnim: {fileID: 1673357895}
+  canvasAnim: {fileID: 1673357895}
   CreditSpeedUp: 4
 --- !u!328 &382449290
 VideoPlayer:
@@ -2383,8 +2383,8 @@ RectTransform:
   - {fileID: 353709547}
   - {fileID: 1533842290}
   - {fileID: 1160975144}
-  - {fileID: 2011787976}
   - {fileID: 1721408518}
+  - {fileID: 2011787976}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2428,7 +2428,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 382449289}
-        m_MethodName: CreditRollDone
+        m_MethodName: AnimDone
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2562,7 +2562,7 @@ RectTransform:
   m_Children:
   - {fileID: 278754298}
   m_Father: {fileID: 1673357894}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2919,12 +2919,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1673357894}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 4, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2011787977
 MonoBehaviour:
@@ -2940,7 +2940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
