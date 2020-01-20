@@ -99,9 +99,9 @@ namespace GreeningEx2019
             }
 
             stageStars = new StageStar[count];
-            for (int i = 0; i < count ; i++)
+            for (int i = 0; i < count; i++)
             {
-                Vector3 pos = (islands[i].transform.position-transform.position).normalized * starRadius;
+                Vector3 pos = (islands[i].transform.position - transform.position).normalized * starRadius;
                 GameObject go = Instantiate<GameObject>(starPrefab, transform);
                 stageStars[i] = go.GetComponent<StageStar>();
                 go.transform.localPosition = pos;
@@ -109,6 +109,13 @@ namespace GreeningEx2019
                 if (i < st)
                 {
                     stageStars[i].SetMaterialRate(1f);
+                }
+
+                // クリア済みなら星表示。最後の星は、クリア以外の時は表示
+                if ((i < count - 1)
+                    || (GameParams.Instance.toStageSelect != StageSelectManager.ToStageSelectType.Clear))
+                {
+                    stageStars[i].SetAnimState(StageStar.AnimType.ForceShow);
                 }
                 stageStars[i].myStage = i;
             }
@@ -315,6 +322,7 @@ namespace GreeningEx2019
             // 少し待ってから開始
             yield return new WaitForSeconds(beforeCleanWait);
 
+            islandUp = 0;
             islandCleanAnim.SetFloat("Speed", 1f);
             islandCleanAnim.SetInteger("Cleared", GameParams.ClearedStageCount);
             MeshRenderer rend = dirtyIslands[GameParams.NowClearStage].GetComponent<MeshRenderer>();
@@ -342,6 +350,9 @@ namespace GreeningEx2019
 
             // 奇麗にしたら少し待つ
             yield return new WaitForSeconds(afterCleanWait);
+
+            // 新ステージの星を出現
+            stageStars[GameParams.ClearedStageCount].SetAnimState(StageStar.AnimType.Show);
         }
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]

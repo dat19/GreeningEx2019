@@ -14,6 +14,16 @@ namespace GreeningEx2019
         Material[] materials = new Material[3];
 
         /// <summary>
+        /// アニメStateの値
+        /// </summary>
+        public enum AnimType
+        {
+            Hide,
+            Show,
+            ForceShow,
+        };
+
+        /// <summary>
         /// 担当するステージ。Stage1が0
         /// </summary>
         public int myStage = 0;
@@ -26,10 +36,12 @@ namespace GreeningEx2019
 
         Camera mainCamera = null;
         MeshRenderer myRenderer = null;
+        Animator myAnimator = null;
 
         private void Awake()
         {
             myRenderer = GetComponentInChildren<MeshRenderer>();
+            myAnimator = GetComponent<Animator>();
         }
 
         void Update()
@@ -43,7 +55,7 @@ namespace GreeningEx2019
                 rotateY = 0f;
             }
 
-            if (mainCamera ==null)
+            if (mainCamera == null)
             {
                 mainCamera = Camera.main;
             }
@@ -70,6 +82,15 @@ namespace GreeningEx2019
                     materials[(int)Goal.MaterialIndex.First],
                     materials[(int)Goal.MaterialIndex.Last], rate);
             }
+        }
+
+        /// <summary>
+        /// 指定のアニメを設定します。
+        /// </summary>
+        /// <param name="type">StageStar.AnimTypeで指定</param>
+        public void SetAnimState(AnimType type)
+        {
+            myAnimator.SetInteger("State", (int)type);
         }
     }
 }

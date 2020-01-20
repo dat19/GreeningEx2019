@@ -131,6 +131,9 @@ namespace GreeningEx2019
                     nextState = StateType.PlayerControl;
                     break;
                 case ToStageSelectType.Clear:
+                    // キャンバスを非表示にする
+                    creditAnim.gameObject.SetActive(false);
+
                     // エンディングチェック
                     if (GameParams.NowClearStage == 9)
                     {
@@ -183,6 +186,7 @@ namespace GreeningEx2019
 
             // 次のステージを自動的に更新
             GameParams.NextSelectStage();
+            UpdateStageName();
 
             // 差し込み動画チェック
             if (GameParams.NowClearStage == 4)
@@ -193,8 +197,11 @@ namespace GreeningEx2019
             else
             {
                 state = StateType.PlayerControl;
+                creditAnim.gameObject.SetActive(true);
+                SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             }
         }
+
         private void Update()
         {
             if (!isStarted) { return; }
@@ -272,6 +279,7 @@ namespace GreeningEx2019
             movieImage.enabled = false;
             SoundController.PlayBGM(SoundController.BgmType.StageSelect);
             state = nextState;
+            creditAnim.gameObject.SetActive(true);
         }
 
 

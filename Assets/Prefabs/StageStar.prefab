@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3179564481240332323}
   - component: {fileID: 3180237539196922867}
+  - component: {fileID: -7136662951785621741}
   m_Layer: 0
   m_Name: StageStar
   m_TagString: Untagged
@@ -51,6 +52,25 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 0d3f505ff53682149850292bc5767d61, type: 2}
   - {fileID: 2100000, guid: bfcd99bc3d024fd49be1884b0a2d1d32, type: 2}
   myStage: 0
+--- !u!95 &-7136662951785621741
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179564481240332324}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3ad10ce3060f9284e835e6a9bc43db7e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &3179564481619243835
 PrefabInstance:
   m_ObjectHideFlags: 0

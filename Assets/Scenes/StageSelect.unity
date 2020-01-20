@@ -969,6 +969,7 @@ GameObject:
   - component: {fileID: 382449288}
   - component: {fileID: 382449289}
   - component: {fileID: 382449290}
+  - component: {fileID: 382449291}
   m_Layer: 0
   m_Name: StageSelectManager
   m_TagString: Untagged
@@ -1058,6 +1059,25 @@ VideoPlayer:
   m_Looping: 0
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
+--- !u!95 &382449291
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382449287}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3ad10ce3060f9284e835e6a9bc43db7e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &452274514
 GameObject:
   m_ObjectHideFlags: 0

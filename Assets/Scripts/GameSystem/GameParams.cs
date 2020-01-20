@@ -117,10 +117,9 @@ namespace GreeningEx2019
             NowClearStage = ClearedStageCount;
 
 #if DEBUG_STAGE_CLEAR
-            NowClearStage = 0;
-            Instance.clearedStageCount = 1;
+            SelectedStage = NowClearStage = 9;
+            Instance.clearedStageCount = NowClearStage + 1;
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
-            SelectedStage = 0;
 #endif
         }
 
