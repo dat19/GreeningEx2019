@@ -1,4 +1,4 @@
-﻿//#define DEBUG_STAGE_CLEAR
+﻿#define DEBUG_STAGE_CLEAR
 
 using System.Collections;
 using System.Collections.Generic;
@@ -117,7 +117,7 @@ namespace GreeningEx2019
             NowClearStage = ClearedStageCount;
 
 #if DEBUG_STAGE_CLEAR
-            SelectedStage = NowClearStage = 9;
+            SelectedStage = NowClearStage = 2;
             Instance.clearedStageCount = NowClearStage + 1;
             Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
 #endif
