@@ -96,6 +96,7 @@ namespace GreeningEx2019
             FadeIn,     // 2
             UIDisplay,  // 3
             WhiteOut,   // 4
+            Credit,     // 5
         }
 
         /// <summary>
@@ -357,7 +358,7 @@ namespace GreeningEx2019
         IEnumerator CreditRoll()
         {
             SoundController.PlayBGM(SoundController.BgmType.Ending);
-            canvasAnim.SetTrigger("Start");
+            canvasAnim.SetInteger("State", (int)CanvasAnimStateType.Credit);
 
             isAnimDone = false;
             while (!isAnimDone)
