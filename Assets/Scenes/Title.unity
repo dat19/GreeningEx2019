@@ -331,6 +331,7 @@ MonoBehaviour:
   movieInterval: 10
   movieWrapImage: {fileID: 18235929}
   canvasAnimator: {fileID: 1875236173}
+  waitMovie: 2
 --- !u!328 &8955181
 VideoPlayer:
   m_ObjectHideFlags: 0
