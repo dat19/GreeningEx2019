@@ -81,7 +81,6 @@ namespace GreeningEx2019
         /// </summary>
         enum VideoType
         {
-            Opening,
             Stage5,
             Ending,
         }
@@ -136,13 +135,6 @@ namespace GreeningEx2019
             GameParams.Instance.toStageSelect = ToStageSelectType.Clear;
 #endif
 
-            switch (GameParams.Instance.toStageSelect)
-            {
-                case ToStageSelectType.NewGame:
-                    PlayVideo(VideoType.Opening);
-                    break;
-            }
-
             UpdateStageName();
             SceneManager.SetActiveScene(gameObject.scene);
             base.OnFadeOutDone();
@@ -159,7 +151,8 @@ namespace GreeningEx2019
             {
                 nextState = StateType.Clear;
             }
-            else if (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
+            else if (   (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
+                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame))
             {
                 nextState = StateType.PlayerControl;
             }
@@ -262,26 +255,13 @@ namespace GreeningEx2019
 
         IEnumerator StoryMovie(VideoType vtype)
         {
-            Debug.Log($"  StoryMovie({vtype}) / state={canvasAnim.GetInteger("State")}");
-            if (vtype != VideoType.Opening)
-            {
-                // オープニング以外はフェードアウト
-                // オープニングはフェードアウト状態から始めるので不要
-                yield return AnimProc(CanvasAnimStateType.FadeOut);
-            }
-            else
-            {
-                canvasAnim.SetInteger("State", (int)CanvasAnimStateType.WhiteOut);
-            }
-
-            Debug.Log($"2");
+            yield return AnimProc(CanvasAnimStateType.FadeOut);
 
             videoPlayer.enabled = true;
             videoPlayer.clip = videoClips[(int)vtype];
             videoPlayer.Play();
             movieImage.enabled = true;
 
-            Debug.Log($"3");
             // 動画開始を待つ
             while (videoPlayer.time <= 0.0001f)
             {
@@ -289,16 +269,13 @@ namespace GreeningEx2019
             }
 
             // フェードイン
-            Debug.Log($"4");
             yield return AnimProc(CanvasAnimStateType.FadeIn);
 
-            Debug.Log($"5");
             // 動画終了を待つ
             while (videoPlayer.isPlaying)
             {
                 yield return null;
             }
-            Debug.Log($"6");
 
             // 最終ステージならクレジットロールへ
             if (GameParams.NowClearStage == GameParams.StageMax-1)

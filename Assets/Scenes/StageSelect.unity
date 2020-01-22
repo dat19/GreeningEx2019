@@ -307,7 +307,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 3669}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &278754299
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   - All Test Island
   - All Test Island
   videoClips:
-  - {fileID: 32900000, guid: f80c33d0c9379e9439c8de0704d1ecf2, type: 3}
+  - {fileID: 32900000, guid: e413ac72acb617946ba15108b34ac0ed, type: 3}
   - {fileID: 32900000, guid: 28d5eb44475a1c7449050e047e630af1, type: 3}
   - {fileID: 32900000, guid: cbd68cd24171b6c4ab2c1dc04852e95c, type: 3}
   videoFadeSeconds: 0.5
