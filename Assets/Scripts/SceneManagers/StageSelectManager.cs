@@ -34,14 +34,12 @@ namespace GreeningEx2019
         float videoFadeSeconds = 0.5f;
         [Tooltip("動画を描画するRawImage"), SerializeField]
         RawImage movieImage = null;
-        [Tooltip("ストーリー動画が始まるまで画面を隠しておくためのイメージ"), SerializeField]
-        Image movieFadeImage = null;
         [Tooltip("星のインスタンス"), SerializeField]
         BaseStar baseStar = null;
         [Tooltip("キャンバスアニメ"), SerializeField]
         Animator canvasAnim = null;
         [Tooltip("クレジットアニメの高速"), SerializeField]
-        float CreditSpeedUp = 4f;
+        float creditSpeedUp = 4f;
 
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
@@ -342,7 +340,7 @@ namespace GreeningEx2019
             {
                 if (GameParams.IsActionAndWaterButton)
                 {
-                    canvasAnim.SetFloat("Speed", CreditSpeedUp);
+                    canvasAnim.SetFloat("Speed", creditSpeedUp);
                 }
                 else
                 {

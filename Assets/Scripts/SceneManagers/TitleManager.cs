@@ -23,6 +23,8 @@ namespace GreeningEx2019
         GameObject movieWrapImage = null;
         [Tooltip("Canvasアニメーター"), SerializeField]
         Animator canvasAnimator = null;
+        [Tooltip("動画が終わってからフェードするまでの待ち秒数"), SerializeField]
+        float waitMovie = 2f;
 
         enum StateType
         {
@@ -118,26 +120,43 @@ namespace GreeningEx2019
                         movieWrapImage.SetActive(false);
                     }
                     canvasAnimator.SetBool("Show", true);
-                    if (!videoPlayer.isPlaying || GameParams.IsActionAndWaterButtonDown)
+                    if (!videoPlayer.isPlaying)
                     {
                         state = StateType.FadeOut;
-                        isAnimDone = false;
-                        canvasAnimator.SetBool("Show", false);
+                        StartCoroutine(movieFadeOut(waitMovie));
+                    }else if(GameParams.IsActionAndWaterButtonDown)
+                    {
+                        state = StateType.FadeOut;
+                        StartCoroutine(movieFadeOut(0));
                     }
                     break;
 
                 case StateType.FadeOut:
-                    if (isAnimDone)
-                    {
-                        // フェードが終わったら、タイトル開始
-                        StartTitle();
-                    }
                     break;
 
                 case StateType.Title:
                     updateTitle();
                     break;
             }
+        }
+
+        /// <summary>
+        /// 動画が終わったら再生します。
+        /// </summary>
+        /// <param name="time">待ち秒数</param>
+        IEnumerator movieFadeOut(float time)
+        {
+            yield return new WaitForSeconds(time);
+
+            isAnimDone = false;
+            canvasAnimator.SetBool("Show", false);
+
+            // フェードが終わったら、タイトル開始
+            while (!isAnimDone)
+            {
+                yield return null;
+            }
+            StartTitle();
         }
 
         void updateTitle()
