@@ -91,12 +91,13 @@ namespace GreeningEx2019
             if (!Mathf.Approximately(Vector3.Distance(naepos, nextNaePos), 0f)) {
                 // 苗の候補場所が変わるので、移動キャンセル調査
                 // 苗の高さは、地面より1マス分上を確認
-                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight + StellaMove.naeActable.HeightFromGround;
+                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight;
                 int hitCount = StellaMove.naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
                 for (int i=0; i<hitCount;i++)
                 {
                     if (hits[i].collider.CompareTag(GroundTag))
                     {
+                        Debug.Log($"  hit nextNaeY={nextNaePos.y}");
                         // ぶつかるので移動をキャンセル
                         StellaMove.myVelocity.x = 0f;
                         break;
