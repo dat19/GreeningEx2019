@@ -147,7 +147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804403749}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -320,8 +320,8 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_subTextObjects:
   - {fileID: 0}
+  - {fileID: 1804403751}
   - {fileID: 1671241552041123987}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -605,6 +605,7 @@ MonoBehaviour:
   messageAnim: {fileID: 8614457879886551943}
   messageMinTime: 2
   messageMaxTime: 5
+  messageAsset: {fileID: 4900000, guid: 9935fc5b92148854288035e2c2d8fc7d, type: 3}
 --- !u!1 &9146241506593805998
 GameObject:
   m_ObjectHideFlags: 0
