@@ -34,6 +34,7 @@ namespace GreeningEx2019
         [SerializeField]
         public enum SeType
         {
+            None = -1,      // なし
             Decision,       // 0 決定、ゲーム開始音
             MushroomJump,   // 1 マッシュルームでジャンプ
             Obore,          // 2 溺れ
@@ -55,6 +56,17 @@ namespace GreeningEx2019
             LiftUp,         // 17 苗を持ち上げる
             PutDown,        // 18 苗を置く
             RockWater,      // 19 岩が水に落ちる
+            // 台詞
+            NarrationOpening,   // 20
+            NarrationStage5,    // 21
+            NarrationEnding,    // 22
+            GimmickDandelion,   // 23
+            GimmickMushroom,    // 24
+            GimmickFlowerBridge,// 25
+            GimmickRock,        // 26
+            GimmickGanbare,     // 27
+            GimmickDaijoubu,    // 28
+            GimmickKiwotsukete, // 29
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;

@@ -15,6 +15,8 @@ namespace GreeningEx2019
         bool waitGrowDone = false;
         [Tooltip("生長する時の効果音"), SerializeField]
         SoundController.SeType growSe = SoundController.SeType.GrowFlowers;
+        [Tooltip("生長した時に実行したいメソッドがあったら登録します。"), SerializeField]
+        UnityEngine.Events.UnityEvent growEvent;
 
         /// <summary>
         /// 汎用の状態
@@ -75,6 +77,7 @@ namespace GreeningEx2019
                 if (waitGrowDone)
                 {
                     WaitGrowCount++;
+                    Debug.Log($"  waitGrowCount={WaitGrowCount}");
                 }
                 return true;
             }
@@ -88,10 +91,12 @@ namespace GreeningEx2019
         /// </summary>
         public virtual void GrowDone()
         {
+            growEvent.Invoke();
             state = StateType.Growed;
             if (waitGrowDone)
             {
                 WaitGrowCount--;
+                Debug.Log($"  done waitGrowCount={WaitGrowCount}");
             }
         }
 
@@ -102,6 +107,7 @@ namespace GreeningEx2019
         {
             WaitGrowCount = 0;
             NaeGrowedCount = 0;
+            Debug.Log($"  init waitGrowCount={WaitGrowCount}");
         }
     }
 }
