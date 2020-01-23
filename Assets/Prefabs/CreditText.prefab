@@ -1,0 +1,260 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3554507624246618374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3554507624246618375}
+  - component: {fileID: 3554507624246618369}
+  - component: {fileID: 3554507624246618368}
+  m_Layer: 5
+  m_Name: TMP SubMeshUI [LogoTypeGothicCondense SDF Material + LiberationSans SDF
+    Atlas]
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3554507624246618375
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624246618374}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3554507624267568158}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &3554507624246618369
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624246618374}
+  m_CullTransparentMesh: 0
+--- !u!114 &3554507624246618368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624246618374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_spriteAsset: {fileID: 0}
+  m_material: {fileID: 0}
+  m_sharedMaterial: {fileID: 0}
+  m_isDefaultMaterial: 0
+  m_padding: 1.25
+  m_canvasRenderer: {fileID: 3554507624246618369}
+  m_TextComponent: {fileID: 3554507624267568159}
+  m_materialReferenceIndex: 1
+--- !u!1 &3554507624267568157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3554507624267568158}
+  - component: {fileID: 3554507624267568152}
+  - component: {fileID: 3554507624267568159}
+  m_Layer: 5
+  m_Name: CreditText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3554507624267568158
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624267568157}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3554507624246618375}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1760.53}
+  m_SizeDelta: {x: 0, y: 50}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &3554507624267568152
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624267568157}
+  m_CullTransparentMesh: 0
+--- !u!114 &3554507624267568159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3554507624267568157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_text: "GreeningEx2019\n\n--- \u958B\u767A\u30E1\u30F3\u30D0\u30FC ---\n\n\n--
+    \u30AA\u30EA\u30B8\u30CA\u30EB\u7248\u4F01\u753B --\n\n\u5165\u4F50\u4FEE\u5E73\u3000\u6C5F\u5CF6\u5F69\u672A\n\n\u5C0F\u6797\u6843\u83DC\u3000\u658E\u85E4\u78A7\u4EBA\n\n\u5BCC\u6C38\u5927\u8CC7\u3000\u6E21\u90E8\u3055\u304F\u3089\n\n\n\n--
+    \u30B2\u30FC\u30E0\u30B3\u30F3\u30BB\u30D7\u30C8\u30FB\u30AD\u30E3\u30E9\u30AF\u30BF\u30FC\u30C7\u30B6\u30A4\u30F3
+    --\n\n\u6C5F\u5CF6\u5F69\u672A\n\n\n\n-- \u30E0\u30FC\u30D3\u30FC\u30B7\u30CA\u30EA\u30AA
+    --\n\n\u8C9D\u639B\u771F\u7531\n\n\n\n-- \u30CA\u30EC\u30FC\u30B7\u30E7\u30F3
+    --\n\n?????\n\n\n\n-- \u30B0\u30E9\u30D5\u30A3\u30C3\u30AF\u30EF\u30FC\u30AF --\n\n-
+    Stella\u30FB\u661F\u30FB\u30DE\u30C3\u30D7\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u3000\u30E2\u30C7\u30EA\u30F3\u30B0
+    -\n\n\u6C5F\u5CF6\u5F69\u672A\n\n\n\n- \u30BF\u30A4\u30C8\u30EB\u753B\u9762\u30FB\u30E0\u30FC\u30D3\u30FC\u5236\u4F5C
+    -\n\n\u5C0F\u6797\u6843\u83DC\n\n\n\n- \u80CC\u666F\u30B0\u30E9\u30D5\u30A3\u30C3\u30AF\u30FB\u30DE\u30C3\u30D7\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u3000\u30E2\u30C7\u30EA\u30F3\u30B0
+    -\n\n\u6E21\u90E8\u3055\u304F\u3089\n\n\n\n- Stella\u30E2\u30FC\u30B7\u30E7\u30F3
+    -\n\n\u6C5F\u5CF6\u5F69\u672A\u3000\u5C0F\u6797\u6843\u83DC\u3000\u6E21\u90E8\u3055\u304F\u3089\n\n\n\n\n--
+    \u30D7\u30ED\u30B0\u30E9\u30DF\u30F3\u30B0 --\n\n- \u30B9\u30C6\u30FC\u30B8\u30A8\u30C7\u30A3\u30BF\u30FC\u30FB\u30B9\u30C6\u30FC\u30B8\u9078\u629E\u30B5\u30DD\u30FC\u30C8
+    -\n\n\u5C0F\u6797\u30A2\u30EC\u30AF\u30B7\u30FC\u3000\u753A\u7530\u52A0\u751F\u3000\u990A\u7530\u7ADC\u5BA3\n\n\n\n-
+    \u304D\u306E\u3053\u30FB\u5CA9\u30A2\u30CB\u30E1\u4F5C\u6210 -\n\n\u65B0\u78A7\u60DF\u3000\u990A\u7530\u7ADC\u5BA3\n\n\n\n-
+    \u30D7\u30EC\u30A4\u30E4\u30FC\u30A2\u30CB\u30E1\u8A2D\u5B9A\u30FB\u30BF\u30A4\u30C8\u30EB\u753B\u9762\u30FB\u6587\u5B57\u6F14\u51FA
+    -\n\n\u9234\u6728\u771F\u8F1D\u3000\u4E26\u6728\u7FD4\u6C70\u3000\u91CE\u6CA2\u9F8D\u751F\n\n\n\n-
+    \u305F\u3093\u307D\u307D\u30A2\u30CB\u30E1\u30FB\u30D7\u30ED\u30B0\u30E9\u30E0
+    -\n\n\u3046\u308F\n\n\n\n- \u30D0\u30B0\u4FEE\u6B63 -\n\n\u6771\u6D77\u6797\u9065\u54C9\u3000\u524D\u7530\u5065\u592A\n\n\n\n-
+    \u9078\u66F2 -\n\n\u6771\u6D77\u6797\u9065\u54C9\n\n\n\n- \u305D\u306E\u4ED6\u3082\u308D\u3082\u308D
+    -\n\n\u305F\u306A\u304B\u3086\u3046\n\n\n\n\n--- \u52B9\u679C\u97F3 ---\n\n\u3046\u308F\n\n\n\n\n---
+    \u4F7F\u7528\u30A2\u30BB\u30C3\u30C8 ---\n\n-- BGM --\n\n\u30CE\u30B9\u30BF\u30EB\u30B8\u30A2(\u7518\u8336)\n\nHaruichi\n\nH/MIX
+    GALLERY\n\nMusMus\n\nPeriTune\n\nTeada\n\n\n\n\n-- \u52B9\u679C\u97F3 --\n\n\n\n--
+    \u30D5\u30A9\u30F3\u30C8 --\n\n- AR CHRISTY -\n\nFontZone.net\n\n\n\n- LogoTypeGothicCondenced
+    -\n\nfontna.com\u3000Kato Masashi\u3000M+ FONTS PROJECT\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThank
+    you for playing!!\nSee you next...\n\nDAT GreeningEx2019\u30C1\u30FC\u30E0\n"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: b9b18ee746ab1004486f66414a41bab5, type: 2}
+  m_sharedMaterial: {fileID: 3221456670452223741, guid: b9b18ee746ab1004486f66414a41bab5,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294309365
+  m_fontColor: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_outlineColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontSize: 40
+  m_fontSizeBase: 40
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_textAlignment: 258
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_firstOverflowCharacterIndex: 15
+  m_linkedTextComponent: {fileID: 0}
+  m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_ignoreRectMaskCulling: 0
+  m_ignoreCulling: 1
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_firstVisibleCharacter: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_textInfo:
+    textComponent: {fileID: 3554507624267568159}
+    characterCount: 875
+    spriteCount: 0
+    spaceCount: 249
+    wordCount: 144
+    linkCount: 0
+    lineCount: 173
+    pageCount: 1
+    materialCount: 2
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_spriteAnimator: {fileID: 0}
+  m_hasFontAssetChanged: 0
+  m_subTextObjects:
+  - {fileID: 0}
+  - {fileID: 3554507624246618368}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}

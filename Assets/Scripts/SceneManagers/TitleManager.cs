@@ -25,6 +25,8 @@ namespace GreeningEx2019
         Animator canvasAnimator = null;
         [Tooltip("動画が終わってからフェードするまでの待ち秒数"), SerializeField]
         float waitMovie = 2f;
+        [Tooltip("クレジットスクロールビュー"), SerializeField]
+        GameObject creditScrollView = null;
 
         enum StateType
         {
@@ -32,6 +34,7 @@ namespace GreeningEx2019
             FadeOut,
             Title,
             FadeIn,
+            Credit,
         }
 
         /// <summary>
@@ -45,13 +48,14 @@ namespace GreeningEx2019
         float lastSeVolume = 0;
 
         VideoPlayer videoPlayer = null;
-        StateType state = StateType.Opening;
+        StateType state = StateType.FadeOut;
         float startTime = 0f;
         bool isAnimDone = false;
 
         public override void OnFadeOutDone()
         {
             SceneManager.SetActiveScene(gameObject.scene);
+            state = StateType.FadeOut;
 
             movieWrapImage.SetActive(true);
 
@@ -137,6 +141,13 @@ namespace GreeningEx2019
                 case StateType.Title:
                     updateTitle();
                     break;
+
+                case StateType.Credit:
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        ShowCredit(false);
+                    }
+                    break;
             }
         }
 
@@ -201,11 +212,13 @@ namespace GreeningEx2019
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = true;
+                startTime = Time.time;
             }
             else if (Input.GetAxisRaw("Horizontal") < 0)
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = false;
+                startTime = Time.time;
             }
         }
 
@@ -229,6 +242,17 @@ namespace GreeningEx2019
         public void AnimDone()
         {
             isAnimDone = true;
+        }
+
+        /// <summary>
+        /// クレジットの表示、非表示を設定します。
+        /// </summary>
+        public void ShowCredit(bool flag)
+        {
+            SoundController.Play(SoundController.SeType.MoveCursor);
+            creditScrollView.SetActive(flag);
+            state = flag ? StateType.Credit : StateType.Title;
+            startTime = Time.time;
         }
     }
 }
