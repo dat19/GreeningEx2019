@@ -34,27 +34,27 @@ namespace GreeningEx2019
         [SerializeField]
         public enum SeType
         {
-            Decision,       // 0
-            MushroomJump,   // 1
-            Obore,          // 2
-            CanClear,       // 3
-            GrowIvy,        // 4
-            GrowMushroom,   // 5
-            GrowDandelion,  // 6
-            Landing,        // 7
-            OpenMenu,       // 8
+            Decision,       // 0 決定、ゲーム開始音
+            MushroomJump,   // 1 マッシュルームでジャンプ
+            Obore,          // 2 溺れ
+            CanClear,       // 3 全て発芽させて、星が光る
+            GrowIvy,        // 4 ツタが伸びる
+            GrowMushroom,   // 5 キノコが発芽
+            GrowDandelion,  // 6 たんぽぽが発芽
+            Landing,        // 7 着地
+            OpenMenu,       // 8 メニューを開く(未実装)
             //
-            MoveCursor,     // 9
-            GrowFlowers,    // 10
-            RollingStone,   // 11
-            WalkOnFlower,   // 12
-            SpawnFluff,     // 13
-            MiniJump,       // 14
-            GrowRock,       // 15
-            Water,          // 16
-            LiftUp,         // 17
-            PutDown,        // 18
-            RockWater,      // 19
+            MoveCursor,     // 9  カーソル移動
+            GrowFlowers,    // 10 花の橋が発芽
+            RollingStone,   // 11 岩が転がる
+            WalkOnFlower,   // 12 花の上を歩く(未実装)
+            SpawnFluff,     // 13 たんぽぽから綿毛出現
+            MiniJump,       // 14 1段差をジャンプ
+            GrowRock,       // 15 岩が発芽
+            Water,          // 16 水をまく
+            LiftUp,         // 17 苗を持ち上げる
+            PutDown,        // 18 苗を置く
+            RockWater,      // 19 岩が水に落ちる
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;
