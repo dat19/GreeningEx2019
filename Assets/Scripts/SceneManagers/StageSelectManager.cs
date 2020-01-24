@@ -120,6 +120,7 @@ namespace GreeningEx2019
         public override void OnFadeOutDone()
         {
             isStarted = true;
+            GameParams.isMiss = false;
 
             //StarClean.StartClearedStage(GameParams.ClearedStageCount);
             baseStar.MakeSeaTexture();
@@ -241,14 +242,12 @@ namespace GreeningEx2019
 
         IEnumerator AnimProc(CanvasAnimStateType type)
         {
-            Debug.Log($"  AnimProc({type})");
             canvasAnim.SetInteger("State", (int)type);
             isAnimDone = false;
             while (!isAnimDone)
             {
                 yield return null;
             }
-            Debug.Log($"  done");
         }
 
         IEnumerator StoryMovie(VideoType vtype)

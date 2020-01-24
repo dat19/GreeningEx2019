@@ -558,6 +558,7 @@ namespace GreeningEx2019
 
             if ((NowAction != ActionType.Obore) && other.CompareTag("DeadZone"))
             {
+                GameParams.isMiss = true;
                 ChangeAction(ActionType.Obore);
                 return;
             }
