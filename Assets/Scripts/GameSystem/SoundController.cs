@@ -67,6 +67,8 @@ namespace GreeningEx2019
             GimmickGanbare,     // 27
             GimmickDaijoubu,    // 28
             GimmickKiwotsukete, // 29
+            // 追加効果音
+            HitHead,            // 30 頭ぶつけ
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;

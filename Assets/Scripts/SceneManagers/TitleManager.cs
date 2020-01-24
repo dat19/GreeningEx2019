@@ -77,7 +77,7 @@ namespace GreeningEx2019
                 IsContinue = true;
             }
 
-            SeMute();
+            //SeMute();
         }
 
         public override void OnFadeInDone()

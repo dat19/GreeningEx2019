@@ -305,7 +305,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
         /// </summary>
-        public void Move()
+        public CollisionFlags Move()
         {
             // 設定された速度を反映
             anim.SetFloat("VelX", Mathf.Abs(myVelocity.x));
@@ -315,15 +315,14 @@ namespace GreeningEx2019
 
             // 左端の移動制限
             move.x = StageOverCheck(move.x);
-
-            chrController.Move(move);
+            CollisionFlags colflag = chrController.Move(move);
 
             if (!chrController.isGrounded 
                 && stellaActionScriptableObjects[(int)NowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
-                chrController.Move(move);
+                colflag = chrController.Move(move);
             }
 
             // ステージ外チェック
@@ -332,10 +331,11 @@ namespace GreeningEx2019
                 // ミスにする
                 GameParams.isMiss = true;
                 ChangeAction(ActionType.Obore);
-                return;
+                return colflag;
             }
 
             anim.SetBool("IsGrounded", chrController.isGrounded);
+            return colflag;
         }
 
         /// <summary>
