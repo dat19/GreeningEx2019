@@ -151,10 +151,11 @@ namespace GreeningEx2019
         /// </summary>
         public static void StageClear()
         {
-            Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
+            Instance.toStageSelect = StageSelectManager.ToStageSelectType.NextStage;
             NowClearStage = SelectedStage;
             if (SelectedStage == ClearedStageCount)
             {
+                Instance.toStageSelect = StageSelectManager.ToStageSelectType.Clear;
                 Instance.clearedStageCount++;
                 SaveClearedStageCount();
             }
