@@ -471,8 +471,8 @@ RectTransform:
   - {fileID: 296751324}
   - {fileID: 353709547}
   - {fileID: 1533842290}
-  - {fileID: 1721408518}
   - {fileID: 1160975144}
+  - {fileID: 1721408518}
   - {fileID: 2011787976}
   m_Father: {fileID: 1673357894}
   m_RootOrder: 0
@@ -856,7 +856,6 @@ MonoBehaviour:
   - All Test Island
   - All Test Island
   videoClips:
-  - {fileID: 32900000, guid: e413ac72acb617946ba15108b34ac0ed, type: 3}
   - {fileID: 32900000, guid: 28d5eb44475a1c7449050e047e630af1, type: 3}
   - {fileID: 32900000, guid: cbd68cd24171b6c4ab2c1dc04852e95c, type: 3}
   videoFadeSeconds: 0.5
@@ -1805,7 +1804,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 328457890}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2346,7 +2345,7 @@ RectTransform:
   m_Children:
   - {fileID: 278754298}
   m_Father: {fileID: 328457890}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

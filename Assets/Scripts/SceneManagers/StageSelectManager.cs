@@ -29,7 +29,7 @@ namespace GreeningEx2019
             "No Name",
         };
         [Tooltip("動画ファイル"), SerializeField]
-        VideoClip[] videoClips = new VideoClip[3];
+        VideoClip[] videoClips = new VideoClip[2];
         [Tooltip("動画フェード秒数"), SerializeField]
         float videoFadeSeconds = 0.5f;
         [Tooltip("動画を描画するRawImage"), SerializeField]
@@ -161,10 +161,13 @@ namespace GreeningEx2019
                 nextState = StateType.Clear;
             }
             else if (   (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
-                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame)
-                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NextStage))
+                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame))
             {
                 nextState = StateType.PlayerControl;
+            }
+            else if (GameParams.Instance.toStageSelect == ToStageSelectType.NextStage)
+            {
+                MovieOrNextStage();
             }
         }
 
@@ -207,6 +210,11 @@ namespace GreeningEx2019
             yield return baseStar.UpdateClean();
 
             // 差し込み動画チェック
+            MovieOrNextStage();
+        }
+
+        void MovieOrNextStage()
+        {
             if (GameParams.NowClearStage == 4)
             {
                 PlayVideo(VideoType.Stage5);
