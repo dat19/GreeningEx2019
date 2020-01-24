@@ -39,6 +39,8 @@ namespace GreeningEx2019
         Transform zyouroEmitter = null;
         [Tooltip("左手Transform"), SerializeField]
         Transform leftTransform = null;
+        [Tooltip("補正移動が途中で終わったとみなす移動量"), SerializeField]
+        float abortMinDistance = 0.001f;
 
         [Header("デバッグ")]
         [Tooltip("常に操作可能にしたい時、チェックします。"), SerializeField]
@@ -690,7 +692,7 @@ namespace GreeningEx2019
 
             // 移動していないのでアボート
             if ((reached != AdjustWalkResult.Reach)
-                && Mathf.Approximately(lastx, instance.transform.position.x))
+                && (Mathf.Abs(lastx-instance.transform.position.x) < instance.abortMinDistance))
             {
                 return AdjustWalkResult.Abort;
             }
