@@ -27,6 +27,8 @@ namespace GreeningEx2019
         float waitMovie = 2f;
         [Tooltip("クレジットスクロールビュー"), SerializeField]
         GameObject creditScrollView = null;
+        [Tooltip("ナレーションの再生開始待ち時間"), SerializeField]
+        float waitNarration = 2f;
 
         enum StateType
         {
@@ -106,6 +108,11 @@ namespace GreeningEx2019
             state = StateType.Opening;
         }
 
+        void StartNarration()
+        {
+            SoundController.Play(SoundController.SeType.NarrationOpening);
+        }
+
         private void Update()
         {
             if (Fade.IsFading 
@@ -122,6 +129,7 @@ namespace GreeningEx2019
                     if (movieWrapImage.activeSelf)
                     {
                         movieWrapImage.SetActive(false);
+                        Invoke("StartNarration", waitNarration);
                     }
                     canvasAnimator.SetBool("Show", true);
                     if (!videoPlayer.isPlaying)
@@ -136,6 +144,8 @@ namespace GreeningEx2019
                     break;
 
                 case StateType.FadeOut:
+                    // フェードアウト
+
                     break;
 
                 case StateType.Title:
