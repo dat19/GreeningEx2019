@@ -43,7 +43,14 @@ namespace GreeningEx2019
                     {
                         // 移動できなければ歩きに戻します
                         StellaMove.myVelocity = Vector3.zero;
-                        StellaMove.instance.ChangeAction(StellaMove.ActionType.NaeWalk);
+                        if (StellaMove.NowAction == StellaMove.ActionType.LiftUp)
+                        {
+                            ToWalk();
+                        }
+                        else
+                        {
+                            StellaMove.instance.ChangeAction(StellaMove.ActionType.NaeWalk);
+                        }
                     }
                     break;
                 case StateType.Action:
@@ -57,5 +64,16 @@ namespace GreeningEx2019
         /// 動作を開始するメソッドです。オーバーライドして実装してください。
         /// </summary>
         protected abstract void ToAction();
+
+        /// <summary>
+        /// 歩きへ
+        /// </summary>
+        protected void ToWalk()
+        {
+            StellaMove.myVelocity.x = 0;
+            StellaMove.naeActable.SetCollider(true);
+            StellaMove.naeActable = null;
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+        }
     }
 }
