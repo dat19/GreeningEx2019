@@ -77,7 +77,6 @@ namespace GreeningEx2019
                 if (waitGrowDone)
                 {
                     WaitGrowCount++;
-                    Debug.Log($"  waitGrowCount={WaitGrowCount}");
                 }
                 return true;
             }
@@ -96,7 +95,6 @@ namespace GreeningEx2019
             if (waitGrowDone)
             {
                 WaitGrowCount--;
-                Debug.Log($"  done waitGrowCount={WaitGrowCount}");
             }
         }
 

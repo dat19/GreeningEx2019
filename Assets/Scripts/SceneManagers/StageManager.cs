@@ -52,6 +52,17 @@ namespace GreeningEx2019
             }
         }
 
+        /// <summary>
+        /// クリアできる状況ならtrueを返します。
+        /// </summary>
+        public static bool CanClear
+        {
+            get
+            {
+                return Grow.NaeGrowedCount >= StageManager.NaeCount;
+            }
+        }
+
         private new void Awake()
         {
             instance = this;
