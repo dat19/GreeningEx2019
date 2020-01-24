@@ -312,27 +312,7 @@ namespace GreeningEx2019
             Vector3 move = myVelocity * Time.fixedDeltaTime;
 
             // 左端の移動制限
-            if (move.x < 0f)
-            {
-                float nextLeft = chrController.bounds.min.x + move.x;
-                if (nextLeft < StageManager.StageLeft)
-                {
-                    // ステージの左端に、ステラの中心から当たり判定の横端までの距離を足す
-                    // これで、ステージ左端にステラがくっつくときの座標が求まる
-                    nextLeft = StageManager.StageLeft + chrController.bounds.extents.x;
-                    move.x = nextLeft - transform.position.x;
-                }
-            }
-            else if (move.x > 0)
-            {
-                // 右端
-                float nextRight = chrController.bounds.max.x + move.x;
-                if (nextRight > StageManager.StageRight)
-                {
-                    nextRight = StageManager.StageRight - chrController.bounds.extents.x;
-                    move.x = nextRight - transform.position.x;
-                }
-            }
+            move.x = StageOverCheck(move.x);
 
             chrController.Move(move);
 
@@ -354,6 +334,38 @@ namespace GreeningEx2019
             }
 
             anim.SetBool("IsGrounded", chrController.isGrounded);
+        }
+
+        /// <summary>
+        /// ステージの端から出ないように、移動値を補正します。
+        /// </summary>
+        /// <param name="movex">移動予定のX距離</param>
+        /// <returns>補正後の移動X値</returns>
+        public float StageOverCheck(float movex)
+        {
+            if (movex < 0f)
+            {
+                float nextLeft = chrController.bounds.min.x + movex;
+                if (nextLeft < StageManager.StageLeft)
+                {
+                    // ステージの左端に、ステラの中心から当たり判定の横端までの距離を足す
+                    // これで、ステージ左端にステラがくっつくときの座標が求まる
+                    nextLeft = StageManager.StageLeft + chrController.bounds.extents.x;
+                    movex = nextLeft - transform.position.x;
+                }
+            }
+            else if (movex > 0)
+            {
+                // 右端
+                float nextRight = chrController.bounds.max.x + movex;
+                if (nextRight > StageManager.StageRight)
+                {
+                    nextRight = StageManager.StageRight - chrController.bounds.extents.x;
+                    movex = nextRight - transform.position.x;
+                }
+            }
+
+            return movex;
         }
 
         /// <summary>

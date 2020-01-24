@@ -49,10 +49,16 @@ namespace GreeningEx2019
 
             Vector3 move = next - StellaMove.instance.transform.position;
 
+            // 画面端から出た時の補正
+            float adjustedX = StellaMove.instance.StageOverCheck(move.x);
+            bool adjusted = move.x != adjustedX;
+            move.x = adjustedX;
+
+            // 移動
             CollisionFlags flags = StellaMove.chrController.Move(move);
 
             // 衝突があったら離す
-            if (flags != CollisionFlags.None)
+            if ((flags != CollisionFlags.None) || adjusted)
             {
                 holded = false;
                 if ((flags & CollisionFlags.Below) != 0)
