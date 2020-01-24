@@ -310,6 +310,30 @@ namespace GreeningEx2019
             anim.SetFloat("VelY", myVelocity.y);
 
             Vector3 move = myVelocity * Time.fixedDeltaTime;
+
+            // 左端の移動制限
+            if (move.x < 0f)
+            {
+                float nextLeft = chrController.bounds.min.x + move.x;
+                if (nextLeft < StageManager.StageLeft)
+                {
+                    // ステージの左端に、ステラの中心から当たり判定の横端までの距離を足す
+                    // これで、ステージ左端にステラがくっつくときの座標が求まる
+                    nextLeft = StageManager.StageLeft + chrController.bounds.extents.x;
+                    move.x = nextLeft - transform.position.x;
+                }
+            }
+            else if (move.x > 0)
+            {
+                // 右端
+                float nextRight = chrController.bounds.max.x + move.x;
+                if (nextRight > StageManager.StageRight)
+                {
+                    nextRight = StageManager.StageRight - chrController.bounds.extents.x;
+                    move.x = nextRight - transform.position.x;
+                }
+            }
+
             chrController.Move(move);
 
             if (!chrController.isGrounded 
@@ -318,6 +342,15 @@ namespace GreeningEx2019
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
                 chrController.Move(move);
+            }
+
+            // ステージ外チェック
+            if (chrController.bounds.max.y < StageManager.StageBottom)
+            {
+                // ミスにする
+                GameParams.isMiss = true;
+                ChangeAction(ActionType.Obore);
+                return;
             }
 
             anim.SetBool("IsGrounded", chrController.isGrounded);
