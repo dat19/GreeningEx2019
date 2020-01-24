@@ -20,6 +20,7 @@ namespace GreeningEx2019
         {
             base.Init();
             StellaMove.SetAnimState(StellaMove.AnimType.Walk);
+            StellaMove.SetAnimBool("Back", false);
             state = StateType.Walk;
         }
 

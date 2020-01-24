@@ -27,10 +27,7 @@ namespace GreeningEx2019
                 // 調整を終えて、苗を下す
                 if (StellaMove.AdjustWalk(targetX, StellaMove.MoveSpeed) != StellaMove.AdjustWalkResult.Continue)
                 {
-                    StellaMove.myVelocity.x = 0;
-                    StellaMove.naeActable.SetCollider(true);
-                    StellaMove.naeActable = null;
-                    StellaMove.instance.ChangeAction(StellaMove.ActionType.Walk);
+                    ToWalk();
                 }
             }
         }
