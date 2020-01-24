@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace GreeningEx2019
 {
+    [System.Serializable]
     public delegate bool EventChecker();
 
     /// <summary>
@@ -15,10 +16,14 @@ namespace GreeningEx2019
         SoundController.SeType se = SoundController.SeType.None;
         [Tooltip("表示するメッセージ。複数設定すると、ランダムでどれか一つを表示します。"), SerializeField]
         MessageManager.MessageType []messages = new MessageManager.MessageType[0];
-        [Tooltip("発動チェックをするイベント。未設定なら無条件で発動します。"), SerializeField]
-        EventChecker canEmit = null;
         [Tooltip("発動させたいイベントがあったら登録します。"), SerializeField]
         UnityEngine.Events.UnityEvent events;
+
+        /// <summary>
+        /// 発動の条件がある場合、このクラスをオーバーライドして、
+        /// 発動できる時にtrueを返すようにします。
+        /// </summary>
+        protected virtual bool canEmit { get { return true; } }
 
         /// <summary>
         /// 多重呼び出しを避けるためのフラグ
@@ -27,13 +32,8 @@ namespace GreeningEx2019
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && !isEmitted)
+            if (other.CompareTag("Player") && !isEmitted && canEmit)
             {
-                if (canEmit != null && !canEmit())
-                {
-                    return;
-                }
-
                 isEmitted = true;
 
                 events.Invoke();

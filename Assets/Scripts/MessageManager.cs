@@ -33,6 +33,12 @@ namespace GreeningEx2019
             LetsMove,
             LetsGreen,
             Stage1Nice,
+            CanClear,
+            Escape,
+            // Stage2
+            Stage2Watage,
+            Stage2Release,
+            Stage2TsutaFlower,
         }
 
         /// <summary>

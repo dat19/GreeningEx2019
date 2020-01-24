@@ -56,6 +56,11 @@ namespace GreeningEx2019
             }
         }
 
+        /// <summary>
+        /// ミスしてからリトライの時のセリフを判定するためのフラグ。
+        /// </summary>
+        public static bool isMiss = false;
+
         private void Awake()
         {
             LoadClearedStageCount();

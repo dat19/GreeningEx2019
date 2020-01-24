@@ -13,6 +13,8 @@ namespace GreeningEx2019
         float changeColorSeconds = 1f;
         [Tooltip("クリア時に、星が飛び去る方向。-1なら左、1なら右"), SerializeField]
         float clearFlyX = 1f;
+        [Tooltip("クリア可能になったら実行したいイベントを登録します。"), SerializeField]
+        UnityEngine.Events.UnityEvent canClearEvent;
 
         /// <summary>
         /// ステラが飛び乗るのを待つ場所へ移動するまでの秒数
@@ -160,7 +162,7 @@ namespace GreeningEx2019
             changeColorTime = 0;
             startMaterial.Lerp(myMaterial, myMaterial, 0);
 
-            if (Grow.NaeGrowedCount < StageManager.NaeCount)
+            if (!StageManager.CanClear)
             {
                 targetMaterial.Lerp(
                     instance.materials[(int)MaterialIndex.First],
@@ -172,6 +174,7 @@ namespace GreeningEx2019
                 SoundController.Play(SoundController.SeType.CanClear);
                 targetMaterial = new Material(instance.materials[(int)MaterialIndex.Completed]);
                 myCollider.enabled = true;
+                instance.canClearEvent.Invoke();
             }
         }
 

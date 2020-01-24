@@ -116,7 +116,11 @@ namespace GreeningEx2019
 
         public override bool Action()
         {
+            Debug.Log($"  Action {state}");
+
             if (state != StateType.Fly) return false;
+
+            Debug.Log($"  Action 2");
 
             // ステラがつかむ手の高さ
             Vector3 holdPos = StellaMove.instance.transform.position;
@@ -126,9 +130,11 @@ namespace GreeningEx2019
             holdOffsetY = holdPos.y - transform.position.y;
             if ((holdOffsetY < stellaOffsetBottom.y) || (holdOffsetY > stellaOffsetTop.y))
             {
+                Debug.Log($"  bad pos");
                 return false;
             }
 
+            Debug.Log($"  hold");
             state = StateType.Hold;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Fluff);
             return true;

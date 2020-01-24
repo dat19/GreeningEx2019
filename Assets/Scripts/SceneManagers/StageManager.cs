@@ -25,6 +25,21 @@ namespace GreeningEx2019
         const float ClearFadeSeconds = 0.24f;
 
         /// <summary>
+        /// ミスからの開始
+        /// </summary>
+        readonly SoundController.SeType[] missStartSerif =
+        {
+            SoundController.SeType.GimmickKiwotsukete,
+            SoundController.SeType.GimmickDaijoubu,
+        };
+
+        readonly SoundController.SeType[] initStartSerif =
+        {
+            SoundController.SeType.GimmickGanbare,
+            SoundController.SeType.GimmickKiwotsukete,
+        };
+
+        /// <summary>
         /// クリアアニメをする際の、ゴールからステラへの相対座標。
         /// ステラのX座標を星からの相対座標で求め、
         /// 星の高さはステラのY座標からの相対座標で求める
@@ -49,6 +64,17 @@ namespace GreeningEx2019
             get
             {
                 return !Fade.IsFading;
+            }
+        }
+
+        /// <summary>
+        /// クリアできる状況ならtrueを返します。
+        /// </summary>
+        public static bool CanClear
+        {
+            get
+            {
+                return Grow.NaeGrowedCount >= StageManager.NaeCount;
             }
         }
 
@@ -78,6 +104,23 @@ namespace GreeningEx2019
             NaeCount = gr.Length;
 
             Grow.Init();
+        }
+
+        public override void OnFadeInDone()
+        {
+            int index = Random.Range(0, 2);
+
+            if (GameParams.isMiss)
+            {
+                GameParams.isMiss = false;
+                SoundController.Play(missStartSerif[index]);
+            }
+            else
+            {
+                SoundController.Play(initStartSerif[index]);
+            }
+
+            base.OnFadeInDone();
         }
 
 #if USE_DEBUG_KEY
