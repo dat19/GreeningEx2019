@@ -110,7 +110,7 @@ namespace GreeningEx2019
 
         void StartNarration()
         {
-            SoundController.Play(SoundController.SeType.NarrationOpening);
+            //SoundController.Play(SoundController.SeType.NarrationOpening);
         }
 
         private void Update()
