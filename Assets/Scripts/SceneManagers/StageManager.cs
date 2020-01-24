@@ -25,18 +25,20 @@ namespace GreeningEx2019
         const float ClearFadeSeconds = 0.24f;
 
         /// <summary>
+        /// 開始時
+        /// </summary>
+        readonly SoundController.SeType[] initStartSerif =
+        {
+            SoundController.SeType.GimmickGanbare,
+        };
+
+        /// <summary>
         /// ミスからの開始
         /// </summary>
         readonly SoundController.SeType[] missStartSerif =
         {
-            SoundController.SeType.GimmickKiwotsukete,
-            SoundController.SeType.GimmickDaijoubu,
-        };
-
-        readonly SoundController.SeType[] initStartSerif =
-        {
             SoundController.SeType.GimmickGanbare,
-            SoundController.SeType.GimmickKiwotsukete,
+            SoundController.SeType.GimmickDaijoubu,
         };
 
         /// <summary>
@@ -143,17 +145,15 @@ namespace GreeningEx2019
 
         public override void OnFadeInDone()
         {
-            int index = Random.Range(0, 2);
+            SoundController.SeType[] seType = initStartSerif;
 
             if (GameParams.isMiss)
             {
                 GameParams.isMiss = false;
-                SoundController.Play(missStartSerif[index]);
+                seType = missStartSerif;
             }
-            else
-            {
-                SoundController.Play(initStartSerif[index]);
-            }
+            int index = Random.Range(0, seType.Length);
+            SoundController.Play(seType[index]);
 
             base.OnFadeInDone();
         }
