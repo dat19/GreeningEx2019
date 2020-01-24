@@ -101,10 +101,10 @@ namespace GreeningEx2019
 
         public override void UpdateAction()
         {
+            StellaMove.ZyouroEmitter.transform.position = StellaMove.ZyouroEmitterPosition.position;
+
             if (state == StateType.Action)
             {
-                StellaMove.ZyouroEmitter.transform.position = StellaMove.ZyouroEmitterPosition.position;
-
                 // 水オブジェクトを生成
                 if (Time.time-lastTriggerTime >= triggerEmitSeconds)
                 {

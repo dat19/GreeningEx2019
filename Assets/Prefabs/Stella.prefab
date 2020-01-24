@@ -408,6 +408,7 @@ MonoBehaviour:
   zyouroEmitterPosition: {fileID: 4761528081297712531}
   zyouroEmitter: {fileID: 8113470482104823767}
   leftTransform: {fileID: 6988236172730180146}
+  abortMinDistance: 0.001
   isDebugMovable: 0
   guiSkin: {fileID: 11400000, guid: 08a00d7c313c0ba4983821e0c3a26507, type: 2}
   isDebugDisp: 0
@@ -2470,6 +2471,21 @@ PrefabInstance:
         type: 3}
       propertyPath: TriggerModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844658418142946750, guid: 8629b3a503ea263428e90667035bc855,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844658418142946750, guid: 8629b3a503ea263428e90667035bc855,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844658418142946750, guid: 8629b3a503ea263428e90667035bc855,
+        type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 2048
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8629b3a503ea263428e90667035bc855, type: 3}
