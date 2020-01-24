@@ -68,6 +68,19 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// ステージの左端
+        /// </summary>
+        public static float StageLeft { get; private set; }
+        /// <summary>
+        /// ステージの右端
+        /// </summary>
+        public static float StageRight { get; private set; }
+        /// <summary>
+        /// ステージの下端
+        /// </summary>
+        public static float StageBottom { get; private set; }
+
+        /// <summary>
         /// クリアできる状況ならtrueを返します。
         /// </summary>
         public static bool CanClear
@@ -85,8 +98,30 @@ namespace GreeningEx2019
             base.Awake();
         }
 
+        /// <summary>
+        /// 指定のtagのオブジェクトの左端、右端、下端を求めます。
+        /// </summary>
+        /// <param name="tag">タグ</param>
+        void StageMinMax(string tag)
+        {
+            GameObject[] maps = GameObject.FindGameObjectsWithTag(tag);
+            for (int i = 0; i < maps.Length; i++)
+            {
+                Bounds bnd = maps[i].GetComponent<Collider>().bounds;
+                StageLeft = Mathf.Min(StageLeft, bnd.min.x);
+                StageRight = Mathf.Max(StageRight, bnd.max.x);
+                StageBottom = Mathf.Min(StageBottom, bnd.min.y);
+            }
+        }
+
         public override void OnFadeOutDone()
         {
+            StageLeft = float.PositiveInfinity;
+            StageRight = float.NegativeInfinity;
+            StageBottom = float.PositiveInfinity;
+            StageMinMax("Ground");
+            StageMinMax("DeadZone");
+
             SoundController.PlayBGM(SoundController.BgmType.Game0, true);
             SceneManager.SetActiveScene(gameObject.scene);
 
