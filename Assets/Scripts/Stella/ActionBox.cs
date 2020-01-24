@@ -105,7 +105,7 @@ namespace GreeningEx2019
             Actable nextSelect = null;
             for (int i=0; i<hitCount;i++)
             {
-                Actable []hitActs = hits[i].collider.GetComponents<Actable>();
+                Actable[]hitActs = hits[i].collider.GetComponents<Actable>();
 
                 for (int j = 0; j < hitActs.Length; j++)
                 {
@@ -113,6 +113,15 @@ namespace GreeningEx2019
 
                     // 距離の更新確認
                     float dist = Mathf.Abs(transform.position.x - hits[i].transform.position.x);
+
+                    if (hitActs[j] is NaeActable)
+                    {
+                        NaeActable naeAct = hitActs[j] as NaeActable;
+                        float tx = hitActs[j].transform.position.x - (StellaMove.NaePutDownOffsetX + naeAct.NaeOffsetX) * StellaMove.forwardVector.x;
+
+                        dist = Mathf.Abs(transform.position.x - tx);
+                    }
+
                     if (dist < min)
                     {
                         min = dist;

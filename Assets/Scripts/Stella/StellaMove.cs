@@ -842,6 +842,17 @@ namespace GreeningEx2019
             return false;
         }
 
+        /// <summary>
+        /// 指定の苗を拾うときのステラがいるべきX座標を返します。
+        /// </summary>
+        /// <param name="naeAct">拾う苗のインスタンス</param>
+        /// <returns>目的の苗を拾う時のステラのX座標</returns>
+        public static float NaeWalkTarget(NaeActable naeAct)
+        {
+            Debug.Log($"  NaeWalkTarget naePutPosition.x={naePutPosition.x} naeAct.NaeOffsetX={naeAct.NaeOffsetX} / forward={forwardVector.x}");
+            return naePutPosition.x - (NaePutDownOffsetX + naeAct.NaeOffsetX) * forwardVector.x;
+        }
+
         [System.Diagnostics.Conditional("DEBUG_MINIJUMP")]
         static void Log(object mes)
         {
