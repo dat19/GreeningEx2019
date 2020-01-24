@@ -333,6 +333,9 @@ MonoBehaviour:
   canvasAnimator: {fileID: 1875236173}
   waitMovie: 2
   creditScrollView: {fileID: 338350200}
+  waitNarration: 2
+  movieVolume: 0.6
+  movieRawImage: {fileID: 1219180758}
 --- !u!328 &8955181
 VideoPlayer:
   m_ObjectHideFlags: 0

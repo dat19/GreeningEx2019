@@ -29,6 +29,10 @@ namespace GreeningEx2019
         GameObject creditScrollView = null;
         [Tooltip("ナレーションの再生開始待ち時間"), SerializeField]
         float waitNarration = 2f;
+        [Tooltip("ムービーの音量"), SerializeField]
+        float movieVolume = 0.6f;
+        [Tooltip("ムービーのRawImage"), SerializeField]
+        RawImage movieRawImage = null;
 
         enum StateType
         {
@@ -104,13 +108,9 @@ namespace GreeningEx2019
         void StartMovie()
         {
             SoundController.StopBGM();
+            videoPlayer.SetDirectAudioVolume(0, movieVolume);
             videoPlayer.Play();
             state = StateType.Opening;
-        }
-
-        void StartNarration()
-        {
-            //SoundController.Play(SoundController.SeType.NarrationOpening);
         }
 
         private void Update()
@@ -145,7 +145,7 @@ namespace GreeningEx2019
 
                 case StateType.FadeOut:
                     // フェードアウト
-
+                    videoPlayer.SetDirectAudioVolume(0, movieRawImage.color.a * movieVolume);
                     break;
 
                 case StateType.Title:
