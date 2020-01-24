@@ -105,7 +105,6 @@ namespace GreeningEx2019
         {
             WaitGrowCount = 0;
             NaeGrowedCount = 0;
-            Debug.Log($"  init waitGrowCount={WaitGrowCount}");
         }
     }
 }
