@@ -55,6 +55,15 @@ namespace GreeningEx2019
             }
         }
 
+        public static bool IsClearEffect
+        {
+            get
+            {
+                return (GameParams.Instance.toStageSelect == ToStageSelectType.Clear)
+                    && (GameParams.NowClearStage == GameParams.ClearedStageCount-1);
+            }
+        }
+
         /// <summary>
         /// ステージ選択シーンに来る時の状況を表す。
         /// </summary>
@@ -62,6 +71,7 @@ namespace GreeningEx2019
         {
             NewGame,    // 新規にゲームを開始
             Clear,      // ステージクリア
+            NextStage,  // クリア済みのステージをクリア
             Back,       // ユーザー操作で戻った時、或いはコンティニューで開始
         }
 
@@ -151,7 +161,8 @@ namespace GreeningEx2019
                 nextState = StateType.Clear;
             }
             else if (   (GameParams.Instance.toStageSelect == ToStageSelectType.Back)
-                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame))
+                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame)
+                ||  (GameParams.Instance.toStageSelect == ToStageSelectType.NextStage))
             {
                 nextState = StateType.PlayerControl;
             }

@@ -27,8 +27,20 @@ namespace GreeningEx2019
         float waitMovie = 2f;
         [Tooltip("クレジットスクロールビュー"), SerializeField]
         GameObject creditScrollView = null;
+        [Tooltip("ムービーのRawImage"), SerializeField]
+        RawImage movieRawImage = null;
         [Tooltip("ナレーションの再生開始待ち時間"), SerializeField]
-        float waitNarration = 2f;
+        float waitNarration = 0.5f;
+        [Tooltip("ムービーの音量"), SerializeField]
+        float movieVolume1 = 0.6f;
+        [Tooltip("ムービーの音量"), SerializeField]
+        float movieVolume2 = 0.8f;
+        [Tooltip("ムービーのボリューム変更タイミング"), SerializeField]
+        float movieVolumeUpTime = 5f;
+        [Tooltip("ムービーのボリューム変更完了秒数"), SerializeField]
+        float movieVolumeUpDuration = 1f;
+        [Tooltip("ナレーションの音量"), SerializeField]
+        float narrationVolume = 1f;
 
         enum StateType
         {
@@ -38,6 +50,15 @@ namespace GreeningEx2019
             FadeIn,
             Credit,
         }
+
+        enum MovieVolumeState
+        {
+            WaitStart,
+            Narration,
+            FadeIn,
+            Last,
+        }
+        MovieVolumeState movieVolumeState = MovieVolumeState.WaitStart;
 
         /// <summary>
         /// コンティニューかどうかのフラグ
@@ -53,11 +74,13 @@ namespace GreeningEx2019
         StateType state = StateType.FadeOut;
         float startTime = 0f;
         bool isAnimDone = false;
+        AudioSource narrationSource = null;
 
         public override void OnFadeOutDone()
         {
             SceneManager.SetActiveScene(gameObject.scene);
             state = StateType.FadeOut;
+            narrationSource = GetComponent<AudioSource>();
 
             movieWrapImage.SetActive(true);
 
@@ -77,7 +100,7 @@ namespace GreeningEx2019
                 IsContinue = true;
             }
 
-            SeMute();
+            //SeMute();
         }
 
         public override void OnFadeInDone()
@@ -92,10 +115,10 @@ namespace GreeningEx2019
         /// </summary>
         void StartTitle()
         {
-            // SoundController.PlayBGM(SoundController.BgmType.Title, true);
             startTime = Time.time;
             state = StateType.Title;
             videoPlayer.Stop();
+            narrationSource.Stop();
         }
 
         /// <summary>
@@ -104,48 +127,71 @@ namespace GreeningEx2019
         void StartMovie()
         {
             SoundController.StopBGM();
+            videoPlayer.SetDirectAudioVolume(0, movieVolume1);
             videoPlayer.Play();
             state = StateType.Opening;
-        }
-
-        void StartNarration()
-        {
-            //SoundController.Play(SoundController.SeType.NarrationOpening);
+            narrationSource.volume = narrationVolume;
+            movieVolumeState = MovieVolumeState.WaitStart;
         }
 
         private void Update()
         {
-            if (Fade.IsFading 
+            if (Fade.IsFading
                 || SceneChanger.NextScene != SceneChanger.SceneType.None
                 || SceneChanger.NowScene != SceneChanger.SceneType.Title) return;
 
-            switch(state)
+            switch (state)
             {
                 case StateType.Opening:
                     if (videoPlayer.time <= 0)
                     {
                         break;
                     }
-                    if (movieWrapImage.activeSelf)
+                    if (movieVolumeState == MovieVolumeState.WaitStart)
                     {
+                        movieVolumeState++;
                         movieWrapImage.SetActive(false);
                         Invoke("StartNarration", waitNarration);
+                        startTime = Time.time;
                     }
                     canvasAnimator.SetBool("Show", true);
                     if (!videoPlayer.isPlaying)
                     {
                         state = StateType.FadeOut;
-                        StartCoroutine(movieFadeOut(waitMovie));
-                    }else if(GameParams.IsActionAndWaterButtonDown)
+                        StartCoroutine(MovieFadeOut(waitMovie));
+                    }
+                    else if (GameParams.IsActionAndWaterButtonDown)
                     {
                         state = StateType.FadeOut;
-                        StartCoroutine(movieFadeOut(0));
+                        StartCoroutine(MovieFadeOut(0));
+                    }
+                    else
+                    {
+                        // timing
+                        switch (movieVolumeState)
+                        {
+                            case MovieVolumeState.Narration:
+                                if ((Time.time-startTime) >= movieVolumeUpTime)
+                                {
+                                    movieVolumeState++;
+                                    startTime = Time.time;
+                                }
+                                break;
+                            case MovieVolumeState.FadeIn:
+                                float t = Mathf.Clamp01((Time.time - startTime) / movieVolumeUpDuration);
+                                videoPlayer.SetDirectAudioVolume(0, Mathf.Lerp(movieVolume1, movieVolume2, t));
+                                if (t >= 1f)
+                                {
+                                    movieVolumeState++;
+                                }
+                                break;
+                            case MovieVolumeState.Last:
+                                break;
+                        }
                     }
                     break;
 
                 case StateType.FadeOut:
-                    // フェードアウト
-
                     break;
 
                 case StateType.Title:
@@ -162,10 +208,22 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// ナレーション開始
+        /// </summary>
+        void StartNarration()
+        {
+            if (state == StateType.Opening)
+            {
+                narrationSource.volume = narrationVolume;
+                narrationSource.Play();
+            }
+        }
+
+        /// <summary>
         /// 動画が終わったら再生します。
         /// </summary>
         /// <param name="time">待ち秒数</param>
-        IEnumerator movieFadeOut(float time)
+        IEnumerator MovieFadeOut(float time)
         {
             yield return new WaitForSeconds(time);
 
@@ -173,10 +231,14 @@ namespace GreeningEx2019
             canvasAnimator.SetBool("Show", false);
 
             // フェードが終わったら、タイトル開始
+            float fromVolume = videoPlayer.GetDirectAudioVolume(0);
             while (!isAnimDone)
             {
                 yield return null;
+                videoPlayer.SetDirectAudioVolume(0, movieRawImage.color.a * fromVolume);
+                narrationSource.volume = movieRawImage.color.a * narrationVolume;
             }
+
             StartTitle();
         }
 
