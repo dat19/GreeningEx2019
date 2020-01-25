@@ -338,11 +338,13 @@ namespace GreeningEx2019
 
             if (GameParams.IsActionAndWaterButtonDown)
             {
+                state = StateType.None;
                 SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
             else if (Input.GetButtonDown("Esc"))
             {
+                state = StateType.None;
                 SoundController.Play(SoundController.SeType.Decision);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
             }

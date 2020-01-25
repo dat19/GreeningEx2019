@@ -188,11 +188,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6900849641491750175, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
         type: 3}
       propertyPath: messages.Array.size
@@ -202,6 +197,11 @@ PrefabInstance:
         type: 3}
       propertyPath: messages.Array.data[0]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb3303d6c6d19794fa9ae2bb4a06dd31, type: 3}
@@ -278,11 +278,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6900849641491750175, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
         type: 3}
       propertyPath: messages.Array.size
@@ -292,6 +287,11 @@ PrefabInstance:
         type: 3}
       propertyPath: messages.Array.data[0]
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb3303d6c6d19794fa9ae2bb4a06dd31, type: 3}
@@ -404,11 +404,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6900849641491750175, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
         type: 3}
       propertyPath: messages.Array.size
@@ -418,6 +413,11 @@ PrefabInstance:
         type: 3}
       propertyPath: messages.Array.data[0]
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb3303d6c6d19794fa9ae2bb4a06dd31, type: 3}
@@ -491,7 +491,7 @@ PrefabInstance:
     - target: {fileID: 3445956254415256171, guid: 8a14b57c7411aa749b7fe2d2f71da81d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3445956254415256171, guid: 8a14b57c7411aa749b7fe2d2f71da81d,
         type: 3}
@@ -898,11 +898,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6900849641491750175, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
         type: 3}
       propertyPath: messages.Array.size
@@ -942,6 +937,11 @@ PrefabInstance:
         type: 3}
       propertyPath: events.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb3303d6c6d19794fa9ae2bb4a06dd31, type: 3}
@@ -88624,11 +88624,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6900849641491750175, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
         type: 3}
       propertyPath: messages.Array.size
@@ -88638,6 +88633,11 @@ PrefabInstance:
         type: 3}
       propertyPath: messages.Array.data[0]
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6900849641491750173, guid: eb3303d6c6d19794fa9ae2bb4a06dd31,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb3303d6c6d19794fa9ae2bb4a06dd31, type: 3}
