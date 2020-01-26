@@ -144,6 +144,11 @@ namespace GreeningEx2019
             GameParams.Instance.toStageSelect = ToStageSelectType.Clear;
 #endif
 
+            if (GameParams.Instance.toStageSelect != ToStageSelectType.NewGame)
+            {
+                StageSelectCamera.SetAnim(StageSelectCamera.AnimType.BackStandby);
+            }
+
             UpdateStageName();
             SceneManager.SetActiveScene(gameObject.scene);
             base.OnFadeOutDone();
@@ -168,6 +173,16 @@ namespace GreeningEx2019
             else if (GameParams.Instance.toStageSelect == ToStageSelectType.NextStage)
             {
                 MovieOrNextStage();
+            }
+
+            // カメラアニメ
+            if (GameParams.Instance.toStageSelect == ToStageSelectType.NewGame)
+            {
+                StageSelectCamera.SetAnim(StageSelectCamera.AnimType.NewGame);
+            }
+            else
+            {
+                StageSelectCamera.SetAnim(StageSelectCamera.AnimType.Back);
             }
         }
 
@@ -340,12 +355,14 @@ namespace GreeningEx2019
             {
                 state = StateType.None;
                 SoundController.Play(SoundController.SeType.Decision);
+                StageSelectCamera.SetAnim(StageSelectCamera.AnimType.Start);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Game);
             }
             else if (Input.GetButtonDown("Esc"))
             {
                 state = StateType.None;
                 SoundController.Play(SoundController.SeType.Decision);
+                StageSelectCamera.SetAnim(StageSelectCamera.AnimType.ToTitle);
                 SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
             }
         }
