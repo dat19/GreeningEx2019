@@ -926,7 +926,6 @@ GameObject:
   m_Component:
   - component: {fileID: 437935119}
   - component: {fileID: 437935121}
-  - component: {fileID: 437935120}
   m_Layer: 0
   m_Name: BackgroundCamera
   m_TagString: Untagged
@@ -948,14 +947,6 @@ Transform:
   m_Father: {fileID: 745748506271266465}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &437935120
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437935118}
-  m_Enabled: 1
 --- !u!20 &437935121
 Camera:
   m_ObjectHideFlags: 0
