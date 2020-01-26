@@ -12,3 +12,8 @@ Escape,クリアできなくなったら、[Escape]キーでやり直せるよ�
 Stage2Watage,[X]か[Space]キー押しっぱなしで綿毛につかまれるよ。
 Stage2Release,[X]か[Space]キーを離せば綿毛をはなすよ。
 Stage2TsutaFlower,左はツタの苗、右は花の橋の苗。どう使おうかな?
+Stage3Mushroom,キノコに水をあげてみよう。
+Stage3CanJump,キノコに向かって歩いてみよう。
+Stage3How,上のキノコはどうやって取ればいいのかな?
+Stage3CanNaeJump,苗を持ったままでもジャンプできるよ。
+Stage3RevJump,キノコでジャンプする時に、逆方向のキーで後ろに飛べるよ。
