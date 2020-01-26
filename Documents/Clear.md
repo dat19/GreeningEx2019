@@ -21,7 +21,7 @@
   - アニメイベント設定 StellaClear.AttachStarを設定
   - ステラの向きを設定
   - 星に捕まるためのジャンプ開始
-- StellaClear.AttackStar
+- StellaClear.AttachStar
   - 星とステラの手の位置関係をOffsetFromStarに保存
   - Goal.FollowStella()を呼び出して、星をステラにくっつける
   - StellaClear.FlyAwayをアニメイベントに登録

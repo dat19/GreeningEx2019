@@ -58,7 +58,7 @@ namespace GreeningEx2019
         /// <summary>
         /// ステラの横向きの角度
         /// </summary>
-        public float RotateY = 40f;
+        public const float RotateY = 40f;
 
         /// <summary>
         /// 方向転換秒数
@@ -104,6 +104,7 @@ namespace GreeningEx2019
             PutDown,    // 9下す
             Clear,      // 10クリア
             ClearFly,   // 11クリアで飛んで行くアニメ
+            ClearWait,  // 12ぶら下がっている状態
         }
 
         /// <summary>
@@ -229,6 +230,11 @@ namespace GreeningEx2019
         /// ステップオンを有効にしたオブジェクト
         /// </summary>
         public static GameObject stepOnObject;
+
+        /// <summary>
+        /// 移動の中断を判定する距離
+        /// </summary>
+        public static float AbortMinDistance { get { return instance.abortMinDistance; } }
 
         static Animator anim;
         static Vector3 checkCenter;
@@ -833,7 +839,7 @@ namespace GreeningEx2019
         /// <returns>ターンが完了したらtrue</returns>
         public bool Turn()
         {
-            Vector3 e = StellaMove.Pivot.eulerAngles;
+            Vector3 e = Pivot.eulerAngles;
 
             if (turnDirecory < -0.5f)
             {
@@ -852,12 +858,12 @@ namespace GreeningEx2019
             if (delta >= 1f)
             {
                 delta = 1f;
-                StellaMove.forwardVector.x = -Mathf.Sign(e.y);
+                forwardVector.x = -Mathf.Sign(e.y);
                 return true;
             }
 
             e.y = Mathf.LerpAngle(-e.y, e.y, delta);
-            StellaMove.Pivot.eulerAngles = e;
+            Pivot.eulerAngles = e;
             return false;
         }
 

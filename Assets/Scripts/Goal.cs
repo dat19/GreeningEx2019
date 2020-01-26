@@ -48,7 +48,7 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 星も出るの座標を返します。
+        /// 星モデルの座標を返します。
         /// </summary>
         public static Vector3 StarPosition
         {
@@ -184,7 +184,12 @@ namespace GreeningEx2019
         public static void ClearAnim()
         {
             anim.SetTrigger("Rolling");
-            instance.StartCoroutine(MoveRollingStandbyPosition());
+
+            // ステラが着地していたら、星をステラの相対位置に移動させる
+            if (StellaMove.chrController.isGrounded)
+            {
+                instance.StartCoroutine(MoveRollingStandbyPosition());
+            }
         }
 
         static IEnumerator MoveRollingStandbyPosition()
