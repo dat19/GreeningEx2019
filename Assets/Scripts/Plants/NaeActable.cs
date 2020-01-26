@@ -9,10 +9,9 @@ namespace GreeningEx2019
     /// オブジェクトを列挙するためのメソッド用のデリゲート定義
     /// </summary>
     /// <param name="pos">チェックする座標</param>
-    /// <param name="hits">列挙したオブジェクトの戻り値</param>
     /// <param name="layer">対象のレイヤー</param>
     /// <returns>見つけたオブジェクト数</returns>
-    public delegate int FetchObjects(Vector3 pos, RaycastHit[] hits, int layer);
+    public delegate int FetchObjects(Vector3 pos, int layer);
 
     /// <summary>
     /// 苗として持ち上げられる処理のためのスクリプト。
@@ -146,37 +145,34 @@ namespace GreeningEx2019
         /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverlapObjectsWithBoxCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithBoxCollider(Vector3 pos, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + boxCollider.center;
-            return Physics.BoxCastNonAlloc(center, myCollider.bounds.extents, Vector3.down, hits, Quaternion.identity, 0f, layer);
+            return PhysicsCaster.BoxCast(center, myCollider.bounds.extents, Vector3.down, 0f, layer);
         }
 
         /// <summary>
         /// スフィアコライダーのオブジェクトと重なっているオブジェクトを列挙して返します。
         /// </summary>
         /// <param name="pos">左右中央、下の座標</param>
-        /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverlapObjectsWithSphereCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithSphereCollider(Vector3 pos, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + sphereCollider.center;
-            return Physics.SphereCastNonAlloc(center, sphereCollider.radius, Vector3.down, hits, 0f, layer);
+            return PhysicsCaster.SphereCast(center, sphereCollider.radius, Vector3.down, 0f, layer);
         }
 
         /// <summary>
         /// カプセルコライダーのオブジェクトと重なっているオブジェクトを列挙して返します。
         /// </summary>
         /// <param name="pos">左右中央、下の座標</param>
-        /// <param name="hits">結果を返すための配列</param>
         /// <param name="layer">対象のレイヤー</param>
         /// <returns>見つけたオブジェクト数</returns>
-        int FetchOverlapObjectsWithCapsuleCollider(Vector3 pos, RaycastHit[] hits, int layer)
+        int FetchOverlapObjectsWithCapsuleCollider(Vector3 pos, int layer)
         {
             Vector3 center = pos + Vector3.up * heightFromGround + capsuleCollider.center;
-            float offsetY = Mathf.Max(capsuleCollider.height * 0.5f - capsuleCollider.radius, 0f);
-            return Physics.CapsuleCastNonAlloc(center + Vector3.up * offsetY, center + Vector3.down * offsetY, capsuleCollider.radius, Vector3.down, hits, 0f, layer);
+            return PhysicsCaster.CapsuleCast(center, capsuleCollider, Vector3.down, 0f, layer);
         }
 
         public override bool Action()

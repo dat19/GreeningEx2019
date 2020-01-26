@@ -194,15 +194,14 @@ namespace GreeningEx2019
         {
             Vector3 origin = StellaMove.chrController.bounds.center;
             origin.x += getOffDistance * Mathf.Sign(lastRockObject.transform.position.x - origin.x);
-            int hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, float.PositiveInfinity, groundLayer, QueryTriggerInteraction.Collide);
-
+            int hitCount = PhysicsCaster.Raycast(origin, Vector3.down, float.PositiveInfinity, PhysicsCaster.MapCollisionLayer, QueryTriggerInteraction.Collide);
             Collider res = FindRock(hitCount);
             if (res.gameObject == lastRockObject) return true;
 
             // 列挙が越えていたら、一番上までで再列挙
-            while (hitCount >= HitMax)
+            while (hitCount >= PhysicsCaster.hits.Length)
             {
-                hitCount = Physics.RaycastNonAlloc(origin, Vector3.down, hits, origin.y-res.bounds.max.y, groundLayer, QueryTriggerInteraction.Collide);
+                hitCount = PhysicsCaster.Raycast(origin, Vector3.down, origin.y - res.bounds.max.y, PhysicsCaster.MapCollisionLayer, QueryTriggerInteraction.Collide);
                 res = FindRock(hitCount);
                 if (res.gameObject == lastRockObject) return true;
             }
@@ -223,15 +222,15 @@ namespace GreeningEx2019
 
             for (int i = 0; i < hitCount; i++)
             {
-                if (hits[i].collider.gameObject == lastRockObject)
+                if (PhysicsCaster.hits[i].collider.gameObject == lastRockObject)
                 {
-                    return hits[i].collider;
+                    return PhysicsCaster.hits[i].collider;
                 }
 
-                float h = hits[i].collider.bounds.max.y;
+                float h = PhysicsCaster.hits[i].collider.bounds.max.y;
                 if (h > top)
                 {
-                    res = hits[i].collider;
+                    res = PhysicsCaster.hits[i].collider;
                     top = h;
                 }
             }

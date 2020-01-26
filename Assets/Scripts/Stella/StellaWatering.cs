@@ -135,21 +135,14 @@ namespace GreeningEx2019
                 }
 
                 // 後ずさりチェック
-                float ofsy = StellaMove.chrController.height * 0.49f - StellaMove.chrController.radius;
-                int hitCount = Physics.CapsuleCastNonAlloc(
-                    StellaMove.chrController.bounds.center + Vector3.up * ofsy,
-                    StellaMove.chrController.bounds.center + Vector3.down * ofsy,
-                    StellaMove.chrController.radius,
-                    Vector3.down,
-                    hits,
-                    0,
-                    groundLayer);
+                int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.chrController, Vector3.down, 0f, PhysicsCaster.MapCollisionPlayerOnlyLayer);
+
                 for (int i=0;i<hitCount;i++)
                 {
                     // 下げる
-                    float colx = hits[i].collider.bounds.extents.x;
+                    float colx = PhysicsCaster.hits[i].collider.bounds.extents.x;
                     float dist = StellaMove.chrController.radius + colx + StellaMove.CollisionMargin;
-                    float target = hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
+                    float target = PhysicsCaster.hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
                     float move = target - StellaMove.instance.transform.position.x;
                     if (move * StellaMove.forwardVector.x >= 0f)
                     {

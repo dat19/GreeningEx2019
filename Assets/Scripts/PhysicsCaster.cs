@@ -152,7 +152,7 @@ namespace GreeningEx2019
         /// <param name="layerMask"></param>
         /// <param name="queryTriggerInteraction"></param>
         /// <returns></returns>
-        public static int CharacterControllerCast(CharacterController chr, Vector3 direction, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction= QueryTriggerInteraction.UseGlobal)
+        public static int CharacterControllerCast(CharacterController chr, Vector3 direction, float maxDistance, int layerMask, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             float h = chr.height * 0.5f - chr.radius;
             return Physics.CapsuleCastNonAlloc(
@@ -160,6 +160,34 @@ namespace GreeningEx2019
                 chr.bounds.center + Vector3.down * h,
                 chr.radius,
                 direction, hits, maxDistance, layerMask, queryTriggerInteraction);
+        }
+
+        /// <summary>
+        /// ボックスキャストします。
+        /// </summary>
+        /// <param name="center">中心座標</param>
+        /// <param name="boxExtents">ボックスのサイズの半分</param>
+        /// <param name="dir">方向</param>
+        /// <param name="dist">距離</param>
+        /// <param name="layer">GetMaskの値</param>
+        /// <returns>検出したオブジェクト数</returns>
+        public static int BoxCast(Vector3 center, Vector3 boxExtents, Vector3 dir, float dist, int layer)
+        {
+            return Physics.BoxCastNonAlloc(
+                center, boxExtents, dir, hits, Quaternion.identity, dist, layer);
+        }
+
+        public static int CapsuleCast(Vector3 center, CapsuleCollider capsuleCollider, Vector3 dir, float dist, int layer) {
+            float offsetY = Mathf.Max(capsuleCollider.height * 0.5f - capsuleCollider.radius, 0f);
+            return Physics.CapsuleCastNonAlloc(
+                center + Vector3.up * offsetY,
+                center + Vector3.down * offsetY, 
+                capsuleCollider.radius,
+                dir, hits, dist, layer);
+        }
+
+        public static int SphereCast(Vector3 center, float radius, Vector3 dir, float dist, int layer) {
+            return Physics.SphereCastNonAlloc(center, radius, dir, hits, dist, layer);
         }
     }
 }

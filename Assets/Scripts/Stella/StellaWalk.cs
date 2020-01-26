@@ -122,7 +122,7 @@ namespace GreeningEx2019
             // 着地目標のX座標と自分の足元のYから下方向にレイを飛ばして、着地点を見つける
             origin.y = StellaMove.chrController.bounds.min.y;
 
-            int cnt = Physics.RaycastNonAlloc(origin, Vector3.down, hits, float.PositiveInfinity, StellaMove.MapCollisionLayerMask);
+            int cnt = PhysicsCaster.Raycast(origin, Vector3.down, float.PositiveInfinity, PhysicsCaster.MapCollisionPlayerOnlyLayer);
             if (cnt == 0)
             {
 #if UNITY_EDITOR
@@ -134,15 +134,15 @@ namespace GreeningEx2019
             }
 
             // 一番上を探す
-            float top = hits[0].collider.bounds.max.y;
+            float top = PhysicsCaster.hits[0].collider.bounds.max.y;
             for (int i = 1; i < cnt; i++)
             {
                 // 地面と水以外は対象外
-                if (!hits[i].collider.CompareTag("Ground")
-                    && !hits[i].collider.CompareTag("Water")) continue;
-                if (hits[i].collider.bounds.max.y > top)
+                if (!PhysicsCaster.hits[i].collider.CompareTag("Ground")
+                    && !PhysicsCaster.hits[i].collider.CompareTag("Water")) continue;
+                if (PhysicsCaster.hits[i].collider.bounds.max.y > top)
                 {
-                    top = hits[i].collider.bounds.max.y;
+                    top = PhysicsCaster.hits[i].collider.bounds.max.y;
                 }
             }
             float h = StellaMove.chrController.bounds.min.y - top;
@@ -170,24 +170,22 @@ namespace GreeningEx2019
             float h = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
             Vector3 p1 = StellaMove.chrController.bounds.center + Vector3.up * h;
             Vector3 p2 = StellaMove.chrController.bounds.center + Vector3.down * h;
-            int hitCount = Physics.CapsuleCastNonAlloc(p1,p2,
-                StellaMove.chrController.radius,
+            int hitCount = PhysicsCaster.CharacterControllerCast(
+                StellaMove.chrController,
                 StellaMove.forwardVector,
-                hits,
-                Mathf.Abs(StellaMove.myVelocity.x*Time.fixedDeltaTime),
-                groundLayer
-                );
+                Mathf.Abs(StellaMove.myVelocity.x * Time.fixedDeltaTime),
+                PhysicsCaster.MapCollisionLayer);
             bool isBack = false;
 
             for (int i=0; i<hitCount;i++)
             {
-                Actable[] acts = hits[i].collider.GetComponents<Actable>();
+                Actable[] acts = PhysicsCaster.hits[i].collider.GetComponents<Actable>();
                 for (int j=0;j<acts.Length;j++)
                 {
                     if (!acts[j].CanAction) continue;
 
                     // 方向が左右か
-                    float ydif = hits[i].point.y - StellaMove.chrController.bounds.center.y;
+                    float ydif = PhysicsCaster.hits[i].point.y - StellaMove.chrController.bounds.center.y;
                     float sidecheck = h + StellaMove.chrController.radius * 0.5f;
                     if (Mathf.Abs(ydif) > sidecheck)
                     {
@@ -195,17 +193,17 @@ namespace GreeningEx2019
                     }
 
                     // 移動していて、移動先にオブジェクトがある場合、押す
-                    float to = hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
+                    float to = PhysicsCaster.hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
                     if (StellaMove.myVelocity.x * to > 0f)
                     {
                         if (!acts[j].PushAction()) continue;
                     }
 
                     // 向いている方向に対象物がある時、対象物に触れていたらステラを下げる
-                    float range = StellaMove.chrController.bounds.extents.x + hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
+                    float range = StellaMove.chrController.bounds.extents.x + PhysicsCaster.hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
                     if (((to * StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
                     {
-                        float posx = hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
+                        float posx = PhysicsCaster.hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;
                         StellaMove.myVelocity.x = (posx - StellaMove.instance.transform.position.x) / Time.fixedDeltaTime;
                         isBack = true;
                     }

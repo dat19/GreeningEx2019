@@ -35,7 +35,7 @@ namespace GreeningEx2019
             if (pos.y > (StellaMove.chrController.bounds.min.y + naePutTopHeight)) return false;
 
             // 重なっているオブジェクトを探査
-            int hitCount = StellaMove.naeActable.FetchOverlapObjects(pos, hits, overlapLayer);
+            int hitCount = StellaMove.naeActable.FetchOverlapObjects(pos, PhysicsCaster.MapLayer);
             return (hitCount == 0);
         }
 
@@ -92,10 +92,10 @@ namespace GreeningEx2019
                 // 苗の候補場所が変わるので、移動キャンセル調査
                 // 苗の高さは、地面より1マス分上を確認
                 nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight;
-                int hitCount = StellaMove.naeActable.FetchOverlapObjects(nextNaePos, hits, groundLayer);
+                int hitCount = StellaMove.naeActable.FetchOverlapObjects(nextNaePos, PhysicsCaster.MapCollisionLayer);
                 for (int i=0; i<hitCount;i++)
                 {
-                    if (hits[i].collider.CompareTag(GroundTag))
+                    if (PhysicsCaster.hits[i].collider.CompareTag(GroundTag))
                     {
                         Debug.Log($"  hit nextNaeY={nextNaePos.y}");
                         // ぶつかるので移動をキャンセル
