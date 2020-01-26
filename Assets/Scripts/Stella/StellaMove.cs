@@ -137,6 +137,11 @@ namespace GreeningEx2019
         public static Vector3 forwardVector;
 
         /// <summary>
+        /// 逆向きで歩いている時、true
+        /// </summary>
+        public static bool IsBack { get; private set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public static float GravityAdd { get { return instance.gravityAdd; } }
@@ -688,14 +693,14 @@ namespace GreeningEx2019
             {
                 reached = AdjustWalkResult.Reach;
                 walkSpeed = dist * Time.fixedDeltaTime;
-                anim.SetBool("Back", false);
+                IsBack = false;
             }
             else
             {
                 // 向きと移動方向が逆ならアニメをバックにする
-                anim.SetBool("Back", (sign * forwardVector.x) < -0.5f);
+                IsBack = (sign * forwardVector.x) < -0.5f;
             }
-
+            anim.SetBool("Back", IsBack);
             anim.SetFloat("VelX", walkSpeed);
 
             myVelocity.x = walkSpeed * sign;

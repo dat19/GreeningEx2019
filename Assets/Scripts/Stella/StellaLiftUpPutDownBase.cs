@@ -33,16 +33,19 @@ namespace GreeningEx2019
             {
                 case StateType.TargetWalk:
                     StellaMove.AdjustWalkResult res = StellaMove.AdjustWalk(targetX, StellaMove.MoveSpeed);
-                    if (res == StellaMove.AdjustWalkResult.Reach)
+                    if (    (res == StellaMove.AdjustWalkResult.Reach)
+                        ||  (res == StellaMove.AdjustWalkResult.Abort))
                     {
                         state = StateType.Action;
                         StellaMove.myVelocity = Vector3.zero;
                         ToAction();
                     }
+                    /*
                     else if (res == StellaMove.AdjustWalkResult.Abort)
                     {
                         // 移動できなければ歩きに戻します
                         StellaMove.myVelocity = Vector3.zero;
+
                         if (StellaMove.NowAction == StellaMove.ActionType.LiftUp)
                         {
                             ToWalk();
@@ -52,6 +55,7 @@ namespace GreeningEx2019
                             StellaMove.instance.ChangeAction(StellaMove.ActionType.NaeWalk);
                         }
                     }
+                    */
                     break;
                 case StateType.Action:
                     StellaMove.myVelocity.x = 0f;
