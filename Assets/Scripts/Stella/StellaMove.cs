@@ -1,5 +1,5 @@
 ﻿#define DEBUG_GUI
-#define DEBUG_MINIJUMP
+//#define DEBUG_MINIJUMP
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -319,6 +319,14 @@ namespace GreeningEx2019
 
             Vector3 move = myVelocity * Time.fixedDeltaTime;
 
+            // Zを調整
+            float distZ = Mathf.Abs(transform.position.z);
+            if (distZ >= abortMinDistance)
+            {
+                distZ = Mathf.Min(distZ, MoveSpeed * Time.fixedDeltaTime);
+                move.z = distZ * Mathf.Sign(-transform.position.z);
+            }
+
             // 左端の移動制限
             move.x = StageOverCheck(move.x);
             chrController.Move(move);
@@ -409,7 +417,6 @@ namespace GreeningEx2019
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
             int hitCount = PhysicsCaster.BoxCast(checkCenter, boxColliderHalfExtents, move, dist, PhysicsCaster.MapCollisionPlayerOnlyLayer);
-            Debug.Log($"hitCount={hitCount}");
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
@@ -420,7 +427,6 @@ namespace GreeningEx2019
             {
                 // ミニジャンプできないものは対象から外す
                 Actable []act = PhysicsCaster.hits[i].collider.GetComponents<Actable>();
-                Debug.Log($"  act={act}");
                 if (act != null)
                 {
                     bool cantMiniJump = false;
@@ -857,7 +863,6 @@ namespace GreeningEx2019
         /// <returns>目的の苗を拾う時のステラのX座標</returns>
         public static float NaeWalkTarget(NaeActable naeAct)
         {
-            Debug.Log($"  NaeWalkTarget naePutPosition.x={naePutPosition.x} naeAct.NaeOffsetX={naeAct.NaeOffsetX} / forward={forwardVector.x}");
             return naePutPosition.x - (NaePutDownOffsetX + naeAct.NaeOffsetX) * forwardVector.x;
         }
 
