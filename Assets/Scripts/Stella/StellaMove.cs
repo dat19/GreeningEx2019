@@ -1,5 +1,5 @@
 ﻿#define DEBUG_GUI
-//#define DEBUG_MINIJUMP
+#define DEBUG_MINIJUMP
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -117,11 +117,6 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// 列挙する接触したオブジェクトの上限数
-        /// </summary>
-        const int CollisionMax = 8;
-
-        /// <summary>
         /// 苗を置く時のオフセットX座標
         /// </summary>
         public const float NaePutDownOffsetX = 0.4f;
@@ -145,11 +140,6 @@ namespace GreeningEx2019
         /// 
         /// </summary>
         public static float GravityAdd { get { return instance.gravityAdd; } }
-
-        /// <summary>
-        /// 地面のレイヤーマスク
-        /// </summary>
-        public static LayerMask MapCollisionLayerMask { get; private set; }
 
         /// <summary>
         /// ミニジャンプの最高速。ミニジャンプで飛び乗る時の最高速度
@@ -235,13 +225,7 @@ namespace GreeningEx2019
         /// </summary>
         public static GameObject stepOnObject;
 
-        /// <summary>
-        /// 前回のMoveの結果
-        /// </summary>
-        public static CollisionFlags lastCollisionFlags { get; private set; }
-
         static Animator anim;
-        static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
         static int defaultLayer = 0;
@@ -264,7 +248,6 @@ namespace GreeningEx2019
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
             NowAction = ActionType.Walk;
-            MapCollisionLayerMask = LayerMask.GetMask("MapCollision");
             boxColliderHalfExtents.y = chrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
             jumpLayer = LayerMask.NameToLayer("Jump");
@@ -275,7 +258,6 @@ namespace GreeningEx2019
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
             naeActable = null;
             ActionBoxInstance.Init();
-            lastCollisionFlags = CollisionFlags.None;
         }
 
         void FixedUpdate()
@@ -291,7 +273,7 @@ namespace GreeningEx2019
 
             stellaActionScriptableObjects[(int)NowAction]?.UpdateAction();
 
-            if (lastCollisionFlags.HasFlag(CollisionFlags.Below))
+            if (chrController.collisionFlags.HasFlag(CollisionFlags.Below))
             {
                 // 下判定があったら、埋まっていないか確認
                 int cnt = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, 0f, PhysicsCaster.MapCollisionLayer);
@@ -329,7 +311,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
         /// </summary>
-        public CollisionFlags Move()
+        public void Move()
         {
             // 設定された速度を反映
             anim.SetFloat("VelX", Mathf.Abs(myVelocity.x));
@@ -339,14 +321,14 @@ namespace GreeningEx2019
 
             // 左端の移動制限
             move.x = StageOverCheck(move.x);
-            lastCollisionFlags = chrController.Move(move);
+            chrController.Move(move);
 
             if (!chrController.isGrounded 
                 && stellaActionScriptableObjects[(int)NowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
-                lastCollisionFlags = chrController.Move(move);
+                chrController.Move(move);
             }
 
             // ステージ外チェック
@@ -355,11 +337,10 @@ namespace GreeningEx2019
                 // ミスにする
                 GameParams.isMiss = true;
                 ChangeAction(ActionType.Obore);
-                return lastCollisionFlags;
+                return;
             }
 
             anim.SetBool("IsGrounded", chrController.isGrounded);
-            return lastCollisionFlags;
         }
 
         /// <summary>
@@ -427,7 +408,8 @@ namespace GreeningEx2019
             checkCenter = chrController.bounds.center
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
-            int hitCount = Physics.BoxCastNonAlloc(checkCenter, boxColliderHalfExtents, move, raycastHits, Quaternion.identity, dist, MapCollisionLayerMask);
+            int hitCount = PhysicsCaster.BoxCast(checkCenter, boxColliderHalfExtents, move, dist, PhysicsCaster.MapCollisionPlayerOnlyLayer);
+            Debug.Log($"hitCount={hitCount}");
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
@@ -437,7 +419,8 @@ namespace GreeningEx2019
             for (int i = 0; i < hitCount; i++)
             {
                 // ミニジャンプできないものは対象から外す
-                Actable []act = raycastHits[i].collider.GetComponents<Actable>();
+                Actable []act = PhysicsCaster.hits[i].collider.GetComponents<Actable>();
+                Debug.Log($"  act={act}");
                 if (act != null)
                 {
                     bool cantMiniJump = false;
@@ -445,7 +428,7 @@ namespace GreeningEx2019
                     {
                         if (!act[j].CanMiniJump)
                         {
-                            Log($"  cant MiniJump {raycastHits[i].collider.name}");
+                            Log($"  cant MiniJump {PhysicsCaster.hits[i].collider.name}");
                             cantMiniJump = true;
                             break;
                         }
@@ -453,7 +436,7 @@ namespace GreeningEx2019
                     if (cantMiniJump) continue;
                 }
 
-                float temph = raycastHits[i].collider.bounds.max.y - footh;
+                float temph = PhysicsCaster.hits[i].collider.bounds.max.y - footh;
                 if (temph > h)
                 {
                     h = temph;
@@ -466,7 +449,7 @@ namespace GreeningEx2019
             Log($"  h={h} > {chrController.stepOffset} and <= {miniJumpHeight}");
             if ((h > chrController.stepOffset) && (h <= miniJumpHeight))
             {
-                targetJumpGround = raycastHits[hitIndex].transform.position;
+                targetJumpGround = PhysicsCaster.hits[hitIndex].transform.position;
                 targetJumpGround.y = chrController.bounds.min.y + h;
                 ChangeAction(ActionType.Jump);
             }
@@ -728,10 +711,11 @@ namespace GreeningEx2019
         /// 下にあるMapCollisionレイヤーのオブジェクトを返します。
         /// </summary>
         /// <returns>見つけたオブジェクト。オブジェクトがなければnull</returns>
-        public static int GetUnderMap(RaycastHit[] hits)
+        public static int GetUnderMap()
         {
             Vector3 origin = chrController.bounds.center;
-            return Physics.RaycastNonAlloc(origin, Vector3.down, hits, chrController.height * 0.5f + 0.1f, MapCollisionLayerMask); ;
+            return PhysicsCaster.Raycast(
+                origin, Vector3.down, chrController.height * 0.5f + 0.1f, PhysicsCaster.MapCollisionPlayerOnlyLayer);
         }
 
         /// <summary>
@@ -739,10 +723,10 @@ namespace GreeningEx2019
         /// </summary>
         public static void CheckStepOn()
         {
-            int hcnt = GetUnderMap(raycastHits);
+            int hcnt = GetUnderMap();
             for (int i = 0; i < hcnt; i++)
             {
-                IStepOn so = raycastHits[i].collider.GetComponent<IStepOn>();
+                IStepOn so = PhysicsCaster.hits[i].collider.GetComponent<IStepOn>();
                 if (so != null)
                 {
                     so.StepOn();
@@ -766,7 +750,7 @@ namespace GreeningEx2019
                 // 下キーの時は、着地していたら移行無し
                 Vector3 foot = chrController.bounds.center;
                 foot.y = chrController.bounds.min.y;
-                int goidx = PhysicsCaster.GetGround(foot, 0.1f);
+                int goidx = PhysicsCaster.GetPlayerGround(foot, 0.1f);
                 if (goidx != -1)
                 {
                     return false;
