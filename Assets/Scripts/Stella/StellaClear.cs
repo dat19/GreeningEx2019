@@ -16,7 +16,13 @@ namespace GreeningEx2019
             Wait,
             HoldStar,
             ToTargetAir,
+            WaitAir,
         }
+
+        /// <summary>
+        /// 空中キャッチの時、定位置に移動するまでの秒数
+        /// </summary>
+        const float ToCatchAirSeconds = 0.5f;
 
         /// <summary>
         /// 星に捕まった時のHoldPositionからのオフセット座標
@@ -127,20 +133,25 @@ namespace GreeningEx2019
                     targetPosition.z = 0f;
 
                     startTime += Time.fixedDeltaTime;
-                    float t = Mathf.Clamp01(startTime / StageManager.RollingSeconds);
+                    float t = Mathf.Clamp01(startTime / ToCatchAirSeconds);
                     StellaMove.instance.transform.position = Vector3.Lerp(
                         StellaMove.instance.transform.position,
-                        targetPosition, t
+                        targetPosition,
+                        t
                         );
+                    if (t >= 1f)
+                    {
+                        OffsetFromStar = StellaMove.HoldPosition - Goal.StarPosition;
+                        state = StateType.WaitAir;
+                    }
                     Log($"  target={targetPosition} / StarPos={Goal.StarPosition} / goalToStellaOffset={StageManager.GoalToStellaOffset}");
-                    OffsetFromStar = StellaMove.HoldPosition - Goal.StarPosition;
                     break;
             }
         }
 
         public override void LateUpdate()
         {
-            if (state == StateType.HoldStar)
+            if ((state == StateType.HoldStar) || (state == StateType.WaitAir))
             {
                 Vector3 ofs = StellaMove.instance.transform.position - StellaMove.HoldPosition;
                 StellaMove.instance.transform.position = Goal.StarPosition + OffsetFromStar + ofs;
@@ -157,7 +168,7 @@ namespace GreeningEx2019
             sc.x = StellaMove.forwardVector.x;
             StellaMove.instance.transform.GetChild(0).localScale = sc;
 
-            if (state == StateType.ToTargetAir)
+            if (state == StateType.WaitAir)
             {
                 // 空中なので、すぐに飛び去りへ
                 FollowStar();

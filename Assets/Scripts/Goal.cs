@@ -112,6 +112,7 @@ namespace GreeningEx2019
             myCollider.enabled = false;
             anim = GetComponent<Animator>();
             state = StateType.Standby;
+            setNaeCount = 0;
         }
 
         private void FixedUpdate()
