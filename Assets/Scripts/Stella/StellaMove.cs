@@ -235,11 +235,6 @@ namespace GreeningEx2019
         /// </summary>
         public static GameObject stepOnObject;
 
-        /// <summary>
-        /// 前回のMoveの結果
-        /// </summary>
-        public static CollisionFlags lastCollisionFlags { get; private set; }
-
         static Animator anim;
         static RaycastHit[] raycastHits = new RaycastHit[CollisionMax];
         static Vector3 checkCenter;
@@ -275,7 +270,6 @@ namespace GreeningEx2019
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
             naeActable = null;
             ActionBoxInstance.Init();
-            lastCollisionFlags = CollisionFlags.None;
         }
 
         void FixedUpdate()
@@ -291,7 +285,7 @@ namespace GreeningEx2019
 
             stellaActionScriptableObjects[(int)NowAction]?.UpdateAction();
 
-            if (lastCollisionFlags.HasFlag(CollisionFlags.Below))
+            if (chrController.collisionFlags.HasFlag(CollisionFlags.Below))
             {
                 // 下判定があったら、埋まっていないか確認
                 int cnt = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, 0f, PhysicsCaster.MapCollisionLayer);
@@ -329,7 +323,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
         /// </summary>
-        public CollisionFlags Move()
+        public void Move()
         {
             // 設定された速度を反映
             anim.SetFloat("VelX", Mathf.Abs(myVelocity.x));
@@ -339,14 +333,14 @@ namespace GreeningEx2019
 
             // 左端の移動制限
             move.x = StageOverCheck(move.x);
-            lastCollisionFlags = chrController.Move(move);
+            chrController.Move(move);
 
             if (!chrController.isGrounded 
                 && stellaActionScriptableObjects[(int)NowAction].canStepDown)
             {
                 // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
                 move.Set(0, -chrController.stepOffset - move.y, 0);
-                lastCollisionFlags = chrController.Move(move);
+                chrController.Move(move);
             }
 
             // ステージ外チェック
@@ -355,11 +349,10 @@ namespace GreeningEx2019
                 // ミスにする
                 GameParams.isMiss = true;
                 ChangeAction(ActionType.Obore);
-                return lastCollisionFlags;
+                return;
             }
 
             anim.SetBool("IsGrounded", chrController.isGrounded);
-            return lastCollisionFlags;
         }
 
         /// <summary>
@@ -766,7 +759,7 @@ namespace GreeningEx2019
                 // 下キーの時は、着地していたら移行無し
                 Vector3 foot = chrController.bounds.center;
                 foot.y = chrController.bounds.min.y;
-                int goidx = PhysicsCaster.GetGround(foot, 0.1f);
+                int goidx = PhysicsCaster.GetPlayerGround(foot, 0.1f);
                 if (goidx != -1)
                 {
                     return false;

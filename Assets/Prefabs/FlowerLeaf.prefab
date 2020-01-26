@@ -122,6 +122,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3ea1e5816d6d14ca45c3e04a5a58f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waitGrowDone: 0
+  growSe: 10
+  growEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   state: 0
 --- !u!114 &7458930698088884568
 MonoBehaviour:
@@ -181,7 +188,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3886611548734705856}
   - component: {fileID: 7106195651439711799}
-  m_Layer: 0
+  - component: {fileID: 1227367645651354190}
+  m_Layer: 17
   m_Name: flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,6 +223,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1227367645651354190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3886611548734803168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6bd1444ef77844683b7d18621548f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3771247379937373132
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -45,7 +45,7 @@ namespace GreeningEx2019
             }
 
             StellaMove.instance.Gravity();
-            CollisionFlags flag = StellaMove.instance.Move();
+            StellaMove.instance.Move();
 
             // 着地チェック
             if (!isLanding && StellaMove.chrController.isGrounded && StellaMove.myVelocity.y < 0f)
@@ -58,7 +58,7 @@ namespace GreeningEx2019
                 StellaMove.CheckStepOn();
             }
             // 頭ぶつけチェック
-            else if ((StellaMove.myVelocity.y > 0f) && flag.HasFlag(CollisionFlags.Above))
+            else if ((StellaMove.myVelocity.y > 0f) && StellaMove.chrController.collisionFlags.HasFlag(CollisionFlags.Above))
             {
                 SoundController.Play(SoundController.SeType.HitHead);
                 StellaMove.myVelocity.y = 0f;
