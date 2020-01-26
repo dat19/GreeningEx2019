@@ -21,7 +21,7 @@ namespace GreeningEx2019
         [Tooltip("クリアテキスト"), SerializeField]
         Animator clearText = null;
 
-        const float RollingSeconds = 0.8f;
+        public const float RollingSeconds = 0.8f;
         const float ClearFadeSeconds = 0.24f;
 
         /// <summary>

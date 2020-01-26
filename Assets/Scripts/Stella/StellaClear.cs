@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define DEBUG_DISP
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +15,19 @@ namespace GreeningEx2019
             ToTarget,
             Wait,
             HoldStar,
+            ToTargetAir,
+            WaitAir,
         }
+
+        /// <summary>
+        /// 空中キャッチの時、定位置に移動するまでの秒数
+        /// </summary>
+        const float ToCatchAirSeconds = 0.5f;
+
+        /// <summary>
+        /// 星に捕まった時のHoldPositionからのオフセット座標
+        /// </summary>
+        public static Vector3 OffsetFromStar { get; private set; }
 
         static StateType state;
 
@@ -26,11 +40,8 @@ namespace GreeningEx2019
         /// 歩く目的地X
         /// </summary>
         float targetX;
-
-        /// <summary>
-        /// 星に捕まった時のHoldPositionからのオフセット座標
-        /// </summary>
-        public static Vector3 OffsetFromStar { get; private set; }
+        float startTime;
+        bool isTurn;
 
         /// <summary>
         /// 目的地を設定
@@ -39,22 +50,35 @@ namespace GreeningEx2019
         {
             base.Init();
 
-            StellaMove.SetAnimState(StellaMove.AnimType.Walk);
-
-            targetX = Goal.instance.transform.position.x + Mathf.Sign(Goal.ClearFlyX) * StageManager.GoalToStellaOffset.x;
-            state = StateType.ToTarget;
+            targetX = Goal.StarPosition.x + Mathf.Sign(Goal.ClearFlyX) * StageManager.GoalToStellaOffset.x;
             float dir = targetX - StellaMove.instance.transform.position.x;
 
-            // 向きが逆の時、方向転換から
-            if ((dir * StellaMove.forwardVector.x) < 0f)
+            if (StellaMove.chrController.isGrounded)
             {
-                StellaMove.instance.StartTurn(dir);
-                afterTurnState = StateType.ToTarget;
-                state = StateType.Turn;
+                StellaMove.SetAnimState(StellaMove.AnimType.Walk);
+                state = StateType.ToTarget;
+
+                // 向きが逆の時、方向転換から
+                if ((dir * StellaMove.forwardVector.x) < 0f)
+                {
+                    StellaMove.instance.StartTurn(dir);
+                    afterTurnState = StateType.ToTarget;
+                    state = StateType.Turn;
+                }
             }
             else
             {
-                state = StateType.ToTarget;
+                // 空中
+                StellaMove.SetAnimState(StellaMove.AnimType.ClearWait);
+                state = StateType.ToTargetAir;
+                startTime = 0;
+
+                // ターンチェック
+                isTurn = false;
+                if (Goal.ClearFlyX * StellaMove.forwardVector.x < 0) {
+                    isTurn = true;
+                    StellaMove.instance.StartTurn(Mathf.Sign(Goal.ClearFlyX));
+                }
             }
         }
 
@@ -97,12 +121,37 @@ namespace GreeningEx2019
                         }
                     }
                     break;
+
+                case StateType.ToTargetAir:
+                    if (isTurn)
+                    {
+                        isTurn = !StellaMove.instance.Turn();
+                    }
+
+                    Vector3 targetPosition = Goal.StarPosition + StageManager.GoalToStellaOffset;
+                    targetPosition.x = Goal.StarPosition.x + Mathf.Sign(Goal.ClearFlyX) * StageManager.GoalToStellaOffset.x;
+                    targetPosition.z = 0f;
+
+                    startTime += Time.fixedDeltaTime;
+                    float t = Mathf.Clamp01(startTime / ToCatchAirSeconds);
+                    StellaMove.instance.transform.position = Vector3.Lerp(
+                        StellaMove.instance.transform.position,
+                        targetPosition,
+                        t
+                        );
+                    if (t >= 1f)
+                    {
+                        OffsetFromStar = StellaMove.HoldPosition - Goal.StarPosition;
+                        state = StateType.WaitAir;
+                    }
+                    Log($"  target={targetPosition} / StarPos={Goal.StarPosition} / goalToStellaOffset={StageManager.GoalToStellaOffset}");
+                    break;
             }
         }
 
         public override void LateUpdate()
         {
-            if (state == StateType.HoldStar)
+            if ((state == StateType.HoldStar) || (state == StateType.WaitAir))
             {
                 Vector3 ofs = StellaMove.instance.transform.position - StellaMove.HoldPosition;
                 StellaMove.instance.transform.position = Goal.StarPosition + OffsetFromStar + ofs;
@@ -114,11 +163,19 @@ namespace GreeningEx2019
         /// </summary>
         public static void HoldStar()
         {
-            StellaMove.RegisterAnimEvent(AttachStar);
             // 左向きの時、Xを逆にする
             Vector3 sc = Vector3.one;
             sc.x = StellaMove.forwardVector.x;
             StellaMove.instance.transform.GetChild(0).localScale = sc;
+
+            if (state == StateType.WaitAir)
+            {
+                // 空中なので、すぐに飛び去りへ
+                FollowStar();
+                return;
+            }
+
+            StellaMove.RegisterAnimEvent(AttachStar);
             StellaMove.SetAnimState(StellaMove.AnimType.Clear);
         }
 
@@ -141,6 +198,12 @@ namespace GreeningEx2019
             // 星が飛び立つ前段階
             Goal.FlyWait();
             state = StateType.HoldStar;
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_DISP")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }

@@ -39,6 +39,12 @@ namespace GreeningEx2019
             Stage2Watage,
             Stage2Release,
             Stage2TsutaFlower,
+            // Stage3
+            Stage3Mushroom,
+            Stage3CanJump,
+            Stage3How,
+            Stage3CanNaeJump,
+            Stage3RevJump,
         }
 
         /// <summary>
