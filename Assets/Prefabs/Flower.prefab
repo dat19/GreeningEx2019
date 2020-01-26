@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6300047521916981204}
   - component: {fileID: 4175211163377121017}
   - component: {fileID: 7344936229518856927}
+  - component: {fileID: 7263183142441280317}
+  - component: {fileID: 2515480484251254994}
   m_Layer: 17
   m_Name: flower
   m_TagString: Untagged
@@ -56,7 +58,39 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.15
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.2, z: 0}
+--- !u!114 &7263183142441280317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6300047521917342708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40453d3ed28db4c4680d26ad5a01772f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitGrowDone: 0
+  growSe: -1
+  growEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  state: 2
+--- !u!114 &2515480484251254994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6300047521917342708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e526f78b375a22c43814a465e6867caa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7137157468005444665
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
 ﻿#define DEBUG_GUI
-//#define DEBUG_MINIJUMP
+#define DEBUG_MINIJUMP
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -409,6 +409,7 @@ namespace GreeningEx2019
                 + move * startOffset;
             float dist = (miniJumpCheckX - startOffset);
             int hitCount = PhysicsCaster.BoxCast(checkCenter, boxColliderHalfExtents, move, dist, PhysicsCaster.MapCollisionPlayerOnlyLayer);
+            Debug.Log($"hitCount={hitCount}");
             if (hitCount == 0) return;
 
             float footh = chrController.bounds.min.y;
@@ -419,6 +420,7 @@ namespace GreeningEx2019
             {
                 // ミニジャンプできないものは対象から外す
                 Actable []act = PhysicsCaster.hits[i].collider.GetComponents<Actable>();
+                Debug.Log($"  act={act}");
                 if (act != null)
                 {
                     bool cantMiniJump = false;
