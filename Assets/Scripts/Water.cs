@@ -12,6 +12,19 @@ public class Water : MonoBehaviour
         Invoke("Disable", lifeTime);
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        // 地面にぶつかったら消す
+        if (other.CompareTag("Ground"))
+        {
+            // 中心がバウンディング内なら消す
+            if ( other.bounds.Contains(transform.position))
+            {
+                Disable();
+            }
+        }
+    }
+
     private void Disable()
     {
         gameObject.SetActive(false);

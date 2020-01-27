@@ -96,7 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-  m_LightingDataAsset: {fileID: 112000002, guid: 574f2d1b54e2cd54d9b19567b3262067,
+  m_LightingDataAsset: {fileID: 112000002, guid: ac6f3e61e1eae77408aebacbbe7bb382,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -150,7 +150,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190469376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalPosition: {x: 23, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0062ca14d202848bebabb7456a2c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startScene: 0
+  startScene: 1
   fadeTime: 0.5
   subCamera: {fileID: 963194227}
 --- !u!114 &190469379
