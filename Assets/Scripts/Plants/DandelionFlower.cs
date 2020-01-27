@@ -18,6 +18,8 @@ namespace GreeningEx2019
         Vector2 direction = new Vector2(0.3f, 0.3f);
         [Tooltip("綿毛を掴んでからの寿命"), SerializeField]
         float FluffLifeTime = 5f;
+        [Tooltip("綿毛が出現してからこの高さに達したら消す"), SerializeField]
+        float FluffMaxHeight = 10f;
 
         /// <summary>
         /// 次の綿毛を発生させるまでの残り秒数
@@ -43,7 +45,7 @@ namespace GreeningEx2019
                     fluffTime = insTime;
                     SoundController.Play(SoundController.SeType.SpawnFluff);
                     GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
-                    Go.GetComponent<FluffActable>().Init(direction, FluffLifeTime);
+                    Go.GetComponent<FluffActable>().Init(direction, FluffLifeTime, FluffMaxHeight);
                 }
             }
         }

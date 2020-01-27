@@ -38,6 +38,15 @@ namespace GreeningEx2019
             SetTarget(go.transform);
         }
 
+        private void Start()
+        {
+            // エディター時は無効
+            if (SceneChanger.NowScene == SceneChanger.SceneType.StageEditor)
+            {
+                enabled = false;
+            }
+        }
+
         private void LateUpdate()
         {
             if (!playerTransform || StageManager.IsClearPlaying) return;

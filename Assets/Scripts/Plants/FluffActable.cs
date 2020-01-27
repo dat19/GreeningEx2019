@@ -6,8 +6,6 @@ namespace GreeningEx2019
 {
     public class FluffActable : Actable
     {
-        [Tooltip("発生してから、これ以上高くなったら消す"), SerializeField]
-        float removeHeight = 10;
         [Tooltip("ステラへのオフセット上端"), SerializeField]
         Vector3 stellaOffsetTop = new Vector3(0, 0.85f, 0);
         [Tooltip("ステラへのオフセット下端"), SerializeField]
@@ -56,6 +54,10 @@ namespace GreeningEx2019
         float lifeTime;
         float startY;
         BoxCollider boxCollider = null;
+        /// <summary>
+        /// 発生してから、これ以上高くなったら消す
+        /// </summary>
+        float removeHeight = 10;
 
         /// <summary>
         /// オブジェクトの座標から、ステラの手の座標へのオフセット高さ
@@ -68,11 +70,12 @@ namespace GreeningEx2019
             boxCollider = GetComponent<BoxCollider>();
         }
 
-        public void Init(Vector2 vel, float lf)
+        public void Init(Vector2 vel, float lf, float maxh = 10)
         {
             rb = GetComponent<Rigidbody>();
             rb.velocity = vel;
             lifeTime = lf;
+            removeHeight = maxh;
             startY = transform.position.y;
         }
 
