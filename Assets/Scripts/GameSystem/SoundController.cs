@@ -126,6 +126,11 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// オーディオリスナ
+        /// </summary>
+        public static AudioListener audioListener;
+
+        /// <summary>
         /// フェードアウトを表すフラグ。trueの時、フェードアウト中。
         /// </summary>
         static bool isFadingOut;
@@ -155,6 +160,7 @@ namespace GreeningEx2019
             }
             isFadingOut = false;
             useFade = false;
+            audioListener = GetComponent<AudioListener>();
         }
 
         private void FixedUpdate()
