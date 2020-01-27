@@ -269,6 +269,8 @@ namespace GreeningEx2019
             ActionBoxInstance = GetComponentInChildren<ActionBox>();
             naeActable = null;
             ActionBoxInstance.Init();
+            SoundController.audioListener.enabled = false;
+            GetComponent<AudioListener>().enabled = true;
         }
 
         void FixedUpdate()
@@ -674,6 +676,9 @@ namespace GreeningEx2019
             // クリアチェック
             if (other.CompareTag("Finish"))
             {
+                SoundController.audioListener.enabled = true;
+                GetComponent<AudioListener>().enabled = false;
+
                 StageManager.StartClear();
                 return true;
             }

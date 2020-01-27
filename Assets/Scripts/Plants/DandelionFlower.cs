@@ -25,6 +25,7 @@ namespace GreeningEx2019
         /// 次の綿毛を発生させるまでの残り秒数
         /// </summary>
         float fluffTime;
+        AudioSource myAudioSource = null;
 
         /// <summary>
         /// アニメーションで開花が完了したら呼び出すメソッド。
@@ -43,7 +44,14 @@ namespace GreeningEx2019
                 if (fluffTime <= 0f)
                 {
                     fluffTime = insTime;
-                    SoundController.Play(SoundController.SeType.SpawnFluff);
+                    if (myAudioSource == null)
+                    {
+                        myAudioSource = GetComponent<AudioSource>();
+                    }
+                    if (!StageManager.IsClearPlaying)
+                    {
+                        myAudioSource.Play();
+                    }
                     GameObject Go = Instantiate(Fluff, transform.position + fluffOffset, Quaternion.identity);
                     Go.GetComponent<FluffActable>().Init(direction, FluffLifeTime, FluffMaxHeight);
                 }

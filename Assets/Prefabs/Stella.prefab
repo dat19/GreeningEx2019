@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 1934622103324141994}
   - component: {fileID: 1934622103324141973}
   - component: {fileID: 7920596351761128626}
+  - component: {fileID: -5684092896310433159}
   m_Layer: 8
   m_Name: Stella
   m_TagString: Player
@@ -412,7 +413,14 @@ MonoBehaviour:
   isDebugMovable: 0
   guiSkin: {fileID: 11400000, guid: 08a00d7c313c0ba4983821e0c3a26507, type: 2}
   isDebugDisp: 0
-  RotateY: 40
+--- !u!81 &-5684092896310433159
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934622103324141995}
+  m_Enabled: 0
 --- !u!1 &2392662632966794372
 GameObject:
   m_ObjectHideFlags: 0
