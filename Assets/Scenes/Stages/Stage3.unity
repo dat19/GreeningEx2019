@@ -19472,7 +19472,7 @@ PrefabInstance:
     - target: {fileID: 745748506634067983, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
       propertyPath: cameraRight
-      value: 28.5
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
