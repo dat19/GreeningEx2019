@@ -45,6 +45,12 @@ namespace GreeningEx2019
             Stage3How,
             Stage3CanNaeJump,
             Stage3RevJump,
+            // Stage4
+            Stage4Water,
+            Stage4Rock,
+            Stage4Action,
+            Stage4On,
+            Stage4Move,
         }
 
         /// <summary>

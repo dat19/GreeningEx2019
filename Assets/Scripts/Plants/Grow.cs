@@ -15,8 +15,11 @@ namespace GreeningEx2019
         bool waitGrowDone = false;
         [Tooltip("生長する時の効果音"), SerializeField]
         SoundController.SeType growSe = SoundController.SeType.GrowFlowers;
+
+#pragma warning disable 649
         [Tooltip("生長した時に実行したいメソッドがあったら登録します。"), SerializeField]
         UnityEngine.Events.UnityEvent growEvent;
+#pragma warning restore 649
 
         /// <summary>
         /// 汎用の状態
