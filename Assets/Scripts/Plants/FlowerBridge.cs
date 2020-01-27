@@ -30,6 +30,11 @@ namespace GreeningEx2019
 
         void Start()
         {
+            if (SceneChanger.NowScene == SceneChanger.SceneType.StageEditor)
+            {
+                return;
+            }
+
             if (flowerBridgePrefab == null) return;
 
             int fcount = flowerCount + (flowerCount - 1) * 2;

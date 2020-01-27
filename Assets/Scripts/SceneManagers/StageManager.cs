@@ -20,6 +20,8 @@ namespace GreeningEx2019
         Material[] clearBGMaterials = new Material[3];
         [Tooltip("クリアテキスト"), SerializeField]
         Animator clearText = null;
+        [Tooltip("BGMの種類"), SerializeField]
+        SoundController.BgmType bgm = SoundController.BgmType.Game0;
 
         public const float RollingSeconds = 0.8f;
         const float ClearFadeSeconds = 0.24f;
@@ -124,7 +126,7 @@ namespace GreeningEx2019
             StageMinMax("Ground");
             StageMinMax("DeadZone");
 
-            SoundController.PlayBGM(SoundController.BgmType.Game0, true);
+            SoundController.PlayBGM(bgm, true);
             SceneManager.SetActiveScene(gameObject.scene);
 
             // プレイヤーを入れ替える
@@ -138,17 +140,14 @@ namespace GreeningEx2019
 
             // 苗の数を数える
             Grow[] gr = GameObject.FindObjectsOfType<Grow>();
-            Debug.Log($"  gr={gr.Length}");
             NaeCount = 0;
             for (int i=0;i<gr.Length;i++)
             {
-                Debug.Log($"  {i} {gr[i].name} {gr[i].transform.position} / {gr[i].state}");
                 if (gr[i].state == Grow.StateType.Nae)
                 {
                     NaeCount++;
                 }
             }
-            Debug.Log($"  naecount={NaeCount}");
 
             Grow.Init();
         }

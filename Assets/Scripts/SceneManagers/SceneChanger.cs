@@ -47,6 +47,7 @@ namespace GreeningEx2019
             StageSelect,
             Game,
             Ending,
+            StageEditor,
         }
 
         [Tooltip("最初に起動するシーン"), SerializeField]
@@ -133,6 +134,15 @@ namespace GreeningEx2019
             isBooting = true;
             NowScene = SceneType.None;
             NextScene = startScene;
+
+            // ステージエディタ設定の処理
+            if (startScene == SceneType.StageEditor)
+            {
+                NowScene = startScene;
+                startScene = NextScene = SceneType.None;
+                isBooting = false;
+                enabled = false;
+            }
         }
 
 #if UNITY_EDITOR

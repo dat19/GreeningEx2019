@@ -51,6 +51,8 @@ namespace GreeningEx2019
             Stage4Action,
             Stage4On,
             Stage4Move,
+            // Stage6
+            Stage6Tempo,
         }
 
         /// <summary>

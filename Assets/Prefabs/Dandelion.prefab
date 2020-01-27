@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f137d82699afb41a55648700028721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  removeHeight: 10
+  removeHeight: 16
   stellaOffsetTop: {x: 0, y: 0.85, z: 0}
   stellaOffsetBottom: {x: 0, y: 0.3, z: 0}
   stellaStandardHoldOffset: {x: 0.35, y: 0.47, z: -0.17}
