@@ -6,15 +6,17 @@ namespace GreeningEx2019
     public class Goal : MonoBehaviour
     {
         public static Goal instance = null;
-
+        
         [Tooltip("星のマテリアル。0=最初, 1=完成直前, 2=完成形"), SerializeField]
         Material[] materials = new Material[3];
         [Tooltip("苗の段階が上がる秒数"), SerializeField]
         float changeColorSeconds = 1f;
         [Tooltip("クリア時に、星が飛び去る方向。-1なら左、1なら右"), SerializeField]
         float clearFlyX = 1f;
+#pragma warning disable 649
         [Tooltip("クリア可能になったら実行したいイベントを登録します。"), SerializeField]
         UnityEngine.Events.UnityEvent canClearEvent;
+#pragma warning restore 649
 
         /// <summary>
         /// ステラが飛び乗るのを待つ場所へ移動するまでの秒数

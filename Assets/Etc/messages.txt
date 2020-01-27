@@ -17,3 +17,8 @@ Stage3CanJump,キノコに向かって歩いてみて。
 Stage3How,上のキノコ、どうやって取ろうかな...
 Stage3CanNaeJump,苗を持ったままでもジャンプできるよ。
 Stage3RevJump,キノコでジャンプする時、逆方向のキーで後ろ向きに飛べるよ。
+Stage4Water,これは岩の木の苗です。水をあげてみよう。
+Stage4Rock,押して転がせるよ。
+Stage4Action,岩の木の横で、[X]か[Space]キーを押すと乗れるよ。
+Stage4On,ちょこちょこ左右に動いて、上手に転がそう！
+Stage4Move,苗は運ぶこともできるよ。

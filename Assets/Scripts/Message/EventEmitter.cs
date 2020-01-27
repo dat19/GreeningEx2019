@@ -16,8 +16,11 @@ namespace GreeningEx2019
         SoundController.SeType se = SoundController.SeType.None;
         [Tooltip("表示するメッセージ。複数設定すると、ランダムでどれか一つを表示します。"), SerializeField]
         MessageManager.MessageType []messages = new MessageManager.MessageType[0];
+
+#pragma warning disable 649
         [Tooltip("発動させたいイベントがあったら登録します。"), SerializeField]
         UnityEngine.Events.UnityEvent events;
+#pragma warning restore 649
 
         /// <summary>
         /// 発動の条件がある場合、このクラスをオーバーライドして、

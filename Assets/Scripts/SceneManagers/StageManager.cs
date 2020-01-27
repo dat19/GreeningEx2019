@@ -89,7 +89,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return Grow.NaeGrowedCount >= StageManager.NaeCount;
+                return Grow.NaeGrowedCount >= NaeCount;
             }
         }
 

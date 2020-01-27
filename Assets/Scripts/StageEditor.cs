@@ -6,7 +6,7 @@ using UnityEditor;
 public class StageEditor : MonoBehaviour
 {
     [SerializeField]
-    MapType selectedMapChip = MapType.GroundUp;
+    MapType selectedMapChip = MapType.GroundTop;
     [SerializeField]
     GameObject[] mapChipPrefabs = null;
 
@@ -18,10 +18,10 @@ public class StageEditor : MonoBehaviour
     public enum MapType
     {
         None=-1,
-        GroundUp,
-        GroundDown,
-        WaterUp,
-        WaterDown,
+        GroundTop,
+        GroundUnder,
+        WaterTop,
+        WaterUnder,
         //
         FlowerLeaf,
         IvyLittle,
