@@ -50,7 +50,6 @@ namespace GreeningEx2019
 
         protected void Awake()
         {
-            state = StateType.Nae;
             anim = GetComponent<Animator>();
             if (!anim)
             {
