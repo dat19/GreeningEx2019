@@ -655,6 +655,13 @@ namespace GreeningEx2019
             stellaActionScriptableObjects[(int)NowAction]?.OnControllerColliderHit(hit);
         }
 
+        private void OnDisable()
+        {
+            SoundController.audioListener.enabled = true;
+            GetComponent<AudioListener>().enabled = false;
+        }
+
+
 #if DEBUG_GUI
         private void OnGUI()
         {
@@ -676,9 +683,6 @@ namespace GreeningEx2019
             // クリアチェック
             if (other.CompareTag("Finish"))
             {
-                SoundController.audioListener.enabled = true;
-                GetComponent<AudioListener>().enabled = false;
-
                 StageManager.StartClear();
                 return true;
             }
