@@ -12,5 +12,10 @@ namespace GreeningEx2019
         {
             SoundController.Play(SoundController.SeType.Walk0 + Random.Range(0, WalkSeCount));
         }
+
+        public void Tsuta()
+        {
+            SoundController.Play(SoundController.SeType.Tsuta0);
+        }
     }
 }

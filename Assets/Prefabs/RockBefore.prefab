@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7075085680647473561}
   - component: {fileID: 260859544415841447}
   - component: {fileID: 7141561159899724451}
+  - component: {fileID: 1514192482544728110}
   m_Layer: 11
   m_Name: RockBefore
   m_TagString: Nae
@@ -53,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitGrowDone: 1
-  growSe: 15
+  growSe: -1
   growEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -165,6 +166,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.85
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1514192482544728110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263619933716130604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c4d2b7867116b419526fbc491ce4c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  se: 15
 --- !u!1001 &1263619934323390689
 PrefabInstance:
   m_ObjectHideFlags: 0
