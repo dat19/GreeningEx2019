@@ -47,10 +47,10 @@ namespace GreeningEx2019
             //
             MoveCursor,     // 9  カーソル移動
             GrowFlowers,    // 10 花の橋が発芽
-            RollingStone,   // 11 岩が転がる
+            RollingStone,   // 11 岩が転がる(RockBeforeに実装)
             WalkOnFlower,   // 12 花の上を歩く(未実装)
-            SpawnFluff,     // 13 たんぽぽから綿毛出現
-            MiniJump,       // 14 1段差をジャンプ
+            SpawnFluff,     // 13 たんぽぽから綿毛出現(Fluffプレハブ側で鳴らしている)
+            MiniJump,       // 14 1段差をジャンプ0
             GrowRock,       // 15 岩が発芽
             Water,          // 16 水をまく
             LiftUp,         // 17 苗を持ち上げる
@@ -68,7 +68,13 @@ namespace GreeningEx2019
             GimmickDaijoubu,    // 28
             GimmickKiwotsukete, // 29
             // 追加効果音
-            HitHead,            // 30 頭ぶつけ
+            HitHead,            // 30頭ぶつけ
+            Walk0,              // 31歩き1
+            Walk1,              // 32歩き2
+            Walk2,              // 33歩き3
+            Tsuta0,             // 34ツタ登り
+            StarFly,            // 35星が飛び去る時
+            DandelionFlower,    // 36たんぽぽが咲く時
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;
@@ -187,7 +193,10 @@ namespace GreeningEx2019
         /// <param name="snd">再生したい効果音</param>
         public static void Play(SeType snd)
         {
-            Instance.audioSE.PlayOneShot(Instance.seList[(int)snd]);
+            if (snd != SeType.None)
+            {
+                Instance.audioSE.PlayOneShot(Instance.seList[(int)snd]);
+            }
         }
 
         /// <summary>

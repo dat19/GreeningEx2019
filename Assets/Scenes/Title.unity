@@ -178,7 +178,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "Copyright \xA9 2019-2020 DAT GreeningEx2019\u30C1\u30FC\u30E0"
+  m_text: "Copyright \xA9 2019-2020 Team GreeningEx2019@\u5C02\u9580\u5B66\u6821\u30C7\u30B8\u30BF\u30EB\u30A2\u30FC\u30C4\u6771\u4EAC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b9b18ee746ab1004486f66414a41bab5, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 5cf6b680bbd09ae4583bc293868a50ce, type: 2}
@@ -247,10 +247,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 2177619}
-    characterCount: 43
+    characterCount: 55
     spriteCount: 0
     spaceCount: 4
-    wordCount: 4
+    wordCount: 5
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -834,6 +834,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3554507624267568159, guid: 185809e084451ef44a0631e02ef0c98a,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -863,21 +878,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.materialCount
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3554507624246618368, guid: 185809e084451ef44a0631e02ef0c98a,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 185809e084451ef44a0631e02ef0c98a, type: 3}

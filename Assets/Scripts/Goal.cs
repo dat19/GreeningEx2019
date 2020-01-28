@@ -187,6 +187,7 @@ namespace GreeningEx2019
         public static void ClearAnim()
         {
             anim.SetTrigger("Rolling");
+            SoundController.Play(SoundController.SeType.StarFly);
 
             // ステラが着地していたら、星をステラの相対位置に移動させる
             if (StellaMove.chrController.isGrounded)
@@ -253,6 +254,7 @@ namespace GreeningEx2019
         /// </summary>
         public void FlyStart()
         {
+            SoundController.Play(SoundController.SeType.StarFly);
             state = StateType.FlyStart;
             StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
         }

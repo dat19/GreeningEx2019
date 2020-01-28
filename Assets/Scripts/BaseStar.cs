@@ -71,6 +71,7 @@ namespace GreeningEx2019
         float[] prevRate;
         byte[] seaTextureRates = null;
         StageStar[] stageStars;
+        AudioSource myAudioSource = null;
 
 #if DEBUG_CALC_SPHERE_POS
         int debugX = 0;
@@ -82,6 +83,7 @@ namespace GreeningEx2019
         private void Awake()
         {
             islandCleanAnim = GetComponent<Animator>();
+            myAudioSource = GetComponent<AudioSource>();
         }
 
         private void Start()
@@ -332,6 +334,7 @@ namespace GreeningEx2019
             MeshRenderer rend = dirtyIslands[GameParams.NowClearStage].GetComponent<MeshRenderer>();
             workDirtyIslandMaterial = new Material(rend.material);
             rend.material = workDirtyIslandMaterial;
+            myAudioSource.Play();
 
             while (islandUp < 1f)
             {
