@@ -97,7 +97,6 @@ namespace GreeningEx2019
                 {
                     if (PhysicsCaster.hits[i].collider.CompareTag(GroundTag))
                     {
-                        Debug.Log($"  hit nextNaeY={nextNaePos.y}");
                         // ぶつかるので移動をキャンセル
                         StellaMove.myVelocity.x = 0f;
                         break;
