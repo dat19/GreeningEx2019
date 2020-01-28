@@ -242,6 +242,7 @@ namespace GreeningEx2019
         /// </summary>
         public static void FlyWait()
         {
+            SoundController.Play(SoundController.SeType.StarFly);
             anim.SetTrigger("Fly");
             Vector3 sc = Vector3.one;
             sc.x = Mathf.Sign(ClearFlyX);
@@ -254,7 +255,6 @@ namespace GreeningEx2019
         /// </summary>
         public void FlyStart()
         {
-            SoundController.Play(SoundController.SeType.StarFly);
             state = StateType.FlyStart;
             StellaMove.SetAnimState(StellaMove.AnimType.ClearFly);
         }
