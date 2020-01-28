@@ -160,7 +160,7 @@ namespace GreeningEx2019
                         state = StateType.FadeOut;
                         StartCoroutine(MovieFadeOut(waitMovie));
                     }
-                    else if (GameParams.IsActionAndWaterButtonDown)
+                    else if (GameParams.IsActionAndWaterButtonDown || Input.GetKeyDown(KeyCode.Escape))
                     {
                         state = StateType.FadeOut;
                         StartCoroutine(MovieFadeOut(0));
