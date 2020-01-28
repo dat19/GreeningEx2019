@@ -7,8 +7,6 @@ namespace GreeningEx2019 {
     {
         [Tooltip("真下に地面がない時の移動速度"), SerializeField]
         float rollSpeed = 0.75f;
-        [Tooltip("効果音を鳴らす秒間隔"), SerializeField]
-        float seSpanSeconds = 1f;
 
         /// <summary>
         /// 苗の時だけ、ミニジャンプ可
@@ -21,11 +19,43 @@ namespace GreeningEx2019 {
         const float PushRate = 1.1f;
 
         /// <summary>
+        /// 効果音を止める秒
+        /// </summary>
+        const float seStopSeconds = 0.1f;
+
+        /// <summary>
+        /// 転がり効果音の基本ボリューム
+        /// </summary>
+        const float RollingVolume = 1f;
+
+        /// <summary>
         /// 地面を調べる時の距離
         /// </summary>
         const float GroundCheckDistance = 0.01f;
 
         CharacterController chrController = null;
+
+        /// <summary>
+        /// 岩転がし音
+        /// </summary>
+        AudioSource _rockAudio = null;
+        AudioSource RockAudio
+        {
+            get
+            {
+                if (_rockAudio == null)
+                {
+                    _rockAudio = GetComponent<AudioSource>();
+                }
+                return _rockAudio;
+            }
+        }
+
+        /// <summary>
+        /// 岩転がりボリューム。0～1
+        /// </summary>
+        float rollingAudioVolume;
+
         CharacterController ChrController
         {
             get
@@ -58,11 +88,6 @@ namespace GreeningEx2019 {
         /// 水しぶきを上げた
         /// </summary>
         bool isSplashed = false;
-
-        /// <summary>
-        /// 前回効果音を鳴らした時の時間
-        /// </summary>
-        float lastSeTime = 0;
 
         public override bool Action()
         {
@@ -129,6 +154,9 @@ namespace GreeningEx2019 {
             // 苗の時はここまで
             if (!CanAction) return;
 
+            // ボリュームを下げる
+            rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / seStopSeconds) * Time.fixedDeltaTime);
+
             // 真下に地面がない場合、自動的に転がす
             Vector3 origin = chrController.bounds.center;
             float dist = chrController.bounds.extents.y + GroundCheckDistance;
@@ -162,6 +190,15 @@ namespace GreeningEx2019 {
             {
                 myVelocity.y = 0f;
             }
+
+            if (rollingAudioVolume <= 0f)
+            {
+                RockAudio.Stop();
+            }
+            else
+            {
+                RockAudio.volume = rollingAudioVolume;
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -184,11 +221,16 @@ namespace GreeningEx2019 {
         void setRotate(float lastPosX)
         {
             float zrot = (transform.position.x - lastPosX) / ChrController.radius;
-            if (!Mathf.Approximately(zrot, 0f) && ((Time.time-lastSeTime) > seSpanSeconds))
+            if (!Mathf.Approximately(zrot, 0f))
             {
-                lastSeTime = Time.time;
-                SoundController.Play(SoundController.SeType.RollingStone);
+                rollingAudioVolume = RollingVolume;
+
+                if (!RockAudio.isPlaying)
+                {
+                    RockAudio.Play();
+                }
             }
+            
             transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
         }
     }

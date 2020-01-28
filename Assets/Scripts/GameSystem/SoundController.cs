@@ -47,7 +47,7 @@ namespace GreeningEx2019
             //
             MoveCursor,     // 9  カーソル移動
             GrowFlowers,    // 10 花の橋が発芽
-            RollingStone,   // 11 岩が転がる
+            RollingStone,   // 11 岩が転がる(RockBeforeに実装)
             WalkOnFlower,   // 12 花の上を歩く(未実装)
             SpawnFluff,     // 13 たんぽぽから綿毛出現(Fluffプレハブ側で鳴らしている)
             MiniJump,       // 14 1段差をジャンプ0
