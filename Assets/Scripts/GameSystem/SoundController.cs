@@ -49,7 +49,7 @@ namespace GreeningEx2019
             GrowFlowers,    // 10 花の橋が発芽
             RollingStone,   // 11 岩が転がる
             WalkOnFlower,   // 12 花の上を歩く(未実装)
-            SpawnFluff,     // 13 たんぽぽから綿毛出現
+            SpawnFluff,     // 13 たんぽぽから綿毛出現(Fluffプレハブ側で鳴らしている)
             MiniJump,       // 14 1段差をジャンプ
             GrowRock,       // 15 岩が発芽
             Water,          // 16 水をまく
@@ -69,6 +69,9 @@ namespace GreeningEx2019
             GimmickKiwotsukete, // 29
             // 追加効果音
             HitHead,            // 30 頭ぶつけ
+            Walk0,              // 31歩き1
+            Walk1,              // 32歩き2
+            Walk2,              // 33歩き3
         };
         [TooltipAttribute("効果音リスト"), SerializeField]
         private AudioClip[] seList = null;

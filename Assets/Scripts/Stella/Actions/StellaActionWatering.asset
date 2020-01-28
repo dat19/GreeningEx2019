@@ -21,3 +21,4 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   waterTrigger: {fileID: 3090555543119301612, guid: 039d0c39f19944647b91af087d301d35,
     type: 3}
+  waterSeSeconds: 0.94
