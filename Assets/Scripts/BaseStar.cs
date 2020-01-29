@@ -68,8 +68,10 @@ namespace GreeningEx2019
         /// </summary>
         Texture2D seaTexture;
         Color32[] seaColors;
+        /*
         float[] prevRate;
         byte[] seaTextureRates = null;
+        */
         StageStar[] stageStars;
         AudioSource myAudioSource = null;
 

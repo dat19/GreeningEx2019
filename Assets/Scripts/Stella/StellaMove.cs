@@ -1,5 +1,6 @@
 ﻿#define DEBUG_GUI
 //#define DEBUG_MINIJUMP
+//#define DEBUG_DIFF_Y
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -133,6 +134,11 @@ namespace GreeningEx2019
         /// ミニジャンプ時に、余分にジャンプする高さ
         /// </summary>
         public const float MiniJumpMargin = 0.25f;
+
+        /// <summary>
+        /// デフォルトの段差
+        /// </summary>
+        public const float DefaultStepOffset = 0.5f;
 
         /// <summary>
         /// 前方を表すベクトル
@@ -345,7 +351,11 @@ namespace GreeningEx2019
                 move.z = distZ * Mathf.Sign(-transform.position.z);
             }
 
-            // 左端の移動制限
+#if DEBUG_DIFF_Y
+            float lastY = transform.position.y;
+#endif
+
+            // 端の移動制限
             move.x = StageOverCheck(move.x);
             ChrController.Move(move);
 
@@ -356,6 +366,10 @@ namespace GreeningEx2019
                 move.Set(0, -ChrController.stepOffset - move.y, 0);
                 ChrController.Move(move);
             }
+
+#if DEBUG_DIFF_Y
+            Debug.Log($"  y={transform.position.y-lastY}");
+#endif
 
             // ステージ外チェック
             if (ChrController.bounds.max.y < StageManager.StageBottom)

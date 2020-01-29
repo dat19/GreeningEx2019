@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define DEBUG_LOG
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +13,11 @@ namespace GreeningEx2019 {
         /// <summary>
         /// 苗の時だけ、ミニジャンプ可
         /// </summary>
-        public override bool CanMiniJump { get { return GrowInstance.state == Grow.StateType.Nae; }}
+        public override bool CanMiniJump { 
+            get {
+                return GrowInstance.state == Grow.StateType.Nae;
+            }
+        }
 
         /// <summary>
         /// ステラの速度より少し速く押して、ひっかかりをなくす
@@ -157,25 +163,25 @@ namespace GreeningEx2019 {
             rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / seStopSeconds) * Time.fixedDeltaTime);
 
             // 真下に地面がない場合、自動的に転がす
-            Vector3 origin = chrController.bounds.center;
-            float dist = chrController.bounds.extents.y + GroundCheckDistance;
-            GameObject ground = PhysicsCaster.GetGroundWater(origin, dist);
-            if (ground == null)
-            {
-                origin.x = chrController.bounds.min.x;
-                ground = PhysicsCaster.GetGroundWater(origin, dist);
-                myVelocity.x = 0;
-                if (ground != null)
-                {
-                    myVelocity.x += rollSpeed;
-                }
+            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
+            float minOffset = float.PositiveInfinity;
+            for (int i = 0; i < count; i++) {
+                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
 
-                origin.x = chrController.bounds.max.x;
-                ground = PhysicsCaster.GetGroundWater(origin, dist);
-                if (ground != null)
+                float temp = transform.position.x - PhysicsCaster.hits[i].point.x;
+                if (Mathf.Abs(temp) < Mathf.Abs(minOffset))
                 {
-                    myVelocity.x -= rollSpeed;
+                    minOffset = temp;
                 }
+                Log($"  CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point} / me={transform.position} / {PhysicsCaster.hits[i].collider.ClosestPoint(transform.position)} / minOffset={minOffset}");
+            }
+            if (Mathf.Abs(minOffset) >= GroundCheckDistance)
+            {
+                myVelocity.x = rollSpeed * Mathf.Sign(minOffset);
+            }
+            else
+            {
+                myVelocity.x = 0f;
             }
 
             // 重力加速
@@ -220,11 +226,15 @@ namespace GreeningEx2019 {
         void CheckGrounded()
         {
             isGrounded = false;
-            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.MapLayer);
+            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
             for (int i = 0; i < count; i++)
             {
-                if (!PhysicsCaster.hits[i].collider.isTrigger)
+                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
+                Log($"  CheckGrounded {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].collider.transform.position}");
+                if (!PhysicsCaster.hits[i].collider.isTrigger
+                    || (PhysicsCaster.hits[i].collider.GetComponent<IStepOn>() != null))
                 {
+                    Log($"  grounded");
                     isGrounded = true;
                     return;
                 }
@@ -249,6 +259,12 @@ namespace GreeningEx2019 {
             }
             
             transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_LOG")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }

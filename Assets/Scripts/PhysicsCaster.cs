@@ -29,6 +29,10 @@ namespace GreeningEx2019
         /// 苗レイヤーのGetMaskの値
         /// </summary>
         public static int NaeLayer { get; private set; }
+        /// <summary>
+        /// 岩の着地チェック用のレイヤー
+        /// </summary>
+        public static int RockGroundedLayer { get; private set; }
         public const string GroundTag = "Ground";
         public const string DeadZoneTag = "DeadZone";
 
@@ -37,6 +41,7 @@ namespace GreeningEx2019
             MapCollisionLayer = LayerMask.GetMask("MapCollision");
             MapCollisionPlayerOnlyLayer = LayerMask.GetMask("MapCollision", "MapCollisionPlayerOnly");
             MapLayer = LayerMask.GetMask("MapCollision", "MapTrigger", "Nae");
+            RockGroundedLayer = LayerMask.GetMask("MapCollision", "MapTrigger", "Nae", "WaterUnder");
             NaeLayer = LayerMask.GetMask("Nae");
         }
 

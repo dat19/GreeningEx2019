@@ -91,7 +91,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rollSpeed: 0.75
-  seStopSeconds: 0.5
 --- !u!114 &5512613250238155944
 MonoBehaviour:
   m_ObjectHideFlags: 0

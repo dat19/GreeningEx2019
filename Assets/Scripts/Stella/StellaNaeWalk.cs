@@ -16,11 +16,6 @@ namespace GreeningEx2019
         [Tooltip("移動チェックの時の足元からの高さ"), SerializeField]
         float naeWalkCollideHeight = 1f;
 
-        public override void Init()
-        {
-            base.Init();
-        }
-
         /// <summary>
         /// 指定の座標に苗が置けるかを確認して、フラグで返します。
         /// </summary>
@@ -105,6 +100,7 @@ namespace GreeningEx2019
             }
 
             StellaMove.instance.Move();
+            StellaMove.ChrController.stepOffset = StellaMove.DefaultStepOffset;
 
             if (!StellaMove.ChrController.isGrounded)
             {
