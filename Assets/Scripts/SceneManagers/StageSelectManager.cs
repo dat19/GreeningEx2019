@@ -34,11 +34,11 @@ namespace GreeningEx2019
         /// <summary>
         /// ナレーション前の余白秒数
         /// </summary>
-        const float NarrationBeforeMarginSeconds = 1f;
+        const float NarrationBeforeMarginSeconds = 1.25f;
         /// <summary>
         /// ナレーション後の余白秒数
         /// </summary>
-        const float NarrationAfterMarginSeconds = 0f;
+        const float NarrationAfterMarginSeconds = 1.25f;
 
         /// <summary>
         /// ステージ名
