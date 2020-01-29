@@ -76,8 +76,8 @@ namespace GreeningEx2019
             StarFly,            // 35星が飛び去る時
             DandelionFlower,    // 36たんぽぽが咲く時
         };
-        [TooltipAttribute("効果音リスト"), SerializeField]
-        private AudioClip[] seList = null;
+        [TooltipAttribute("効果音リスト")]
+        public AudioClip[] seList = null;
 
         /// <summary>
         /// BGMの列挙子。この並びと<c>BGMList</c>にセットするAudioClipの並びを合わせます。
