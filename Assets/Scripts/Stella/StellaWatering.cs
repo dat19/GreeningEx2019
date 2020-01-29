@@ -34,15 +34,15 @@ namespace GreeningEx2019
         /// <summary>
         /// トリガーオブジェクトの数
         /// </summary>
-        const int triggerCount = 10;
+        const int TriggerCount = 10;
         /// <summary>
         /// トリガーの有効秒数。これをトリガーの秒数で割った間隔で発射
         /// </summary>
-        const float triggerTime = 3f;
+        const float TriggerTime = 3f;
 
-        GameObject[] triggerObjects = new GameObject[triggerCount];
-        Rigidbody[] triggerRigidbody = new Rigidbody[triggerCount];
-        Water[] triggerWater = new Water[triggerCount];
+        readonly GameObject[] triggerObjects = new GameObject[TriggerCount];
+        readonly Rigidbody[] triggerRigidbody = new Rigidbody[TriggerCount];
+        readonly Water[] triggerWater = new Water[TriggerCount];
         StateType state;
         ParticleSystem zyouroParticle = null;
         float triggerSpeed;
@@ -69,8 +69,8 @@ namespace GreeningEx2019
                 zyouroParticle = StellaMove.ZyouroEmitter.GetComponent<ParticleSystem>();
                 triggerSpeed = (zyouroParticle.main.startSpeed.constantMin
                     + zyouroParticle.main.startSpeed.constantMax) * 0.5f;
-                triggerEmitSeconds = triggerTime / (float)triggerCount;
-                for (int i=0; i<triggerCount;i++)
+                triggerEmitSeconds = TriggerTime / (float)TriggerCount;
+                for (int i=0; i<TriggerCount;i++)
                 {
                     triggerObjects[i] = Instantiate(waterTrigger);
                     triggerRigidbody[i] = triggerObjects[i].GetComponent<Rigidbody>();
@@ -113,7 +113,7 @@ namespace GreeningEx2019
                     triggerObjects[triggerIndex].transform.position = StellaMove.ZyouroEmitterPosition.position;
                     triggerRigidbody[triggerIndex].velocity = StellaMove.ZyouroEmitter.forward * triggerSpeed;
                     triggerWater[triggerIndex].Start();
-                    triggerIndex = (triggerIndex + 1) % triggerCount;
+                    triggerIndex = (triggerIndex + 1) % TriggerCount;
                 }
 
                 // 水まき終了チェック
@@ -136,13 +136,13 @@ namespace GreeningEx2019
                 }
 
                 // 後ずさりチェック
-                int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.chrController, Vector3.down, 0f, PhysicsCaster.MapCollisionPlayerOnlyLayer);
+                int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.ChrController, Vector3.down, 0f, PhysicsCaster.MapCollisionPlayerOnlyLayer);
 
                 for (int i=0;i<hitCount;i++)
                 {
                     // 下げる
                     float colx = PhysicsCaster.hits[i].collider.bounds.extents.x;
-                    float dist = StellaMove.chrController.radius + colx + StellaMove.CollisionMargin;
+                    float dist = StellaMove.ChrController.radius + colx + StellaMove.CollisionMargin;
                     float target = PhysicsCaster.hits[i].transform.position.x - dist * StellaMove.forwardVector.x;
                     float move = target - StellaMove.instance.transform.position.x;
                     if (move * StellaMove.forwardVector.x >= 0f)

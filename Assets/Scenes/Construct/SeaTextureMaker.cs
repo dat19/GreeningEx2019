@@ -8,24 +8,11 @@ namespace GreeningEx2019
     {
         [Tooltip("汚れ島のオブジェクト"), SerializeField]
         GameObject[] dirtyIslands = new GameObject[10];
-        [Tooltip("汚れ海テクスチャ"), SerializeField]
-        Texture2D dirtySeaTexture = null;
-        [Tooltip("緑化海テクスチャ"), SerializeField]
-        Texture2D cleanSeaTexture = null;
-        [Tooltip("海のレンダラー"), SerializeField]
-        MeshRenderer seaRenderer = null;
         [Tooltip("試しのSphere"), SerializeField]
         GameObject testSphere = null;
 
-        Texture2D nowTexture;
-        Color32[] dirtyColors;
-        Color32[] cleanColors;
-        Color32[] nowColors;
-
         void Start()
         {
-            BaseStar baseStar = GetComponent<BaseStar>();
-
             for (int i = 0; i < dirtyIslands.Length; i++) {
                 for (int j=0;j<dirtyIslands[i].transform.childCount;j++)
                 {

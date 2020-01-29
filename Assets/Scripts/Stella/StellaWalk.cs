@@ -14,7 +14,6 @@ namespace GreeningEx2019
         }
 
         protected StateType state = StateType.Walk;
-        float stateStartTime;
 
         public override void Init()
         {
@@ -68,7 +67,7 @@ namespace GreeningEx2019
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
 
-            if (!StellaMove.chrController.isGrounded)
+            if (!StellaMove.ChrController.isGrounded)
             {
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                 FallNextBlock();
@@ -99,7 +98,6 @@ namespace GreeningEx2019
             if ((h * StellaMove.forwardVector.x) < -0.5f)
             {
                 state = StateType.Turn;
-                stateStartTime = Time.time - Time.fixedDeltaTime;
                 StellaMove.instance.StartTurn(-StellaMove.forwardVector.x);
                 return false;
             }
@@ -120,7 +118,7 @@ namespace GreeningEx2019
             origin.x = Mathf.Round(StellaMove.instance.transform.position.x);
 
             // 着地目標のX座標と自分の足元のYから下方向にレイを飛ばして、着地点を見つける
-            origin.y = StellaMove.chrController.bounds.min.y;
+            origin.y = StellaMove.ChrController.bounds.min.y;
 
             int cnt = PhysicsCaster.Raycast(origin, Vector3.down, float.PositiveInfinity, PhysicsCaster.MapCollisionPlayerOnlyLayer);
             if (cnt == 0)
@@ -145,7 +143,7 @@ namespace GreeningEx2019
                     top = PhysicsCaster.hits[i].collider.bounds.max.y;
                 }
             }
-            float h = StellaMove.chrController.bounds.min.y - top;
+            float h = StellaMove.ChrController.bounds.min.y - top;
             // 高さがないか、負の値の時は、1段分で算出
             if (h <= 0f)
             {
@@ -167,11 +165,9 @@ namespace GreeningEx2019
         /// <returns>戻す処理をしていたらtrueを返します。</returns>
         protected bool PushCheck()
         {
-            float h = StellaMove.chrController.height * 0.5f - StellaMove.chrController.radius;
-            Vector3 p1 = StellaMove.chrController.bounds.center + Vector3.up * h;
-            Vector3 p2 = StellaMove.chrController.bounds.center + Vector3.down * h;
+            float h = StellaMove.ChrController.height * 0.5f - StellaMove.ChrController.radius;
             int hitCount = PhysicsCaster.CharacterControllerCast(
-                StellaMove.chrController,
+                StellaMove.ChrController,
                 StellaMove.forwardVector,
                 Mathf.Abs(StellaMove.myVelocity.x * Time.fixedDeltaTime),
                 PhysicsCaster.MapCollisionLayer);
@@ -185,8 +181,8 @@ namespace GreeningEx2019
                     if (!acts[j].CanAction) continue;
 
                     // 方向が左右か
-                    float ydif = PhysicsCaster.hits[i].point.y - StellaMove.chrController.bounds.center.y;
-                    float sidecheck = h + StellaMove.chrController.radius * 0.5f;
+                    float ydif = PhysicsCaster.hits[i].point.y - StellaMove.ChrController.bounds.center.y;
+                    float sidecheck = h + StellaMove.ChrController.radius * 0.5f;
                     if (Mathf.Abs(ydif) > sidecheck)
                     {
                         continue;
@@ -200,7 +196,7 @@ namespace GreeningEx2019
                     }
 
                     // 向いている方向に対象物がある時、対象物に触れていたらステラを下げる
-                    float range = StellaMove.chrController.bounds.extents.x + PhysicsCaster.hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
+                    float range = StellaMove.ChrController.bounds.extents.x + PhysicsCaster.hits[i].collider.bounds.extents.x + StellaMove.CollisionMargin;
                     if (((to * StellaMove.forwardVector.x) > 0f) && (Mathf.Abs(to) < range))
                     {
                         float posx = PhysicsCaster.hits[i].collider.bounds.center.x - range * StellaMove.forwardVector.x;

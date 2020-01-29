@@ -18,8 +18,8 @@ namespace GreeningEx2019
         VideoClip[] videoClips = new VideoClip[2];
         [Tooltip("カットインイメージ。0=Stage5, 1=エンディング前"), SerializeField]
         Sprite[] storySprites = new Sprite[2];
-        [Tooltip("動画フェード秒数"), SerializeField]
-        float videoFadeSeconds = 0.5f;
+        //[Tooltip("動画フェード秒数"), SerializeField]
+        //float videoFadeSeconds = 0.5f;
         [Tooltip("動画を描画するRawImage"), SerializeField]
         RawImage movieImage = null;
         [Tooltip("画像表示、あるいは、動画を隠すために使うイメージ"), SerializeField]
@@ -214,7 +214,7 @@ namespace GreeningEx2019
                 switch (state)
                 {
                     case StateType.Clear:
-                        StartCoroutine(clearSequence());
+                        StartCoroutine(ClearSequence());
                         break;
 
                     case StateType.PlayerControl:
@@ -234,7 +234,7 @@ namespace GreeningEx2019
         /// <summary>
         /// クリア演出を実行します
         /// </summary>
-        IEnumerator clearSequence()
+        IEnumerator ClearSequence()
         {
             // 切り替え
             yield return baseStar.UpdateClean();

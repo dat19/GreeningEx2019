@@ -55,7 +55,7 @@ namespace GreeningEx2019
             move.x = adjustedX;
 
             // 移動
-            CollisionFlags flags = StellaMove.chrController.Move(move);
+            CollisionFlags flags = StellaMove.ChrController.Move(move);
 
             // 衝突があったら離す
             if ((flags != CollisionFlags.None) || adjusted)

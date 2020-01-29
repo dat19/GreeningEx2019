@@ -100,7 +100,7 @@ namespace GreeningEx2019
         /// </summary>
         static bool useFade = false;
 
-        static float _seVolume = 0.5f;
+        static float seVolume = 0.5f;
         /// <summary>
         /// SEのボリューム
         /// </summary>
@@ -108,14 +108,14 @@ namespace GreeningEx2019
         {
             get
             {
-                return _seVolume;
+                return seVolume;
             }
             set
             {
-                _seVolume = Mathf.Clamp01(value);
+                seVolume = Mathf.Clamp01(value);
             }
         }
-        static float _bgmVolume = 0.5f;
+        static float bgmVolume = 0.5f;
         /// <summary>
         /// BGMのボリューム
         /// </summary>
@@ -123,11 +123,11 @@ namespace GreeningEx2019
         {
             get
             {
-                return _bgmVolume;
+                return bgmVolume;
             }
             set
             {
-                _bgmVolume = Mathf.Clamp01(value);
+                bgmVolume = Mathf.Clamp01(value);
             }
         }
 
@@ -307,17 +307,17 @@ namespace GreeningEx2019
         /// </summary>
         static void SetVolume()
         {
-            float newvol = _bgmVolume;
+            float newvol = bgmVolume;
 
             if (useFade)
             {
                 if (useFadeAlpha)
                 {
-                    newvol = _bgmVolume * (1f - Fade.NowColor.a);
+                    newvol = bgmVolume * (1f - Fade.NowColor.a);
                 }
                 else
                 {
-                    newvol = _bgmVolume * (1f - (fadeSeconds / targetFadeSeconds));
+                    newvol = bgmVolume * (1f - (fadeSeconds / targetFadeSeconds));
                 }
             }
 
@@ -325,9 +325,9 @@ namespace GreeningEx2019
             {
                 Instance.audioBGM.volume = newvol;
             }
-            if (Instance.audioSE.volume != _seVolume)
+            if (Instance.audioSE.volume != seVolume)
             {
-                Instance.audioSE.volume = _seVolume;
+                Instance.audioSE.volume = seVolume;
             }
         }
 

@@ -190,7 +190,7 @@ namespace GreeningEx2019
             SoundController.Play(SoundController.SeType.StarFly);
 
             // ステラが着地していたら、星をステラの相対位置に移動させる
-            if (StellaMove.chrController.isGrounded)
+            if (StellaMove.ChrController.isGrounded)
             {
                 instance.StartCoroutine(MoveRollingStandbyPosition());
             }
