@@ -52,7 +52,7 @@ namespace GreeningEx2019
             SpawnFluff,     // 13 たんぽぽから綿毛出現(Fluffプレハブ側で鳴らしている)
             MiniJump,       // 14 1段差をジャンプ0
             GrowRock,       // 15 岩が発芽
-            Water,          // 16 水をまく
+            Water,          // 16 水をまく(StellaのAudioSourceで制御)
             LiftUp,         // 17 苗を持ち上げる
             PutDown,        // 18 苗を置く
             RockWater,      // 19 岩が水に落ちる
@@ -76,8 +76,8 @@ namespace GreeningEx2019
             StarFly,            // 35星が飛び去る時
             DandelionFlower,    // 36たんぽぽが咲く時
         };
-        [TooltipAttribute("効果音リスト"), SerializeField]
-        private AudioClip[] seList = null;
+        [TooltipAttribute("効果音リスト")]
+        public AudioClip[] seList = null;
 
         /// <summary>
         /// BGMの列挙子。この並びと<c>BGMList</c>にセットするAudioClipの並びを合わせます。

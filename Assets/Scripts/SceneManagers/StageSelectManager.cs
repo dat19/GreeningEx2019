@@ -14,32 +14,48 @@ namespace GreeningEx2019
     {
         [Tooltip("ステージテキスト"), SerializeField]
         TextMeshProUGUI stageText = null;
-        [Tooltip("ステージ名"), SerializeField]
-        string[] stageNames =
-        {
-            "First Island",
-            "Second Island",
-            "All Test Island",
-            "No Name",
-            "No Name",
-            "No Name",
-            "No Name",
-            "No Name",
-            "No Name",
-            "No Name",
-        };
         [Tooltip("動画ファイル"), SerializeField]
         VideoClip[] videoClips = new VideoClip[2];
+        [Tooltip("カットインイメージ。0=Stage5, 1=エンディング前"), SerializeField]
+        Sprite[] storySprites = new Sprite[2];
         [Tooltip("動画フェード秒数"), SerializeField]
         float videoFadeSeconds = 0.5f;
         [Tooltip("動画を描画するRawImage"), SerializeField]
         RawImage movieImage = null;
+        [Tooltip("画像表示、あるいは、動画を隠すために使うイメージ"), SerializeField]
+        Image waitMovieFade = null;
         [Tooltip("星のインスタンス"), SerializeField]
         BaseStar baseStar = null;
         [Tooltip("キャンバスアニメ"), SerializeField]
         Animator canvasAnim = null;
         [Tooltip("クレジットアニメの高速"), SerializeField]
         float creditSpeedUp = 4f;
+
+        /// <summary>
+        /// ナレーション前の余白秒数
+        /// </summary>
+        const float NarrationBeforeMarginSeconds = 1f;
+        /// <summary>
+        /// ナレーション後の余白秒数
+        /// </summary>
+        const float NarrationAfterMarginSeconds = 0f;
+
+        /// <summary>
+        /// ステージ名
+        /// </summary>
+        readonly string[] stageNames =
+        {
+            "First Island",
+            "You Can Fly",
+            "Mushroom Jump",
+            "Rolling Rocks Island",
+            "Flower Garden",
+            "Dandelion River",
+            "No Name",
+            "No Name",
+            "No Name",
+            "No Name",
+        };
 
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
@@ -118,7 +134,7 @@ namespace GreeningEx2019
         // リピートを防ぐための前のカーソル
         static float lastCursor = 0;
 
-        static VideoPlayer videoPlayer = null;
+        VideoPlayer videoPlayer = null;
 
         /// <summary>
         /// 処理開始
@@ -127,18 +143,17 @@ namespace GreeningEx2019
 
         bool isAnimDone = false;
 
+        AudioSource audioSource = null;
+
         public override void OnFadeOutDone()
         {
             isStarted = true;
             GameParams.isMiss = false;
+            audioSource = GetComponent<AudioSource>();
+            videoPlayer = GetComponent<VideoPlayer>();
 
             //StarClean.StartClearedStage(GameParams.ClearedStageCount);
             baseStar.MakeSeaTexture();
-
-            if (videoPlayer == null)
-            {
-                videoPlayer = GetComponent<VideoPlayer>();
-            }
 
 #if DEBUG_ENDING
             GameParams.Instance.toStageSelect = ToStageSelectType.Clear;
@@ -232,13 +247,13 @@ namespace GreeningEx2019
         {
             if (GameParams.NowClearStage == 4)
             {
-                PlayVideo(VideoType.Stage5);
-                nextState = StateType.PlayerControl;
+                //PlayVideo(VideoType.Stage5);
+                CutScene(VideoType.Stage5);
             }
             else if (GameParams.NowClearStage == 9)
             {
-                PlayVideo(VideoType.Ending);
-                nextState = StateType.CreditRoll;
+                //PlayVideo(VideoType.Ending);
+                CutScene(VideoType.Ending);
             }
             else
             {
@@ -260,13 +275,14 @@ namespace GreeningEx2019
         }
 
         /// <summary>
-        /// ビデオの再生を開始します。
+        /// カットシーンを開始します。
         /// </summary>
-        /// <param name="vtype">再生するビデオの種類</param>
-        void PlayVideo(VideoType vtype)
+        /// <param name="type">表示するスプライトの種類</param>
+        void CutScene(VideoType type)
         {
             nextState = StateType.StoryMovie;
-            StartCoroutine(StoryMovie(vtype));
+            waitMovieFade.sprite = storySprites[(int)type];
+            StartCoroutine(StoryCutin(type));
         }
 
         public void AnimDone()
@@ -284,12 +300,42 @@ namespace GreeningEx2019
             }
         }
 
-        IEnumerator StoryMovie(VideoType vtype)
+        IEnumerator StoryCutin(VideoType type)
         {
-            yield return AnimProc(CanvasAnimStateType.FadeOut);
+            // 画像表示
+            audioSource.clip = SoundController.Instance.seList[(int)SoundController.SeType.NarrationStage5 + (int)type];
 
+            yield return AnimProc(CanvasAnimStateType.FadeOut);
+            yield return new WaitForSeconds(NarrationBeforeMarginSeconds);
+            audioSource.Play();
+
+            // ナレーションの終了、あるいは、操作待ち
+            while (audioSource.isPlaying && !GameParams.IsActionAndWaterButtonDown)
+            {
+                yield return null;
+            }
+            audioSource.Stop();
+
+            // 終了待ち
+            float startTime = Time.time;
+            while (((Time.time-startTime) < NarrationAfterMarginSeconds) && !GameParams.IsActionAndWaterButton)
+            {
+                yield return null;
+            }
+
+            // Stage5なら、フェードアウトしてすぐにプレイヤー操作へ
+            if (type == VideoType.Stage5)
+            {
+                yield return AnimProc(CanvasAnimStateType.FadeIn);
+                waitMovieFade.sprite = null;
+                SelectNextStage();
+                nextState = StateType.PlayerControl;
+                yield break;
+            }
+
+            // エンディングムービー
             videoPlayer.enabled = true;
-            videoPlayer.clip = videoClips[(int)vtype];
+            videoPlayer.clip = videoClips[(int)type];
             videoPlayer.Play();
             movieImage.enabled = true;
 
@@ -301,6 +347,7 @@ namespace GreeningEx2019
 
             // フェードイン
             yield return AnimProc(CanvasAnimStateType.FadeIn);
+                waitMovieFade.sprite = null;
 
             // 動画終了を待つ
             while (videoPlayer.isPlaying)
@@ -308,31 +355,10 @@ namespace GreeningEx2019
                 yield return null;
             }
 
-            // 最終ステージならクレジットロールへ
-            if (GameParams.NowClearStage == GameParams.StageMax-1)
-            {
-                yield return CreditRoll();
-                SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
-                yield break;
-            }
-
-            // ビデオプレイヤーをフェードアウトさせる
-            float fadeTime = 0;
-            Color col = movieImage.color;
-            while (fadeTime < videoFadeSeconds)
-            {
-                fadeTime += Time.deltaTime;
-                float alpha = (1f - fadeTime / videoFadeSeconds);
-                col.a = alpha;
-                movieImage.color = col;
-                yield return null;
-            }
-
-            movieImage.enabled = false;
-            SelectNextStage();
-            nextState = StateType.PlayerControl;
+            // クレジットロールへ
+            yield return CreditRoll();
+            SceneChanger.ChangeScene(SceneChanger.SceneType.Title);
         }
-
 
         void UpdatePlayerControl()
         {

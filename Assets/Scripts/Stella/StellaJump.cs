@@ -19,7 +19,7 @@ namespace GreeningEx2019
         {
             base.Init();
 
-            StellaMove.myVelocity.y = 0f;
+            StellaMove.myVelocity = Vector3.zero;
             StellaMove.RegisterAnimEvent(StellaMove.instance.StartTargetJump);
             StellaMove.SetAnimState(StellaMove.AnimType.Jump);
             StellaMove.SetAnimFloat("JumpRev", 1f);
