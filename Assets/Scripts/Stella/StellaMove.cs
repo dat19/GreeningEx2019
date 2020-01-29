@@ -657,7 +657,7 @@ namespace GreeningEx2019
 
         private void OnDisable()
         {
-            if (Application.isPlaying)
+            if (SoundController.audioListener != null)
             {
                 SoundController.audioListener.enabled = true;
                 GetComponent<AudioListener>().enabled = false;
