@@ -18,11 +18,11 @@ namespace GreeningEx2019
         string[] stageNames =
         {
             "First Island",
-            "Second Island",
-            "All Test Island",
-            "No Name",
-            "No Name",
-            "No Name",
+            "You Can Fly",
+            "Mushroom Jump",
+            "Rolling Rocks Island",
+            "Flower Garden",
+            "Dandelion River",
             "No Name",
             "No Name",
             "No Name",
