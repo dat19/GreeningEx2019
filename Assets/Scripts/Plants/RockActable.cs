@@ -8,7 +8,7 @@ namespace GreeningEx2019 {
     public class RockActable :Actable
     {
         [Tooltip("真下に地面がない時の移動速度"), SerializeField]
-        float rollSpeed = 0.75f;
+        float rollSpeed = 1f;
 
         /// <summary>
         /// 苗の時だけ、ミニジャンプ可

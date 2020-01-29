@@ -21,6 +21,7 @@ namespace GreeningEx2019
             base.Init();
             isLanding = false;
             StellaMove.SetAnimState(StellaMove.AnimType.Air);
+            Debug.Log($"  Air {StellaMove.myVelocity.x}");
         }
 
         public override void UpdateAction()
