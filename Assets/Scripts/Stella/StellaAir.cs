@@ -50,7 +50,19 @@ namespace GreeningEx2019
             StellaMove.instance.Move();
 
             // 着地チェック
-            if (!isLanding && StellaMove.ChrController.isGrounded && StellaMove.myVelocity.y < 0f)
+            bool isGrounded = StellaMove.ChrController.isGrounded;
+            if (!isGrounded)
+            {
+                int hitCount = PhysicsCaster.CharacterControllerCast(
+                    StellaMove.ChrController,
+                    Vector3.down,
+                    StellaMove.CollisionMargin,
+                    PhysicsCaster.MapCollisionPlayerOnlyLayer);
+                isGrounded = hitCount > 0;
+            }
+
+            // 着地チェック
+            if (!isLanding && isGrounded && StellaMove.myVelocity.y < 0f)
             {
                 SoundController.Play(SoundController.SeType.Landing);
 
