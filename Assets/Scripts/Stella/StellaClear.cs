@@ -53,7 +53,7 @@ namespace GreeningEx2019
             targetX = Goal.StarPosition.x + Mathf.Sign(Goal.ClearFlyX) * StageManager.GoalToStellaOffset.x;
             float dir = targetX - StellaMove.instance.transform.position.x;
 
-            if (StellaMove.chrController.isGrounded)
+            if (StellaMove.ChrController.isGrounded)
             {
                 StellaMove.SetAnimState(StellaMove.AnimType.Walk);
                 state = StateType.ToTarget;
@@ -90,7 +90,7 @@ namespace GreeningEx2019
             switch(state)
             {
                 case StateType.Turn:
-                    if (StellaMove.chrController.isGrounded)
+                    if (StellaMove.ChrController.isGrounded)
                     {
                         // 方向を確認
                         if (StellaMove.instance.Turn())

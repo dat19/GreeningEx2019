@@ -76,7 +76,7 @@ namespace GreeningEx2019 {
             get
             {
                 return (GrowInstance.state == Grow.StateType.Growed)
-                    && StellaMove.chrController.isGrounded;
+                    && StellaMove.ChrController.isGrounded;
             }
             protected set => base.CanAction = value;
         }

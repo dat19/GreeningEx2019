@@ -56,7 +56,7 @@ namespace GreeningEx2019
         void BackOff()
         {
             state = StateType.BackOff;
-            targetX = StellaMove.naePutPosition.x - (StellaMove.chrController.radius + StellaMove.naeActable.ColliderExtentsX) * StellaMove.forwardVector.x + StellaMove.CollisionMargin;
+            targetX = StellaMove.naePutPosition.x - (StellaMove.ChrController.radius + StellaMove.naeActable.ColliderExtentsX) * StellaMove.forwardVector.x + StellaMove.CollisionMargin;
             // 前進はしない
             if ((targetX-StellaMove.instance.transform.position.x) * StellaMove.forwardVector.x > 0)
             {

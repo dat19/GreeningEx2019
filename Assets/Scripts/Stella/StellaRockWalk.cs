@@ -45,17 +45,17 @@ namespace GreeningEx2019
             StellaMove.instance.Gravity();
             Log($"A: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} {StellaMove.myVelocity.x}, {StellaMove.myVelocity.y} rock={rockActable.transform.position.x}, {rockActable.transform.position.y}");
             StellaMove.instance.Move();
-            Log($"B: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} isGrounded={StellaMove.chrController.isGrounded}");
+            Log($"B: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} isGrounded={StellaMove.ChrController.isGrounded}");
 
             // 逆再生設定
             bool back = h * StellaMove.forwardVector.x < -0.5f;
             StellaMove.SetAnimBool("Back", back);
 
-            if (!StellaMove.chrController.isGrounded)
+            if (!StellaMove.ChrController.isGrounded)
             {
                 /// 下に岩があればセーフ
                 int hitCount = PhysicsCaster.CharacterControllerCast(
-                    StellaMove.chrController, Vector3.down, CheckFallHeight, PhysicsCaster.MapCollisionLayer);
+                    StellaMove.ChrController, Vector3.down, CheckFallHeight, PhysicsCaster.MapCollisionLayer);
                 bool isRock = false;
                 for (int i = 0; i < hitCount; i++)
                 {
@@ -111,7 +111,7 @@ namespace GreeningEx2019
 
                     // ステラが移動できるか確認
                     int hitCount = PhysicsCaster.CharacterControllerCast(
-                        StellaMove.chrController,
+                        StellaMove.ChrController,
                         StellaMove.myVelocity.x < 0f ? Vector3.left : Vector3.right,
                         Mathf.Abs(StellaMove.myVelocity.x)*Time.fixedDeltaTime,
                         PhysicsCaster.MapCollisionLayer);
@@ -130,7 +130,7 @@ namespace GreeningEx2019
                     // 岩を移動させる
                     if (!blocked)
                     {
-                        StellaMove.chrController.enabled = false;
+                        StellaMove.ChrController.enabled = false;
                         rockActable.PushAction();
                         Log($"F: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
 
@@ -140,16 +140,16 @@ namespace GreeningEx2019
                         float rad = moved / rockCollider.radius;
                         stellaMove.Set(
                             moved + Mathf.Sin(rad) * rockCollider.radius,
-                            StellaMove.chrController.skinWidth * 1.5f,
+                            StellaMove.ChrController.skinWidth * 1.5f,
                             0f);
                         Log($"  moved={moved}={lastRockObject.transform.position.x}-{lastPos.x} / rad={rad} / sin={Mathf.Sin(rad)} / rockrad={rockCollider.radius} / Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
-                        StellaMove.chrController.enabled = true;
-                        StellaMove.chrController.Move(stellaMove);
+                        StellaMove.ChrController.enabled = true;
+                        StellaMove.ChrController.Move(stellaMove);
                         Log($"  moved2 Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y}");
                         // 着地
-                        stellaMove.Set(0, -StellaMove.chrController.stepOffset, 0);
-                        StellaMove.chrController.Move(stellaMove);
-                        Log($"G: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} move={stellaMove.x}, {stellaMove.y} isGrounded={StellaMove.chrController.isGrounded} / rock={rockActable.transform.position.x}, {rockActable.transform.position.y}");
+                        stellaMove.Set(0, -StellaMove.ChrController.stepOffset, 0);
+                        StellaMove.ChrController.Move(stellaMove);
+                        Log($"G: Stella={StellaMove.instance.transform.position.x}, {StellaMove.instance.transform.position.y} move={stellaMove.x}, {stellaMove.y} isGrounded={StellaMove.ChrController.isGrounded} / rock={rockActable.transform.position.x}, {rockActable.transform.position.y}");
 
                         // 足元に岩が無ければ飛び降りる
                         if (!CheckGetOff())
@@ -174,7 +174,7 @@ namespace GreeningEx2019
         /// </summary>
         bool NotOnRock()
         {
-            int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.chrController, Vector3.down, getOffDistance, PhysicsCaster.MapCollisionLayer);
+            int hitCount = PhysicsCaster.CharacterControllerCast(StellaMove.ChrController, Vector3.down, getOffDistance, PhysicsCaster.MapCollisionLayer);
             for (int i=0;i<hitCount;i++)
             {
                 if (PhysicsCaster.hits[i].collider.CompareTag("Rock"))
@@ -192,7 +192,7 @@ namespace GreeningEx2019
         /// <returns>岩がある時、trueを返します。</returns>
         bool CheckGetOff()
         {
-            Vector3 origin = StellaMove.chrController.bounds.center;
+            Vector3 origin = StellaMove.ChrController.bounds.center;
             origin.x += getOffDistance * Mathf.Sign(lastRockObject.transform.position.x - origin.x);
             int hitCount = PhysicsCaster.Raycast(origin, Vector3.down, float.PositiveInfinity, PhysicsCaster.MapCollisionLayer, QueryTriggerInteraction.Collide);
             Collider res = FindRock(hitCount);
@@ -206,7 +206,7 @@ namespace GreeningEx2019
                 if (res.gameObject == lastRockObject) return true;
             }
 
-            GetOffOutside(StellaMove.chrController.bounds.min.y - res.bounds.max.y);
+            GetOffOutside(StellaMove.ChrController.bounds.min.y - res.bounds.max.y);
             return false;
         }
 
@@ -245,8 +245,8 @@ namespace GreeningEx2019
         /// <param name="top">床までの高さ</param>
         void GetOffOutside(float top)
         {
-            float dir = StellaMove.chrController.bounds.center.x - lastRockObject.transform.position.x;
-            float offset = StellaMove.chrController.bounds.extents.x + StellaMove.CollisionMargin + rockCollider.bounds.extents.x;
+            float dir = StellaMove.ChrController.bounds.center.x - lastRockObject.transform.position.x;
+            float offset = StellaMove.ChrController.bounds.extents.x + StellaMove.CollisionMargin + rockCollider.bounds.extents.x;
             float t = StellaMove.GetFallTime(top + StellaMove.MiniJumpMargin * 2f);
             float jumpt = StellaMove.GetFallTime(StellaMove.MiniJumpMargin);
             StellaMove.myVelocity.Set(offset * Mathf.Sign(dir) / t, jumpt * StellaMove.GravityAdd, 0f);

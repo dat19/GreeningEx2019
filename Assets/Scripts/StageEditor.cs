@@ -6,10 +6,12 @@ using UnityEditor;
 namespace GreeningEx2019 {
     public class StageEditor : MonoBehaviour
     {
+#pragma warning disable 414
         [SerializeField]
         MapType selectedMapChip = MapType.GroundTop;
         [SerializeField]
         GameObject[] mapChipPrefabs = null;
+#pragma warning restore 414
 
         /// <summary>
         /// 配置するZ座標

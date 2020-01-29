@@ -29,10 +29,10 @@ namespace GreeningEx2019
         bool CheckPut(Vector3 pos)
         {
             // 置く先が、ステラの足元より一定以上低い場合は置けない
-            if (pos.y < (StellaMove.chrController.bounds.min.y-naePutUnderHeight)) return false;
+            if (pos.y < (StellaMove.ChrController.bounds.min.y-naePutUnderHeight)) return false;
 
             // 置く先が、ステラの足元より一定以上高い場所は置けない
-            if (pos.y > (StellaMove.chrController.bounds.min.y + naePutTopHeight)) return false;
+            if (pos.y > (StellaMove.ChrController.bounds.min.y + naePutTopHeight)) return false;
 
             // 重なっているオブジェクトを探査
             int hitCount = StellaMove.naeActable.FetchOverlapObjects(pos, PhysicsCaster.MapLayer);
@@ -91,7 +91,7 @@ namespace GreeningEx2019
             if (!Mathf.Approximately(Vector3.Distance(naepos, nextNaePos), 0f)) {
                 // 苗の候補場所が変わるので、移動キャンセル調査
                 // 苗の高さは、地面より1マス分上を確認
-                nextNaePos.y = StellaMove.chrController.bounds.min.y + naeWalkCollideHeight;
+                nextNaePos.y = StellaMove.ChrController.bounds.min.y + naeWalkCollideHeight;
                 int hitCount = StellaMove.naeActable.FetchOverlapObjects(nextNaePos, PhysicsCaster.MapCollisionLayer);
                 for (int i=0; i<hitCount;i++)
                 {
@@ -106,7 +106,7 @@ namespace GreeningEx2019
 
             StellaMove.instance.Move();
 
-            if (!StellaMove.chrController.isGrounded)
+            if (!StellaMove.ChrController.isGrounded)
             {
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);
                 FallNextBlock();
@@ -146,12 +146,12 @@ namespace GreeningEx2019
             }
 
             // 床の位置を調べる
-            naepos.y = StellaMove.chrController.bounds.center.y;
+            naepos.y = StellaMove.ChrController.bounds.center.y;
             int grobj = PhysicsCaster.GetGround(naepos, float.PositiveInfinity);
             if (grobj == -1)
             {
                 // 置けない高さを設定
-                naepos.y = (StellaMove.chrController.bounds.min.y - naePutUnderHeight * 2f);
+                naepos.y = (StellaMove.ChrController.bounds.min.y - naePutUnderHeight * 2f);
                 return naepos;
             }
 

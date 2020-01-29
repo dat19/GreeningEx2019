@@ -96,7 +96,7 @@ namespace GreeningEx2019
 
             // 移動
             float lastY = StellaMove.instance.transform.position.y;
-            CollisionFlags flags = StellaMove.chrController.Move(StellaMove.myVelocity * Time.fixedDeltaTime);
+            CollisionFlags flags = StellaMove.ChrController.Move(StellaMove.myVelocity * Time.fixedDeltaTime);
             if (flags.HasFlag(CollisionFlags.Below) && StellaMove.myVelocity.y < 0f)
             {
                 // 下にぶつかっていたらツタを離す
