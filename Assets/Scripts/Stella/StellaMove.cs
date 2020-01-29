@@ -252,10 +252,13 @@ namespace GreeningEx2019
         /// </summary>
         static float turnDirecory = 0;
 
+        static AudioSource waterAudio = null;
+
         void Awake()
         {
             instance = this;
             chrController = GetComponent<CharacterController>();
+            waterAudio = GetComponent<AudioSource>();
             anim = GetComponentInChildren<Animator>();
             anim.SetInteger("State", (int)AnimType.Walk);
             NowAction = ActionType.Walk;
@@ -887,6 +890,22 @@ namespace GreeningEx2019
         public static float NaeWalkTarget(NaeActable naeAct)
         {
             return naePutPosition.x - (NaePutDownOffsetX + naeAct.NaeOffsetX) * forwardVector.x;
+        }
+
+        /// <summary>
+        /// 水効果音開始
+        /// </summary>
+        public static void WaterSePlay()
+        {
+            waterAudio.Play();
+        }
+
+        /// <summary>
+        /// 水効果音停止
+        /// </summary>
+        public static void WaterSeStop()
+        {
+            waterAudio.Stop();
         }
 
         [System.Diagnostics.Conditional("DEBUG_MINIJUMP")]

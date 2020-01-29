@@ -124,6 +124,7 @@ namespace GreeningEx2019
                     StellaMove.SetAnimState(StellaMove.AnimType.Walk);
                     StellaMove.RegisterAnimEvent(EndAction);
                     zyouroParticle.Stop();
+                    StellaMove.WaterSeStop();
                     return;
                 }
 
@@ -131,7 +132,7 @@ namespace GreeningEx2019
                 if ((Time.time - lastSeTime) >= waterSeSeconds)
                 {
                     lastSeTime = Time.time;
-                    SoundController.Play(SoundController.SeType.Water);
+                    StellaMove.WaterSePlay();
                 }
 
                 // 後ずさりチェック

@@ -52,7 +52,7 @@ namespace GreeningEx2019
             SpawnFluff,     // 13 たんぽぽから綿毛出現(Fluffプレハブ側で鳴らしている)
             MiniJump,       // 14 1段差をジャンプ0
             GrowRock,       // 15 岩が発芽
-            Water,          // 16 水をまく
+            Water,          // 16 水をまく(StellaのAudioSourceで制御)
             LiftUp,         // 17 苗を持ち上げる
             PutDown,        // 18 苗を置く
             RockWater,      // 19 岩が水に落ちる
