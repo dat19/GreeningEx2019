@@ -17,8 +17,10 @@ namespace GreeningEx2019
         [Tooltip("海演算に使う各ステージの島のメッシュを持ったオブジェクト"), SerializeField]
         GameObject[] meshIslands = new GameObject[GameParams.StageMax];
 
+#pragma warning disable 414
         [Tooltip("データ生成を実行"), SerializeField]
         bool isRun = false;
+#pragma warning restore 414
 
         // 頂点からの有効範囲。正規座標系
         const float IslandDistance = 0.15f;

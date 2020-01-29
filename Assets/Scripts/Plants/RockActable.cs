@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define DEBUG_LOG
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +13,11 @@ namespace GreeningEx2019 {
         /// <summary>
         /// 苗の時だけ、ミニジャンプ可
         /// </summary>
-        public override bool CanMiniJump { get { return GrowInstance.state == Grow.StateType.Nae; }}
+        public override bool CanMiniJump { 
+            get {
+                return GrowInstance.state == Grow.StateType.Nae;
+            }
+        }
 
         /// <summary>
         /// ステラの速度より少し速く押して、ひっかかりをなくす
@@ -56,18 +62,6 @@ namespace GreeningEx2019 {
         /// </summary>
         float rollingAudioVolume;
 
-        CharacterController ChrController
-        {
-            get
-            {
-                if (chrController == null)
-                {
-                    chrController = GetComponent<CharacterController>();
-                }
-                return chrController;
-            }
-        }
-
         /// <summary>
         /// 生長後、かつ、ステラが着地時、かつ、岩が着地時に動かせる
         /// </summary>
@@ -89,12 +83,22 @@ namespace GreeningEx2019 {
         /// </summary>
         bool isSplashed = false;
 
+        /// <summary>
+        /// 自前で調査した設置情報
+        /// </summary>
+        bool isGrounded = false;
+
+        private void Awake()
+        {
+            chrController = GetComponent<CharacterController>();
+        }
+
         public override bool Action()
         {
             if (!CanAction) return　false;
 
             StellaMove.targetJumpGround = transform.position;
-            StellaMove.targetJumpGround.y = ChrController.bounds.max.y;
+            StellaMove.targetJumpGround.y = chrController.bounds.max.y;
             StellaMove.myVelocity.x = 0f;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Jump);
             return true;
@@ -102,7 +106,7 @@ namespace GreeningEx2019 {
 
         public override bool PushAction()
         {
-            if (!CanAction || !chrController.isGrounded)
+            if (!CanAction || !isGrounded)
             {
                 return false;
             }
@@ -111,15 +115,16 @@ namespace GreeningEx2019 {
             Vector3 move = Vector3.zero;
             move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime * PushRate;
             Vector3 lastPos = transform.position;
-            ChrController.Move(move);
+            chrController.Move(move);
             if (transform.position.y > lastPos.y)
             {
                 // 持ちあがる時は押しキャンセル
                 transform.position = lastPos;
             }
+            CheckGrounded();
 
             // 移動した分、回転
-            setRotate(lastPos.x);
+            SetRotate(lastPos.x);
             return true;
         }
 
@@ -130,10 +135,10 @@ namespace GreeningEx2019 {
             {
                 sphereCollider = GetComponent<SphereCollider>();
             }
-            if (ChrController.enabled)
+            if (chrController.enabled)
             {
-                sphereCollider.radius = ChrController.radius;
-                sphereCollider.center = ChrController.center;
+                sphereCollider.radius = chrController.radius;
+                sphereCollider.center = chrController.center;
                 sphereCollider.enabled = true;
             }
 
@@ -158,35 +163,36 @@ namespace GreeningEx2019 {
             rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / seStopSeconds) * Time.fixedDeltaTime);
 
             // 真下に地面がない場合、自動的に転がす
-            Vector3 origin = chrController.bounds.center;
-            float dist = chrController.bounds.extents.y + GroundCheckDistance;
-            GameObject ground = PhysicsCaster.GetGroundWater(origin, dist);
-            if (ground == null)
-            {
-                origin.x = chrController.bounds.min.x;
-                ground = PhysicsCaster.GetGroundWater(origin, dist);
-                myVelocity.x = 0;
-                if (ground != null)
-                {
-                    myVelocity.x += rollSpeed;
-                }
+            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
+            float minOffset = float.PositiveInfinity;
+            for (int i = 0; i < count; i++) {
+                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
 
-                origin.x = chrController.bounds.max.x;
-                ground = PhysicsCaster.GetGroundWater(origin, dist);
-                if (ground != null)
+                float temp = transform.position.x - PhysicsCaster.hits[i].point.x;
+                if (Mathf.Abs(temp) < Mathf.Abs(minOffset))
                 {
-                    myVelocity.x -= rollSpeed;
+                    minOffset = temp;
                 }
+                Log($"  CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point} / me={transform.position} / {PhysicsCaster.hits[i].collider.ClosestPoint(transform.position)} / minOffset={minOffset}");
+            }
+            if (Mathf.Abs(minOffset) >= GroundCheckDistance)
+            {
+                myVelocity.x = rollSpeed * Mathf.Sign(minOffset);
+            }
+            else
+            {
+                myVelocity.x = 0f;
             }
 
             // 重力加速
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             Vector3 lastPos = transform.position;
-            ChrController.Move(myVelocity * Time.fixedDeltaTime);
-            setRotate(lastPos.x);
+            chrController.Move(myVelocity * Time.fixedDeltaTime);
+            CheckGrounded();
+            SetRotate(lastPos.x);
 
             // 着地チェック
-            if (ChrController.isGrounded && myVelocity.y <= 0f)
+            if (isGrounded && myVelocity.y <= 0f)
             {
                 myVelocity.y = 0f;
             }
@@ -215,12 +221,33 @@ namespace GreeningEx2019 {
         }
 
         /// <summary>
+        /// 着地状態かを確認します。地面だけではなく、折衝するものであればすべて着地とみなして、isGroundedに設定します。
+        /// </summary>
+        void CheckGrounded()
+        {
+            isGrounded = false;
+            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
+            for (int i = 0; i < count; i++)
+            {
+                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
+                Log($"  CheckGrounded {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].collider.transform.position}");
+                if (!PhysicsCaster.hits[i].collider.isTrigger
+                    || (PhysicsCaster.hits[i].collider.GetComponent<IStepOn>() != null))
+                {
+                    Log($"  grounded");
+                    isGrounded = true;
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// 前回のX座標を指定して、現在のX座標に移動するのに必要な回転をさせます。
         /// </summary>
         /// <param name="lastPosX">前回のX座標</param>
-        void setRotate(float lastPosX)
+        void SetRotate(float lastPosX)
         {
-            float zrot = (transform.position.x - lastPosX) / ChrController.radius;
+            float zrot = (transform.position.x - lastPosX) / chrController.radius;
             if (!Mathf.Approximately(zrot, 0f))
             {
                 rollingAudioVolume = RollingVolume;
@@ -232,6 +259,12 @@ namespace GreeningEx2019 {
             }
             
             transform.Rotate(0, 0, -zrot * Mathf.Rad2Deg);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_LOG")]
+        static void Log(object mes)
+        {
+            Debug.Log(mes);
         }
     }
 }

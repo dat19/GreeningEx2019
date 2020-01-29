@@ -13,6 +13,11 @@ namespace GreeningEx2019
             Turn,
         }
 
+        /// <summary>
+        /// 押している時の段差
+        /// </summary>
+        public const float PushStepOffset = 0.2f;
+
         protected StateType state = StateType.Walk;
 
         public override void Init()
@@ -66,6 +71,7 @@ namespace GreeningEx2019
             bool isBack = PushCheck();
             StellaMove.instance.Gravity();
             StellaMove.instance.Move();
+            StellaMove.ChrController.stepOffset = StellaMove.DefaultStepOffset;
 
             if (!StellaMove.ChrController.isGrounded)
             {
@@ -192,6 +198,7 @@ namespace GreeningEx2019
                     float to = PhysicsCaster.hits[i].collider.bounds.center.x - StellaMove.instance.transform.position.x;
                     if (StellaMove.myVelocity.x * to > 0f)
                     {
+                        StellaMove.ChrController.stepOffset = PushStepOffset;
                         if (!acts[j].PushAction()) continue;
                     }
 
