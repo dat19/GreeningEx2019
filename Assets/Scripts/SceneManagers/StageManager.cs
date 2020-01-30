@@ -67,7 +67,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return !Fade.IsFading;
+                return !Fade.IsFading || StellaMove.NowAction == StellaMove.ActionType.Start;
             }
         }
 
@@ -94,6 +94,9 @@ namespace GreeningEx2019
                 return Grow.NaeGrowedCount >= NaeCount;
             }
         }
+
+        static FollowCamera followCamera = null;
+        static GameObject stabPlayer = null;
 
         private new void Awake()
         {
@@ -130,13 +133,13 @@ namespace GreeningEx2019
             SceneManager.SetActiveScene(gameObject.scene);
 
             // プレイヤーを入れ替える
-            GameObject stabPlayer = GameObject.FindGameObjectWithTag("Player");
-            GameObject myp = Instantiate(stellaPrefab, stabPlayer.transform.position, stabPlayer.transform.rotation);
-            Destroy(stabPlayer);
+            stabPlayer = GameObject.FindGameObjectWithTag("Player");
+            stabPlayer.SetActive(false);
+            Instantiate(stellaPrefab, stabPlayer.transform.position, stabPlayer.transform.rotation);
 
             // カメラにターゲットを設定
-            FollowCamera fcam = Camera.main.gameObject.GetComponent<FollowCamera>();
-            fcam.SetTarget(myp.transform);
+            followCamera = Camera.main.gameObject.GetComponent<FollowCamera>();
+            followCamera.SetTarget(stabPlayer.transform);      // 一度設定してから解除
 
             // 苗の数を数える
             Grow[] gr = GameObject.FindObjectsOfType<Grow>();
@@ -214,6 +217,21 @@ namespace GreeningEx2019
 
             // ステラが飛び乗る
             StellaClear.HoldStar();
+        }
+
+        /// <summary>
+        /// 追うカメラにターゲットを設定します。
+        /// </summary>
+        /// <param name="target"></param>
+        public static void SetFollowCameraTarget(Transform target)
+        {
+            followCamera.SetTarget(target);
+
+            if (stabPlayer != null)
+            {
+                Destroy(stabPlayer);
+                stabPlayer = null;
+            }
         }
     }
 }

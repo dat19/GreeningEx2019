@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StellaActionStart
   m_EditorClassIdentifier: 
   canStepDown: 0
-  fallVelocity: {x: 1, y: -2, z: 0}
-  fallHeight: 2
+  fallVelocity: {x: 1, y: -3, z: 0}
+  fallHeight: 1.5
   startHeight: 5
   fluffPrefab: {fileID: 8356661317230378195, guid: ac4890ffd9183f043843f4f5fa3ea07d,
     type: 3}

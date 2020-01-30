@@ -96,10 +96,7 @@ namespace GreeningEx2019
                     lifeTime -= Time.fixedDeltaTime;
                     if (lifeTime <= 0f)
                     {
-                        state = StateType.Fall;
-                        Vector3 v = rb.velocity;
-                        v.Set(0f, fallSpeed, 0);
-                        rb.velocity = v;
+                        SetFall();
                     }
                     break;
 
@@ -145,8 +142,7 @@ namespace GreeningEx2019
         {
             Vector3 holdOffset = stellaStandardHoldOffset;
             holdOffset.x = holdOffset.x * StellaMove.forwardVector.x;
-            transform.position = pos - holdOffset;
-
+            transform.position = pos + holdOffset;
             state = StateType.Hold;
         }
 
@@ -156,6 +152,9 @@ namespace GreeningEx2019
         public void SetFall()
         {
             state = StateType.Fall;
+            Vector3 v = rb.velocity;
+            v.Set(0f, fallSpeed, 0);
+            rb.velocity = v;
         }
 
         /// <summary>
