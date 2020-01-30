@@ -51,7 +51,7 @@ namespace GreeningEx2019
             "Rolling Rocks Island",
             "Flower Garden",
             "Dandelion River",
-            "No Name",
+            "Guru Guru",
             "No Name",
             "No Name",
             "No Name",
