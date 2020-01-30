@@ -138,6 +138,27 @@ namespace GreeningEx2019
         }
 
         /// <summary>
+        /// 渡されたステラの座標(transform.position)と向きに合わせた場所に綿毛を移動させて、
+        /// 持ち状態にします。
+        /// </summary>
+        public void SetPositionAndHold(Vector3 pos)
+        {
+            Vector3 holdOffset = stellaStandardHoldOffset;
+            holdOffset.x = holdOffset.x * StellaMove.forwardVector.x;
+            transform.position = pos - holdOffset;
+
+            state = StateType.Hold;
+        }
+
+        /// <summary>
+        /// 落下にします。
+        /// </summary>
+        public void SetFall()
+        {
+            state = StateType.Fall;
+        }
+
+        /// <summary>
         /// Spawnアニメが終わったら、アニメからこのメソッドを呼び出します。
         /// </summary>
         public void ToFly()

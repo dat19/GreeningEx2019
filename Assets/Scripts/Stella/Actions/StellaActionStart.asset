@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa82922698521547b7314436b13e72d, type: 3}
+  m_Name: StellaActionStart
+  m_EditorClassIdentifier: 
+  canStepDown: 0
+  fallVelocity: {x: 1, y: -2, z: 0}
+  fallHeight: 2
+  startHeight: 5
+  fluffPrefab: {fileID: 8356661317230378195, guid: ac4890ffd9183f043843f4f5fa3ea07d,
+    type: 3}

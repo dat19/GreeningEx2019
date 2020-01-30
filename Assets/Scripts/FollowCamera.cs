@@ -25,7 +25,10 @@ namespace GreeningEx2019
         public void SetTarget(Transform tg)
         {
             playerTransform = tg;
-            camToPlayer = playerTransform.position - transform.position;
+            if (tg != null)
+            {
+                camToPlayer = playerTransform.position - transform.position;
+            }
         }
 
         private void Awake()

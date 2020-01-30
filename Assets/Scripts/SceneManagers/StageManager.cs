@@ -150,6 +150,8 @@ namespace GreeningEx2019
             }
 
             Grow.Init();
+
+            StellaMove.instance.ChangeAction(StellaMove.ActionType.Start);
         }
 
         public override void OnFadeInDone()
