@@ -210,7 +210,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                return stellaAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             }
         }
 
@@ -244,7 +244,7 @@ namespace GreeningEx2019
         /// </summary>
         public static float AbortMinDistance { get { return instance.abortMinDistance; } }
 
-        static Animator anim;
+        static Animator stellaAnimator;
         static Vector3 checkCenter;
         static UnityAction animEventAction = null;
         static int defaultLayer = 0;
@@ -267,8 +267,8 @@ namespace GreeningEx2019
             instance = this;
             ChrController = GetComponent<CharacterController>();
             waterAudio = GetComponent<AudioSource>();
-            anim = GetComponentInChildren<Animator>();
-            anim.SetInteger("State", (int)AnimType.Walk);
+            stellaAnimator = transform.Find("Pivot").GetComponentInChildren<Animator>();
+            stellaAnimator.SetInteger("State", (int)AnimType.Walk);
             NowAction = ActionType.Walk;
             boxColliderHalfExtents.y = ChrController.height * 0.5f - walkDownY;
             defaultLayer = LayerMask.NameToLayer("Player");
@@ -338,8 +338,8 @@ namespace GreeningEx2019
         public void Move()
         {
             // 設定された速度を反映
-            anim.SetFloat("VelX", Mathf.Abs(myVelocity.x));
-            anim.SetFloat("VelY", myVelocity.y);
+            stellaAnimator.SetFloat("VelX", Mathf.Abs(myVelocity.x));
+            stellaAnimator.SetFloat("VelY", myVelocity.y);
 
             Vector3 move = myVelocity * Time.fixedDeltaTime;
 
@@ -380,7 +380,7 @@ namespace GreeningEx2019
                 return;
             }
 
-            anim.SetBool("IsGrounded", ChrController.isGrounded);
+            stellaAnimator.SetBool("IsGrounded", ChrController.isGrounded);
         }
 
         /// <summary>
@@ -541,7 +541,7 @@ namespace GreeningEx2019
         /// <param name="type">StellaMove.AnimTypeで指定</param>
         public static void SetAnimState(AnimType type)
         {
-            anim.SetInteger("State", (int)type);
+            stellaAnimator.SetInteger("State", (int)type);
         }
 
         /// <summary>
@@ -551,7 +551,7 @@ namespace GreeningEx2019
         /// <param name="value">設定する値</param>
         public static void SetAnimFloat(string key, float value)
         {
-            anim.SetFloat(key, value);
+            stellaAnimator.SetFloat(key, value);
         }
 
         /// <summary>
@@ -561,7 +561,7 @@ namespace GreeningEx2019
         /// <param name="flag">設定したいbool値</param>
         public static void SetAnimBool(string param, bool flag)
         {
-            anim.SetBool(param, flag);
+            stellaAnimator.SetBool(param, flag);
         }
 
         /// <summary>
@@ -570,7 +570,7 @@ namespace GreeningEx2019
         /// <param name="param"></param>
         public static void SetAnimTrigger(string param)
         {
-            anim.SetTrigger(param);
+            stellaAnimator.SetTrigger(param);
         }
 
         /// <summary>
@@ -737,8 +737,8 @@ namespace GreeningEx2019
                 // 向きと移動方向が逆ならアニメをバックにする
                 IsBack = (sign * forwardVector.x) < -0.5f;
             }
-            anim.SetBool("Back", IsBack);
-            anim.SetFloat("VelX", walkSpeed);
+            stellaAnimator.SetBool("Back", IsBack);
+            stellaAnimator.SetFloat("VelX", walkSpeed);
 
             myVelocity.x = walkSpeed * sign;
             instance.Gravity();

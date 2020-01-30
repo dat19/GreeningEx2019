@@ -388,7 +388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityAdd: 20
   stellaActionScriptableObjects:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 1c4f8bbaf1ae39c44ab933377d663a8f, type: 2}
   - {fileID: 11400000, guid: 5c1f1bdd635655c469e7e396b6bd680f, type: 2}
   - {fileID: 11400000, guid: 3fde1576e30d3d841989fe2a85531fff, type: 2}
   - {fileID: 11400000, guid: 1eb9375e3d83363408e2a9e3796ee1a1, type: 2}

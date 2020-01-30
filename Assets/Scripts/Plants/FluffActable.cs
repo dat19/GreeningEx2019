@@ -96,10 +96,7 @@ namespace GreeningEx2019
                     lifeTime -= Time.fixedDeltaTime;
                     if (lifeTime <= 0f)
                     {
-                        state = StateType.Fall;
-                        Vector3 v = rb.velocity;
-                        v.Set(0f, fallSpeed, 0);
-                        rb.velocity = v;
+                        SetFall();
                     }
                     break;
 
@@ -135,6 +132,29 @@ namespace GreeningEx2019
             state = StateType.Hold;
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Fluff);
             return true;
+        }
+
+        /// <summary>
+        /// 渡されたステラの座標(transform.position)と向きに合わせた場所に綿毛を移動させて、
+        /// 持ち状態にします。
+        /// </summary>
+        public void SetPositionAndHold(Vector3 pos)
+        {
+            Vector3 holdOffset = stellaStandardHoldOffset;
+            holdOffset.x = holdOffset.x * StellaMove.forwardVector.x;
+            transform.position = pos + holdOffset;
+            state = StateType.Hold;
+        }
+
+        /// <summary>
+        /// 落下にします。
+        /// </summary>
+        public void SetFall()
+        {
+            state = StateType.Fall;
+            Vector3 v = rb.velocity;
+            v.Set(0f, fallSpeed, 0);
+            rb.velocity = v;
         }
 
         /// <summary>

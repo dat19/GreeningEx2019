@@ -70,6 +70,8 @@ namespace GreeningEx2019
                 StellaMove.RegisterAnimEvent(Grounded);
                 isLanding = true;
                 StellaMove.CheckStepOn();
+
+                StageManager.SetFollowCameraTarget(StellaMove.instance.transform);
             }
             // 頭ぶつけチェック
             else if ((StellaMove.myVelocity.y > 0f) && StellaMove.ChrController.collisionFlags.HasFlag(CollisionFlags.Above))
