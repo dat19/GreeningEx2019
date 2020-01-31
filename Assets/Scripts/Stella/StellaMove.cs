@@ -70,7 +70,7 @@ namespace GreeningEx2019
         public const float TurnSeconds = 0.15f;
 
         /// <summary>
-        /// ステラの行動定義
+        /// ステラの行動定義。列挙子
         /// </summary>
         public enum ActionType
         {
