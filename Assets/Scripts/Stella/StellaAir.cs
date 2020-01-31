@@ -58,7 +58,13 @@ namespace GreeningEx2019
                     Vector3.down,
                     StellaMove.CollisionMargin,
                     PhysicsCaster.MapCollisionPlayerOnlyLayer);
-                isGrounded = hitCount > 0;
+                for (int i=0;i<hitCount;i++)
+                {
+                    if (!PhysicsCaster.hits[i].collider.isTrigger)
+                    {
+                        isGrounded = true;
+                    }
+                }
             }
 
             // 着地チェック

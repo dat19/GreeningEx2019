@@ -659,6 +659,7 @@ namespace GreeningEx2019
             if ((NowAction != ActionType.Obore) && other.CompareTag("DeadZone"))
             {
                 GameParams.isMiss = true;
+                SoundController.Play(SoundController.SeType.RockWater);
                 ChangeAction(ActionType.Obore);
                 return;
             }
