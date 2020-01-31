@@ -96,6 +96,21 @@ namespace GreeningEx2019
         private AudioClip[] bgmList = null;
 
         /// <summary>
+        /// 効果音を連続で再生する時にずらしておく秒数
+        /// </summary>
+        const float RapidSeWait = 0.04f;
+
+        /// <summary>
+        /// 同時再生登録の最高登録数
+        /// </summary>
+        const int EntrySeMax = 8;
+
+        static SeType[] entrySe = new SeType[EntrySeMax];
+        static int entrySeCount = 0;
+        static int entrySeIndex = 0;
+        static float seWait;
+
+        /// <summary>
         /// フェードに合わせたボリューム調整をする時、true
         /// </summary>
         static bool useFade = false;
@@ -157,7 +172,7 @@ namespace GreeningEx2019
         static float fadeSeconds;
 
         #region System
-
+        
         void Awake()
         {
             if (Instance == null)
@@ -167,6 +182,9 @@ namespace GreeningEx2019
             isFadingOut = false;
             useFade = false;
             audioListener = GetComponent<AudioListener>();
+            entrySeCount = 0;
+            seWait = 0;
+            entrySeIndex = 0;
         }
 
         private void FixedUpdate()
@@ -180,12 +198,21 @@ namespace GreeningEx2019
 
         private void LateUpdate()
         {
+            if (entrySeCount > 0)
+            {
+                seWait -= Time.deltaTime;
+                if (seWait <= 0)
+                {
+                    entrySeCount--;
+                    PlaySe(entrySe[entrySeIndex]);
+                    entrySeIndex = (entrySeIndex + 1) % EntrySeMax;
+                }
+            }
+
             SetVolume();
         }
 
         #endregion System
-
-        #region Service Methods
 
         /// <summary>
         /// 指定の効果音を鳴らします。
@@ -193,11 +220,29 @@ namespace GreeningEx2019
         /// <param name="snd">再生したい効果音</param>
         public static void Play(SeType snd)
         {
-            if (snd != SeType.None)
+            // すでに上限の時はキャンセル
+            if (entrySeCount >= EntrySeMax) return;
+
+            if ((seWait <= 0) && (entrySeCount == 0))
             {
-                Instance.audioSE.PlayOneShot(Instance.seList[(int)snd]);
+                PlaySe(snd);
+                return;
+            }
+
+            int idx = (entrySeIndex + entrySeCount) % EntrySeMax;
+            entrySe[idx] = snd;
+            entrySeCount++;
+        }
+
+        static void PlaySe(SeType se)
+        {
+            seWait = RapidSeWait;
+            if (se != SeType.None)
+            {
+                Instance.audioSE.PlayOneShot(Instance.seList[(int)se]);
             }
         }
+
 
         /// <summary>
         /// 効果音を停止します。
@@ -296,8 +341,6 @@ namespace GreeningEx2019
                 yield return null;
             }
         }
-
-        #endregion Service Methods
 
         #region Private Methods
 
