@@ -846,12 +846,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageText: {fileID: 296751325}
   videoClips:
-  - {fileID: 32900000, guid: 28d5eb44475a1c7449050e047e630af1, type: 3}
+  - {fileID: 0}
   - {fileID: 32900000, guid: cbd68cd24171b6c4ab2c1dc04852e95c, type: 3}
   storySprites:
-  - {fileID: 21300000, guid: 412ba7cc1df7f1140b7255114c818bb2, type: 3}
-  - {fileID: 21300000, guid: 5bb11792edef2c642b6bd7abbccb5cbe, type: 3}
-  videoFadeSeconds: 0.5
+  - {fileID: 21300000, guid: 4db144f592d624245b48c1375822c7d0, type: 3}
+  - {fileID: 21300000, guid: e9386da8b65201f4a880c7f325ca65a5, type: 3}
   movieImage: {fileID: 1160975145}
   waitMovieFade: {fileID: 2011787977}
   baseStar: {fileID: 2015810826}
