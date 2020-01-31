@@ -1,6 +1,7 @@
 ﻿#define DEBUG_GUI
 //#define DEBUG_MINIJUMP
 //#define DEBUG_DIFF_Y
+//#define DEBUG_CLEAR
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -322,15 +323,22 @@ namespace GreeningEx2019
             stellaActionScriptableObjects[(int)NowAction]?.LateUpdate();
         }
 
-#if DEBUG_GUI
         private void Update()
         {
+#if DEBUG_CLEAR
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                StageManager.StartClear();
+            }
+#endif
+
+#if DEBUG_GUI
             if (Input.GetKeyDown(KeyCode.P))
             {
                 isDebugDisp = !isDebugDisp;
             }
-        }
 #endif
+        }
 
         /// <summary>
         /// 設定した動きをキャラクターコントローラーに反映。
