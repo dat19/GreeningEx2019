@@ -27,7 +27,7 @@ namespace GreeningEx2019 {
         /// <summary>
         /// 効果音を止める秒
         /// </summary>
-        const float seStopSeconds = 0.1f;
+        const float SeStopSeconds = 0.1f;
 
         /// <summary>
         /// 転がり効果音の基本ボリューム
@@ -44,16 +44,16 @@ namespace GreeningEx2019 {
         /// <summary>
         /// 岩転がし音
         /// </summary>
-        AudioSource _rockAudio = null;
+        AudioSource rockAudio = null;
         AudioSource RockAudio
         {
             get
             {
-                if (_rockAudio == null)
+                if (rockAudio == null)
                 {
-                    _rockAudio = GetComponent<AudioSource>();
+                    rockAudio = GetComponent<AudioSource>();
                 }
-                return _rockAudio;
+                return rockAudio;
             }
         }
 
@@ -123,6 +123,8 @@ namespace GreeningEx2019 {
             }
             CheckGrounded();
 
+            Log($"  {Time.frameCount}: PushAction {move}");
+
             // 移動した分、回転
             SetRotate(lastPos.x);
             return true;
@@ -160,34 +162,63 @@ namespace GreeningEx2019 {
             if (!CanAction) return;
 
             // ボリュームを下げる
-            rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / seStopSeconds) * Time.fixedDeltaTime);
+            rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / SeStopSeconds) * Time.fixedDeltaTime);
 
             // 真下に地面がない場合、自動的に転がす
             int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
+            Vector3 pivotPoint = Vector3.zero;
             float minOffset = float.PositiveInfinity;
+            bool isAutoRoll = false;
             for (int i = 0; i < count; i++) {
                 if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
 
-                float temp = transform.position.x - PhysicsCaster.hits[i].point.x;
+                isAutoRoll = true;
+                Vector3 tempPivot = PhysicsCaster.hits[i].collider.ClosestPoint(transform.position);
+                float temp = transform.position.x - tempPivot.x;
                 if (Mathf.Abs(temp) < Mathf.Abs(minOffset))
                 {
                     minOffset = temp;
+                    pivotPoint = tempPivot;
                 }
-                Log($"  CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point} / me={transform.position} / {PhysicsCaster.hits[i].collider.ClosestPoint(transform.position)} / minOffset={minOffset}");
+                Log($"  CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point} / me={transform.position} / {tempPivot} / minOffset={minOffset}");
             }
-            if (Mathf.Abs(minOffset) >= GroundCheckDistance)
+            if (isAutoRoll && (Mathf.Abs(minOffset) >= GroundCheckDistance))
             {
                 myVelocity.x = rollSpeed * Mathf.Sign(minOffset);
             }
             else
             {
+                isAutoRoll = false;
                 myVelocity.x = 0f;
             }
 
             // 重力加速
             myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             Vector3 lastPos = transform.position;
+            Log($"  {Time.frameCount}: 自動転がし {myVelocity.x}, {myVelocity.y}");
+            Vector3 nextPos = lastPos + myVelocity * Time.fixedDeltaTime;
+
+            // 自動回転時、回転に合わせて落下させる
+            if (isAutoRoll)
+            {
+                Vector3 cp = pivotPoint - lastPos;
+                float movedX = pivotPoint.x - nextPos.x;
+                float dx = (cp.x - movedX) / chrController.radius;
+                Log($"  dx={dx}");
+                if (Mathf.Abs(dx) < 1f)
+                {
+                    float th = Mathf.Acos(dx);
+                    float nextY = nextPos.y - chrController.radius * Mathf.Sin(th);
+                    float dy = nextY - pivotPoint.y;
+                    Log($"  th={th} / {th * Mathf.Rad2Deg} / cp={cp.x}, {cp.y} / pivotPoint={pivotPoint.x}, {pivotPoint.y} / lastPos={lastPos.x}, {lastPos.y} / movedX={movedX} / sin={Mathf.Sin(th)} / radius={chrController.radius} / dy={dy} / nextY={nextY} / center={chrController.bounds.center.x}, {chrController.bounds.center.y}");
+                    //UnityEditor.EditorApplication.isPaused = true;
+                    myVelocity.y += dy / Time.fixedDeltaTime;
+                }
+            }
+
             chrController.Move(myVelocity * Time.fixedDeltaTime);
+
+
             CheckGrounded();
             SetRotate(lastPos.x);
 
