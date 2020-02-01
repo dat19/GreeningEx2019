@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: GreenPower
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
-  m_LightmapFlags: 1
+  m_ShaderKeywords: _ALPHABLEND_ON
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
@@ -74,5 +74,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.32213217, g: 0.8490566, b: 0.028034903, a: 1}
-    - _EmissionColor: {r: 0.28838864, g: 2.1185474, b: 0, a: 1}
+    - _Color: {r: 0.32213217, g: 0.8490566, b: 0.028034903, a: 0.54509807}
+    - _EmissionColor: {r: 0.20392157, g: 1.4980392, b: 0, a: 1}
