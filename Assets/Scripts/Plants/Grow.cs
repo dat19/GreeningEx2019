@@ -74,8 +74,8 @@ namespace GreeningEx2019
                 state = StateType.Growing;
                 anim.SetTrigger("Grow");
                 SoundController.Play(growSe);
+                GreenPowerEmitter.Emit(transform.position);
                 NaeGrowedCount++;
-                Goal.IncrementNaeCount();
                 if (waitGrowDone)
                 {
                     WaitGrowCount++;

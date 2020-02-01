@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BackgroundClearedEmit
+  m_Name: GreenPower
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 1
@@ -37,13 +37,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: ac48bb47e00052c4da6d9e8ffde75e39, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ac48bb47e00052c4da6d9e8ffde75e39, type: 3}
+        m_Texture: {fileID: 2800000, guid: 08ded2b2af5b658489e4808d56e4bc1f, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: -0.03693194, y: -0.008823198}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -74,5 +74,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.31047243, g: 1.7386457, b: 1.9766746, a: 1}
+    - _Color: {r: 0.32213217, g: 0.8490566, b: 0.028034903, a: 1}
+    - _EmissionColor: {r: 0.28838864, g: 2.1185474, b: 0, a: 1}
