@@ -236,6 +236,11 @@ namespace GreeningEx2019
         public static ActionType NowAction { get; private set; }
 
         /// <summary>
+        /// 頭をぶつけたフラグ
+        /// </summary>
+        public static bool IsHitHead { get; private set; }
+
+        /// <summary>
         /// ステップオンを有効にしたオブジェクト
         /// </summary>
         public static GameObject stepOnObject;
@@ -359,23 +364,32 @@ namespace GreeningEx2019
                 move.z = distZ * Mathf.Sign(-transform.position.z);
             }
 
-#if DEBUG_DIFF_Y
             float lastY = transform.position.y;
-#endif
 
             // 端の移動制限
             move.x = StageOverCheck(move.x);
             ChrController.Move(move);
 
-            if (!ChrController.isGrounded 
-                && stellaActionScriptableObjects[(int)NowAction].canStepDown)
+            IsHitHead = false;
+            if (!ChrController.isGrounded)
             {
-                // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
-                move.Set(0, -ChrController.stepOffset - move.y, 0);
-                ChrController.Move(move);
+                if ((myVelocity.y*Time.fixedDeltaTime) > 0f)
+                {
+                    if (Mathf.Approximately(lastY, transform.position.y))
+                    {
+                        IsHitHead = true;
+                    }
+                }
+                else if (stellaActionScriptableObjects[(int)NowAction].canStepDown)
+                {
+                    // 歩き時は、乗り越えられる段差の高さ分、落下を許容する
+                    move.Set(0, -ChrController.stepOffset - move.y, 0);
+                    ChrController.Move(move);
+                }
             }
 
 #if DEBUG_DIFF_Y
+            Debug.Log($"  StellaMove.Move {ChrController.collisionFlags} / move={move} / hit head={IsHitHead}");
             Debug.Log($"  y={transform.position.y-lastY}");
 #endif
 

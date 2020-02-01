@@ -51,7 +51,7 @@ namespace GreeningEx2019
 
             // 着地チェック
             bool isGrounded = StellaMove.ChrController.isGrounded;
-            if (!isGrounded)
+            if (!isGrounded && (StellaMove.myVelocity.y <0))
             {
                 int hitCount = PhysicsCaster.CharacterControllerCast(
                     StellaMove.ChrController,
@@ -80,7 +80,7 @@ namespace GreeningEx2019
                 StageManager.SetFollowCameraTarget(StellaMove.instance.transform);
             }
             // 頭ぶつけチェック
-            else if ((StellaMove.myVelocity.y > 0f) && StellaMove.ChrController.collisionFlags.HasFlag(CollisionFlags.Above))
+            else if ((StellaMove.myVelocity.y > 0f) && StellaMove.IsHitHead)
             {
                 SoundController.Play(SoundController.SeType.HitHead);
                 StellaMove.myVelocity.y = 0f;
