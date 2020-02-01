@@ -48,13 +48,13 @@ namespace GreeningEx2019
             "First Island",
             "You Can Fly",
             "Mushroom Jump",
-            "Rolling Rocks Island",
+            "Rock Flower",
             "Flower Garden",
             "Dandelion River",
             "Guru Guru",
-            "No Name",
-            "No Name",
-            "No Name",
+            "Rolling Rocks",
+            "Underground Maze",
+            "Last Star",
         };
 
         // ステージ名の色指定
