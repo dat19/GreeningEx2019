@@ -5661,39 +5661,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
         type: 3}
-      propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
-      propertyPath: clearFlyX
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
-      propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
-      propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
       propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 932945706}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
-      propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CanClear
-      objectReference: {fileID: 0}
-    - target: {fileID: 1435105969831904022, guid: 7a985c672a7858840978f3d9c5184d46,
-        type: 3}
-      propertyPath: canClearEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a985c672a7858840978f3d9c5184d46, type: 3}
 --- !u!1001 &2624188472381215423

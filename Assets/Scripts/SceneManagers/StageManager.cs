@@ -91,7 +91,7 @@ namespace GreeningEx2019
         {
             get
             {
-                return Grow.NaeGrowedCount >= NaeCount;
+                return Goal.ReachedGreenPowerCount >= NaeCount * GreenPowerEmitter.SpawnCount;
             }
         }
 

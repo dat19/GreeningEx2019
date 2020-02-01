@@ -23,6 +23,16 @@ namespace GreeningEx2019
         /// </summary>
         const float ToStandbyPositionTime = 0.5f;
 
+        /// <summary>
+        /// 効果音を遅延させる秒数
+        /// </summary>
+        const float SeRapidSeconds = 0.04f;
+
+        /// <summary>
+        /// 前回効果音を鳴らした時のtime
+        /// </summary>
+        static float lastSeTime = 0f;
+
         public enum MaterialIndex
         {
             First,
@@ -63,11 +73,6 @@ namespace GreeningEx2019
         static Material myMaterial = null;
 
         /// <summary>
-        /// 現在までに色に反映させた苗の数
-        /// </summary>
-        static float counter = 0;
-
-        /// <summary>
         /// 開始マテリアル
         /// </summary>
         static Material startMaterial;
@@ -85,7 +90,7 @@ namespace GreeningEx2019
         /// <summary>
         /// 設定済みの苗の数。同じだった場合は初期化は省く
         /// </summary>
-        static int setNaeCount;
+        //static int setNaeCount;
 
         /// <summary>
         /// コライダー
@@ -102,6 +107,14 @@ namespace GreeningEx2019
         /// </summary>
         static StateType state;
 
+        static AudioSource seAudioSource = null;
+        static int seCount = 0;
+
+        /// <summary>
+        /// 到着した緑の力の数
+        /// </summary>
+        public static int ReachedGreenPowerCount { get; private set; }
+
         private void Awake()
         {
             instance = this;
@@ -109,16 +122,25 @@ namespace GreeningEx2019
             myMaterial.Lerp(materials[(int)MaterialIndex.First], materials[(int)MaterialIndex.First], 1f);
             startMaterial = new Material(myMaterial);
             targetMaterial = new Material(myMaterial);
-            counter = 0;
             myCollider = GetComponent<Collider>();
             myCollider.enabled = false;
             anim = GetComponent<Animator>();
             state = StateType.Standby;
-            setNaeCount = 0;
+            ReachedGreenPowerCount = 0;
+            seAudioSource = GetComponent<AudioSource>();
+            lastSeTime = 0f;
         }
 
         private void FixedUpdate()
         {
+            // 効果音
+            if ((seCount > 0) && (Time.time-lastSeTime) >= SeRapidSeconds)
+            {
+                seCount--;
+                lastSeTime = Time.time;
+                seAudioSource.Play();
+            }
+
             switch (state)
             {
                 case StateType.Standby:
@@ -141,7 +163,7 @@ namespace GreeningEx2019
         /// </summary>
         void updateStandby()
         {
-            if (counter >= Grow.NaeGrowedCount) return;
+            if (changeColorTime >= changeColorSeconds) return;
 
             // 星の色を段階的に変化させる
             changeColorTime += Time.fixedDeltaTime;
@@ -149,19 +171,34 @@ namespace GreeningEx2019
             if (t >= 1f)
             {
                 t = 1f;
-                counter = Grow.NaeGrowedCount;
             }
             myMaterial.Lerp(startMaterial, targetMaterial, t);
         }
 
         /// <summary>
-        /// 開花させた苗の数を増やして、星のマテリアルを設定する
+        /// 緑の音を鳴らします。前に鳴らしてから一定秒数経過していたらすぐに鳴らします。
+        /// 時間が経っていない場合は、登録をしてあとでならします。
         /// </summary>
-        public static void IncrementNaeCount()
+        static void PlayIncrementSe()
         {
-            if (setNaeCount == Grow.NaeGrowedCount) return;
+            if (Time.time - lastSeTime >= SeRapidSeconds)
+            {
+                seAudioSource.Play();
+                lastSeTime = Time.time;
+            }
+            else
+            {
+                seCount++;
+            }
+        }
 
-            setNaeCount = Grow.NaeGrowedCount;
+        /// <summary>
+        /// 到着した緑エネルギーを増やして、星のマテリアルを設定する
+        /// </summary>
+        public static void IncrementGreenPower()
+        {
+            ReachedGreenPowerCount++;
+            PlayIncrementSe();
             changeColorTime = 0;
             startMaterial.Lerp(myMaterial, myMaterial, 0);
 
@@ -170,7 +207,7 @@ namespace GreeningEx2019
                 targetMaterial.Lerp(
                     instance.materials[(int)MaterialIndex.First],
                     instance.materials[(int)MaterialIndex.Last],
-                    (float)Grow.NaeGrowedCount / (float)(StageManager.NaeCount - 1));
+                    (float)ReachedGreenPowerCount / (float)((StageManager.NaeCount - 1) * GreenPowerEmitter.SpawnCount));
             }
             else
             {

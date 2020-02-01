@@ -566,6 +566,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8159345046338038628, guid: a17ae1fdee39aa24da13ab2eb9b4e69b,
+        type: 3}
+      propertyPath: bgm
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a17ae1fdee39aa24da13ab2eb9b4e69b, type: 3}
 --- !u!1001 &1372671377
@@ -12491,6 +12496,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: state
@@ -12525,16 +12540,6 @@ PrefabInstance:
         type: 3}
       propertyPath: FluffLifeTime
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}
@@ -14480,6 +14485,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: state
@@ -14514,16 +14529,6 @@ PrefabInstance:
         type: 3}
       propertyPath: FluffLifeTime
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}
@@ -19111,6 +19116,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: state
@@ -19145,16 +19160,6 @@ PrefabInstance:
         type: 3}
       propertyPath: FluffLifeTime
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}
@@ -27786,6 +27791,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: state
@@ -27820,16 +27835,6 @@ PrefabInstance:
         type: 3}
       propertyPath: FluffLifeTime
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}
