@@ -21,7 +21,7 @@ Greeningの2019年度EXプロジェクト開発用のリポジトリーです。
 - [ステージ選択シーン](Documents/StageSelect.md)
 - [ステージ選択シーンの星の海の色変化](Documents/StarSea.md)
 - [花の橋の当たり判定](Documents/FlowerBridgeHit.md)
-- [岩の転がりの動きを調整](Documents/PushRock.md)
+- [岩の転がりの動きを調整](Documents/PushRock.html)
 
 # 使用アセット
 - Bgm H/MIX Gallary http://www.hmix.net/
