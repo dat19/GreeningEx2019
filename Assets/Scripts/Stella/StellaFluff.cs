@@ -21,8 +21,8 @@ namespace GreeningEx2019
 
         public override void UpdateAction()
         {
-            // 離したら落下へ
-            if (!Input.GetButton("Action"))
+            // 離すか、綿毛が無効化していたら落下へ
+            if (!Input.GetButton("Action") || (fluffActable == null))
             {
                 StellaMove.myVelocity = Vector3.zero;
                 StellaMove.instance.ChangeAction(StellaMove.ActionType.Air);

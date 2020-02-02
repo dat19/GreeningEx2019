@@ -54,7 +54,7 @@ namespace GreeningEx2019
             "Guru Guru",
             "Rolling Rocks",
             "Underground Maze",
-            "Last Star",
+            "The Holy Mountain",
         };
 
         // ステージ名の色指定
