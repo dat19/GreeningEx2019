@@ -12,6 +12,8 @@ namespace GreeningEx2019
         float cameraLeft = 0.5f;
         [Tooltip("カメラの座標右端"), SerializeField]
         float cameraRight = 20.5f;
+        [Tooltip("カメラの上端"), SerializeField]
+        float cameraTop = 100f;
         [Tooltip("カメラの下端"), SerializeField]
         float cameraBottom = 5f;
 
@@ -70,7 +72,11 @@ namespace GreeningEx2019
             }
 
             next.y = playerTransform.position.y + y;
-            if (next.y < cameraBottom)
+            if (next.y > cameraTop)
+            {
+                next.y = cameraTop;
+            }
+            else if (next.y < cameraBottom)
             {
                 next.y = cameraBottom;
             }
