@@ -55,7 +55,7 @@ MonoBehaviour:
   toStarMin: 0.3
   toStarMax: 0.6
   addMin: 8
-  addMax: 12
+  addMax: 16
 --- !u!1 &8550191346104494655
 GameObject:
   m_ObjectHideFlags: 0

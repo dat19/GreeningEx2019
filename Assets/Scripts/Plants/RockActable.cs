@@ -1,4 +1,6 @@
 ﻿//#define DEBUG_LOG
+//#define DEBUG_PUSHACTION
+//#define DEBUG_AUTOROLL
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,6 +42,7 @@ namespace GreeningEx2019 {
         const float GroundCheckDistance = 0.01f;
 
         CharacterController chrController = null;
+        static Ray ray = new Ray();
 
         /// <summary>
         /// 岩転がし音
@@ -91,6 +94,7 @@ namespace GreeningEx2019 {
         private void Awake()
         {
             chrController = GetComponent<CharacterController>();
+            sphereCollider = GetComponent<SphereCollider>();
         }
 
         public override bool Action()
@@ -108,35 +112,68 @@ namespace GreeningEx2019 {
         {
             if (!CanAction || !isGrounded)
             {
+#if DEBUG_PUSHACTION
+                Log($"  PushAction Not Work CanAction={CanAction} / isGrounded={isGrounded}");
+#endif
                 return false;
             }
 
             // 重力加速
             Vector3 move = Vector3.zero;
             move.x = StellaMove.myVelocity.x * Time.fixedDeltaTime * PushRate;
+
+            int hitCount = PhysicsCaster.CharacterControllerCast(chrController, StellaMove.myVelocity.normalized, StellaMove.myVelocity.magnitude * Time.fixedDeltaTime, PhysicsCaster.MapCollisionLayer, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
+
+                // ぶつかった場所を確認
+                Vector3 closest = PhysicsCaster.hits[i].collider.ClosestPoint(transform.position);
+                // 移動方向で、一定より高い場合はキャンセル
+                if (((StellaMove.myVelocity.x * (closest.x - transform.position.x)) > 0f) && (closest.y >= chrController.bounds.min.y + GroundCheckDistance))
+                {
+#if DEBUG_PUSHACTION
+                    Log($"  高いのでキャンセル {PhysicsCaster.hits[i].collider.name} closest={closest.x}, {closest.y} / now={chrController.bounds.min.y} + {GroundCheckDistance} = {chrController.bounds.min.y + GroundCheckDistance}");
+#endif
+                    return false;
+                }
+                
+            }
+
             Vector3 lastPos = transform.position;
             chrController.Move(move);
-            if (transform.position.y > lastPos.y)
-            {
-                // 持ちあがる時は押しキャンセル
-                transform.position = lastPos;
-            }
+#if DEBUG_PUSHACTION
+            Debug.Log($"  after move last={lastPos.y} to {transform.position.y}");
+#endif
             CheckGrounded();
 
+#if DEBUG_PUSHACTION
             Log($"  {Time.frameCount}: PushAction {move}");
-
+#endif
             // 移動した分、回転
             SetRotate(lastPos.x);
             return true;
         }
 
+        /// <summary>
+        /// 地面へのめり込みを修正します。
+        /// </summary>
+        public void OnGround()
+        {
+            int goidx = PhysicsCaster.GetGround(chrController.bounds.center, chrController.bounds.extents.y);
+            if (goidx != -1)
+            {
+                float targetY = PhysicsCaster.hits[goidx].collider.bounds.max.y + chrController.bounds.extents.y;
+                if (transform.position.y < targetY)
+                {
+                    transform.Translate(0, targetY - transform.position.y, 0);
+                }
+            }
+        }
+
         private void FixedUpdate()
         {
             // 当たり判定を一致させる
-            if (sphereCollider == null)
-            {
-                sphereCollider = GetComponent<SphereCollider>();
-            }
             if (chrController.enabled)
             {
                 sphereCollider.radius = chrController.radius;
@@ -147,15 +184,7 @@ namespace GreeningEx2019 {
             // 生長中、地面のめり込みを防ぐ
             if (GrowInstance.state == Grow.StateType.Growing)
             {
-                int goidx = PhysicsCaster.GetGround(chrController.bounds.center, chrController.bounds.extents.y);
-                if (goidx != -1)
-                {
-                    float targetY = PhysicsCaster.hits[goidx].collider.bounds.max.y + chrController.bounds.extents.y;
-                    if (transform.position.y < targetY)
-                    {
-                        transform.Translate(0, targetY - transform.position.y, 0);
-                    }
-                }
+                OnGround();
             }
 
             // 苗の時はここまで
@@ -164,70 +193,87 @@ namespace GreeningEx2019 {
             // ボリュームを下げる
             rollingAudioVolume = Mathf.Clamp01(rollingAudioVolume - (1f / SeStopSeconds) * Time.fixedDeltaTime);
 
-            // 真下に地面がない場合、自動的に転がす
-            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, GroundCheckDistance, PhysicsCaster.RockGroundedLayer);
-            Vector3 pivotPoint = Vector3.zero;
+            // 着地＆自動転がし確認。半径の分、下に何かないか確認
+            int count = PhysicsCaster.CharacterControllerCast(chrController, Vector3.down, chrController.radius, PhysicsCaster.RockGroundedLayer, QueryTriggerInteraction.Ignore);
             float minOffset = float.PositiveInfinity;
-            bool isAutoRoll = false;
+            Vector3 minHeight = Vector3.zero;
+            minHeight.y = 0f;
+            isGrounded = false;
             for (int i = 0; i < count; i++) {
-                if (PhysicsCaster.hits[i].collider.gameObject == gameObject) continue;
+                // 自分と同じか、トリガーなら無効
+                if ((PhysicsCaster.hits[i].collider.gameObject == gameObject)
+                    ||  (PhysicsCaster.hits[i].collider.isTrigger))
+                    continue;
 
-                isAutoRoll = true;
+                // ぶつかった先
+                AutoRollLog($"  hit[{i}] {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point.x}, {PhysicsCaster.hits[i].point.y}");
                 Vector3 tempPivot = PhysicsCaster.hits[i].collider.ClosestPoint(transform.position);
-                float temp = transform.position.x - tempPivot.x;
+                Vector3 destPivot = tempPivot;
+
+                // 真上に岩に向かってキャスト
+                RaycastHit hit;
+                tempPivot.y = sphereCollider.bounds.min.y - GroundCheckDistance;
+                ray.origin = tempPivot;
+                ray.direction = Vector3.up;
+                if (!sphereCollider.Raycast(ray, out hit, sphereCollider.radius+GroundCheckDistance*2f))
+                {
+                    AutoRollLog($"  接点見つからず。本来はないはず origin={ray.origin} / dir={ray.direction} / dist={sphereCollider.radius+GroundCheckDistance*2f} / x={chrController.bounds.min.x} - {chrController.bounds.max.x}");
+                    continue;
+                }
+
+                // 衝突した場所が、今の一番下から誤差分より下ならぶつからないので無視
+                if (destPivot.y+GroundCheckDistance < sphereCollider.bounds.min.y)
+                {
+                    AutoRollLog($"  {destPivot.y}が、{sphereCollider.bounds.min.y}より下なのでぶつからない");
+                    continue;
+                }
+
+                isGrounded = true;
+
+                // 接した高さ分、下げる
+                float diffY = destPivot.y - hit.point.y;
+                AutoRollLog($"  接点 {hit.point.x}, {hit.point.y} / under={sphereCollider.bounds.min.y} - {hit.point.y} = {diffY} > {GroundCheckDistance}");
+                if (diffY < minHeight.y)
+                {
+                    minHeight.y = diffY;
+                }
+
+                float temp = transform.position.x - hit.point.x;
                 if (Mathf.Abs(temp) < Mathf.Abs(minOffset))
                 {
                     minOffset = temp;
-                    pivotPoint = tempPivot;
                 }
-                Log($"  CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / {PhysicsCaster.hits[i].point} / me={transform.position} / {tempPivot} / minOffset={minOffset}");
+                AutoRollLog($"  自動転がし：　CapsuleCast {i} / {count} / {PhysicsCaster.hits[i].collider.name} / point={PhysicsCaster.hits[i].point.x}, {PhysicsCaster.hits[i].point.y} / tempPivot={tempPivot.x}, {tempPivot.y} / minY={chrController.bounds.min.y} / minOffset={minOffset} / minHeight={minHeight.y}");
             }
-            if (isAutoRoll && (Mathf.Abs(minOffset) >= GroundCheckDistance))
+            if (isGrounded)
             {
-                myVelocity.x = rollSpeed * Mathf.Sign(minOffset);
+                // 着地しているので速度はリセット
+                myVelocity.y = 0f;
+
+                // 自動転がり
+                if (Mathf.Abs(minOffset) >= GroundCheckDistance)
+                {
+                    myVelocity.x = rollSpeed * Mathf.Sign(minOffset);
+                    chrController.Move(minHeight);
+                }
             }
             else
             {
-                isAutoRoll = false;
+                // 地面がない
                 myVelocity.x = 0f;
+
+                // 重力加速
+                myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             }
 
-            // 重力加速
-            myVelocity.y -= StellaMove.GravityAdd * Time.fixedDeltaTime;
             Vector3 lastPos = transform.position;
-            Log($"  {Time.frameCount}: 自動転がし {myVelocity.x}, {myVelocity.y}");
+            AutoRollLog($"  {Time.frameCount}: 自動転がし {myVelocity.x}, {myVelocity.y}");
             Vector3 nextPos = lastPos + myVelocity * Time.fixedDeltaTime;
 
-            // 自動回転時、回転に合わせて落下させる
-            if (isAutoRoll)
-            {
-                Vector3 cp = pivotPoint - lastPos;
-                float movedX = pivotPoint.x - nextPos.x;
-                float dx = (cp.x - movedX) / chrController.radius;
-                Log($"  dx={dx}");
-                if (Mathf.Abs(dx) < 1f)
-                {
-                    float th = Mathf.Acos(dx);
-                    float nextY = nextPos.y - chrController.radius * Mathf.Sin(th);
-                    float dy = nextY - pivotPoint.y;
-                    Log($"  th={th} / {th * Mathf.Rad2Deg} / cp={cp.x}, {cp.y} / pivotPoint={pivotPoint.x}, {pivotPoint.y} / lastPos={lastPos.x}, {lastPos.y} / movedX={movedX} / sin={Mathf.Sin(th)} / radius={chrController.radius} / dy={dy} / nextY={nextY} / center={chrController.bounds.center.x}, {chrController.bounds.center.y}");
-                    //UnityEditor.EditorApplication.isPaused = true;
-                    myVelocity.y += dy / Time.fixedDeltaTime;
-                }
-            }
-
             chrController.Move(myVelocity * Time.fixedDeltaTime);
-
-
-            CheckGrounded();
             SetRotate(lastPos.x);
 
             // 着地チェック
-            if (isGrounded && myVelocity.y <= 0f)
-            {
-                myVelocity.y = 0f;
-            }
-
             if (rollingAudioVolume <= 0f)
             {
                 RockAudio.Stop();
@@ -294,6 +340,12 @@ namespace GreeningEx2019 {
 
         [System.Diagnostics.Conditional("DEBUG_LOG")]
         static void Log(object mes)
+        {
+            Debug.Log(mes);
+        }
+
+        [System.Diagnostics.Conditional("DEBUG_AUTOROLL")]
+        static void AutoRollLog(object mes)
         {
             Debug.Log(mes);
         }

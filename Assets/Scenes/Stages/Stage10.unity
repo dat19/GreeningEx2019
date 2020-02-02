@@ -3579,12 +3579,12 @@ PrefabInstance:
     - target: {fileID: 745748506634067980, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 745748506634067980, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -31
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 745748506634067980, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
@@ -3641,10 +3641,25 @@ PrefabInstance:
       propertyPath: cameraLeft
       value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067983, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraTop
+      value: 57
+      objectReference: {fileID: 0}
+    - target: {fileID: 745748506634067983, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraBottom
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
       propertyPath: cameraTop
       value: 57
+      objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraBottom
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3653e50c2e208934ba3e52457bcb811c, type: 3}
@@ -59211,16 +59226,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: direction.x
@@ -59240,6 +59245,16 @@ PrefabInstance:
         type: 3}
       propertyPath: insTime
       value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}
@@ -70646,16 +70661,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7937882301023864054, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
         type: 3}
       propertyPath: direction.x
@@ -70685,6 +70690,16 @@ PrefabInstance:
         type: 3}
       propertyPath: FluffMaxHeight
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702757606659715458, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 786299292617655329, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15e16e8703dfbfc49a0dc0e4f7cb58b7, type: 3}

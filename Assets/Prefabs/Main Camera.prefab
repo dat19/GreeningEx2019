@@ -294,8 +294,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffe64293dcca47449ae863aa45338f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewPointMin: 0.2
-  viewPointMax: 0.6
+  cameraLeft: 0.5
+  cameraRight: 20.5
+  cameraTop: 100
+  cameraBottom: 5
 --- !u!114 &2889244990636917841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,7 +348,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 20
   orthographic: 0
   orthographic size: 5
