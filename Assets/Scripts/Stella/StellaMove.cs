@@ -373,7 +373,7 @@ namespace GreeningEx2019
             IsHitHead = false;
             if (!ChrController.isGrounded)
             {
-                if ((myVelocity.y*Time.fixedDeltaTime) > 0f)
+                if (move.y > ChrController.minMoveDistance)
                 {
                     if (Mathf.Approximately(lastY, transform.position.y))
                     {
