@@ -280,13 +280,13 @@ namespace GreeningEx2019
             // クリアステージがなければ変更なし
             if (GameParams.ClearedStageCount == 0) return;
 
-            if (Input.GetAxisRaw("Horizontal") > 0)
+            if ((Input.GetAxisRaw("Horizontal") > 0) && !IsContinue)
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = true;
                 startTime = Time.time;
             }
-            else if (Input.GetAxisRaw("Horizontal") < 0)
+            else if ((Input.GetAxisRaw("Horizontal") < 0) && IsContinue)
             {
                 SoundController.Play(SoundController.SeType.MoveCursor);
                 IsContinue = false;
