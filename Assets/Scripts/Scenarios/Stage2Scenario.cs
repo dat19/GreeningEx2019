@@ -8,7 +8,7 @@ namespace GreeningEx2019
     {
         public void Dandelion()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage2Watage);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage2Watage);
         }
     }
 }

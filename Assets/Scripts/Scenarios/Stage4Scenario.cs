@@ -10,19 +10,19 @@ namespace GreeningEx2019
 
         public void Rock()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage4Rock);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage4Rock);
             SoundController.Play(SoundController.SeType.GimmickRock);
         }
 
         public void Action()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage4Action);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage4Action);
             Invoke("OnMessage", NextMessage);
         }
 
         void OnMessage()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage4On);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage4On);
         }
     }
 }

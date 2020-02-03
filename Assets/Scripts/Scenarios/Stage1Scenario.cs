@@ -19,12 +19,12 @@ namespace GreeningEx2019
             Done,
         };
 
-        MessageManager.MessageType[] messages =
+        Messages.MessageType[] messages =
         {
-            MessageManager.MessageType.None,
-            MessageManager.MessageType.WaterKey,
-            MessageManager.MessageType.MoveKey,
-            MessageManager.MessageType.Escape,
+            Messages.MessageType.None,
+            Messages.MessageType.WaterKey,
+            Messages.MessageType.MoveKey,
+            Messages.MessageType.Escape,
         };
 
         ScenarioState state = ScenarioState.WaitStart;
@@ -66,7 +66,7 @@ namespace GreeningEx2019
         /// </summary>
         public void UpDown()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Ivy);
+            MessageManager.instance.SetMessage(Messages.MessageType.Ivy);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace GreeningEx2019
         /// </summary>
         public void LetsGreen()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage1Nice);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage1Nice);
             FlowerBridge();
         }
 
@@ -98,7 +98,7 @@ namespace GreeningEx2019
         /// </summary>
         public void CanClear()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.CanClear);
+            MessageManager.instance.SetMessage(Messages.MessageType.CanClear);
         }
     }
 }

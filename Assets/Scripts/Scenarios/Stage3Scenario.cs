@@ -8,7 +8,7 @@ namespace GreeningEx2019
     {
         public void Mushroom()
         {
-            MessageManager.instance.SetMessage(MessageManager.MessageType.Stage3CanJump);
+            MessageManager.instance.SetMessage(Messages.MessageType.Stage3CanJump);
         }
     }
 }

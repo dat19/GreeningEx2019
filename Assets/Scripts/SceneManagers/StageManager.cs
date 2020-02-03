@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GreeningEx2019
 {
@@ -22,6 +23,8 @@ namespace GreeningEx2019
         Animator clearText = null;
         [Tooltip("BGMの種類"), SerializeField]
         SoundController.BgmType bgm = SoundController.BgmType.Game0;
+        [Tooltip("ステージ名テキスト"), SerializeField]
+        TextMeshProUGUI stageNameText = null;
 
         public const float RollingSeconds = 0.8f;
         const float ClearFadeSeconds = 0.24f;
@@ -155,6 +158,8 @@ namespace GreeningEx2019
             Grow.Init();
 
             StellaMove.instance.ChangeAction(StellaMove.ActionType.Start);
+
+            stageNameText.text = Messages.GetMessage(Messages.MessageType.Stage1Name + GameParams.SelectedStage);
         }
 
         public override void OnFadeInDone()
@@ -168,6 +173,8 @@ namespace GreeningEx2019
             }
             int index = Random.Range(0, seType.Length);
             SoundController.Play(seType[index]);
+
+            GetComponent<Animator>().SetTrigger("Show");
 
             base.OnFadeInDone();
         }

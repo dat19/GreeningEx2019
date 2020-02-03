@@ -23,3 +23,13 @@ Stage4Action,岩の花の横で、[X]か[Space]キーを押すと乗れるよ。
 Stage4On,ちょこちょこ左右に動いて、上手に転がそう！
 Stage4Move,苗は運ぶこともできるよ。
 Stage6Tempo,リズムよく行こう！
+Stage1Name,First Island
+Stage2Name,You Can Fly
+Stage3Name,Mushroom Jump
+Stage4Name,Rock Flower
+Stage5Name,Flower Garden
+Stage6Name,Dandelion River
+Stage7Name,Guru Guru
+Stage8Name,Rolling Rocks
+Stage9Name,Underground Maze
+Stage10Name,The Holy Mountain

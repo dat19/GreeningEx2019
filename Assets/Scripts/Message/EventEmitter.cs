@@ -15,7 +15,7 @@ namespace GreeningEx2019
         [Tooltip("鳴らす音"), SerializeField]
         SoundController.SeType se = SoundController.SeType.None;
         [Tooltip("表示するメッセージ。複数設定すると、ランダムでどれか一つを表示します。"), SerializeField]
-        MessageManager.MessageType []messages = new MessageManager.MessageType[0];
+        Messages.MessageType []messages = new Messages.MessageType[0];
 
 #pragma warning disable 649
         [Tooltip("発動させたいイベントがあったら登録します。"), SerializeField]

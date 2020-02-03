@@ -40,23 +40,6 @@ namespace GreeningEx2019
         /// </summary>
         const float NarrationAfterMarginSeconds = 1.25f;
 
-        /// <summary>
-        /// ステージ名
-        /// </summary>
-        readonly string[] stageNames =
-        {
-            "First Island",
-            "You Can Fly",
-            "Mushroom Jump",
-            "Rock Flower",
-            "Flower Garden",
-            "Dandelion River",
-            "Guru Guru",
-            "Rolling Rocks",
-            "Underground Maze",
-            "The Holy Mountain",
-        };
-
         // ステージ名の色指定
         const string StageNameColor = "\n<color=#afc>";
 
@@ -425,7 +408,7 @@ namespace GreeningEx2019
         /// </summary>
         void UpdateStageName()
         {
-            stageText.text = $"Stage {GameParams.SelectedStage+1}{StageNameColor}{stageNames[GameParams.SelectedStage]}</color>";
+            stageText.text = $"Stage {GameParams.SelectedStage+1}{StageNameColor}{Messages.GetMessage(Messages.MessageType.Stage1Name+GameParams.SelectedStage)}</color>";
         }
     }
 }
