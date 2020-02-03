@@ -209,6 +209,10 @@ namespace GreeningEx2019
 
         Color32[] beforeSeaColors = null;
         Color32[] afterSeaColors = null;
+
+        /// <summary>
+        /// 海や島の初期状態を設定します。
+        /// </summary>
         public void MakeSeaTexture()
         {
 #if DEBUG_CALC_SPHERE_POS

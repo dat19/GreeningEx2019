@@ -1,4 +1,5 @@
 ﻿#define USE_DEBUG_KEY
+#define USE_DEBUG_CLEARKEY // CとLキーを押しっぱなしにすると、デバッグクリア
 
 using System.Collections;
 using System.Collections.Generic;
@@ -179,8 +180,7 @@ namespace GreeningEx2019
             base.OnFadeInDone();
         }
 
-#if USE_DEBUG_KEY
-        private void FixedUpdate()
+        private void Update()
         {
             if (Input.GetButtonDown("Esc"))
             {
@@ -188,14 +188,21 @@ namespace GreeningEx2019
                 GameParams.Instance.toStageSelect = StageSelectManager.ToStageSelectType.Back;
                 SceneChanger.ChangeScene(SceneChanger.SceneType.StageSelect);
             }
-        }
+#if USE_DEBUG_CLEARKEY
+            if (Input.GetKey(KeyCode.C) && Input.GetKey(KeyCode.L))
+            {
+                StartClear();
+            }
 #endif
+        }
 
         /// <summary>
         /// クリア処理を開始
         /// </summary>
         public static void StartClear()
         {
+            if (IsClearPlaying) return;
+
             IsClearPlaying = true;
             instance.StartCoroutine(instance.ClearSequence());
             SoundController.PlayBGM(SoundController.BgmType.Clear);
