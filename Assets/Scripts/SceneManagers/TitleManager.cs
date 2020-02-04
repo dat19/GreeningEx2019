@@ -162,6 +162,7 @@ namespace GreeningEx2019
                     }
                     else if (GameParams.IsActionAndWaterButtonDown || Input.GetKeyDown(KeyCode.Escape))
                     {
+                        SoundController.Play(SoundController.SeType.MoveCursor);
                         state = StateType.FadeOut;
                         StartCoroutine(MovieFadeOut(0));
                     }
@@ -262,6 +263,8 @@ namespace GreeningEx2019
 
             if (Input.GetButtonDown("Esc"))
             {
+                SoundController.Play(SoundController.SeType.MoveCursor);
+
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else
