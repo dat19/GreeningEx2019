@@ -16703,6 +16703,11 @@ PrefabInstance:
       propertyPath: cameraRight
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 2889244990636917841, guid: 3653e50c2e208934ba3e52457bcb811c,
+        type: 3}
+      propertyPath: cameraTop
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 745748506634067981, guid: 3653e50c2e208934ba3e52457bcb811c,
         type: 3}
       propertyPath: m_Depth
